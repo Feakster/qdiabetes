@@ -1,14 +1,14 @@
-#=================#
-#                 #
-#### TEST DATA ####
-#                 #
-#=================#
+#===================#
+#                   #
+#### SAMPLE DATA ####
+#                   #
+#===================#
 
-n <- 30L
+n <- 100L
 
 set.seed(10)
 
-df_qdr <- data.frame(
+dat_qdr <- data.frame(
   gender = sample(gl(2, 1, 2, c("Male", "Female")), n, replace = T),
   age = sample(25:84, n, replace = T),
   height = sample((140:210)/100, n, replace = T),
@@ -29,6 +29,7 @@ df_qdr <- data.frame(
   hypertension = sample(c(F, T), n, replace = T),
   fh_diab = sample(c(F, T), n, replace = T)
 ); rm(n)
-df_qdr[["bmi"]] <- with(df_qdr, round(weight/height^2, 2))
+dat_qdr[["bmi"]] <- with(dat_qdr, round(weight/height^2, 2))
+dat_qdr <- dat_qdr[dat_qdr$bmi >= 20 & dat_qdr$bmi <= 40, ]
 
-save(df_qdr, file = "data/df_qdr.RData")
+save(dat_qdr, file = "data/dat_qdr.RData")

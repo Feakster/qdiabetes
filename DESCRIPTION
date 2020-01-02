@@ -5,7 +5,10 @@ Version: 0.1.0
 Author: Benjamin Feakins
 Maintainer: Benjamin Feakins <benjamin.feakins@ndph.ox.ac.uk>
 Description: This function aims to calculate the risk of developing type 2 diabetes in the next 10 years. This package is based on published risk prediction algorithms <https://qdiabetes.org/src.php>
-Suggests: data.table, parallel
+Suggests:
+    knitr,
+    rmarkdown
 License: MIT
 Encoding: UTF-8
 LazyData: true
+VignetteBuilder: knitr

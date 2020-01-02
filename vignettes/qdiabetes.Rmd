@@ -1,0 +1,71 @@
+---
+title: "Using the QDiabetes Package"
+author: "Benjamin Feakins"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{qdiabetes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(QDiabetes)
+```
+
+## Ad hoc usage
+
+```{r}
+QDR()
+```
+
+Note: default values for the function are set as per the [QDiabetes-2018 risk calculator](https://qdiabetes.org/2018). The QDiabetes-2018 algorithm is actually six separate algorithms; three variants (A, B and C) per gender (male and female). Each of these variants may be invoked directly via the `QDRA()`, `QDRB()` and `QDRC()` functions. Alternatively, the `QDR()` function may be used, in which case the algorithm selection will mirror that of the QDiabetes website for any given information, i.e. if fasting plasma glucose (FPG) if available then the B variant is always used, if glycated haemoglobin (HbA[1c]) is available (but not FPG) then the C variant is used, if neither FPG nor HbA[1c] are available then the A variant is used. For convenience, I have also added the ability to specify body mass index or height and weight. Note, many of the default values of the `QDR()` algorithms assume the absence of comorbidities and concomittant pharmacotherapies. Hence, although you will be able to get an output from the `QDR()` or `QDRA()` functions with the spcification of only `gender`, `age` and `bmi`, this will likely underestimate the risk unless you specify the other parameters of the function.
+
+```{r}
+QDR(gender = "Female", age = 65, height = 1.65, weight = 70)
+QDR(gender = "Male", age = 54, bmi = 35)
+```
+
+Load the sample data:
+
+```{r}
+data(dat_qdr)
+dat_qdr$risk <- with(dat_qdr, mapply(QDR, gender = gender, age = age, bmi = bmi))
+```
+
+Or, for a vectorised (but not faster) syntax, try the following:
+
+```{r}
+vQDR <- Vectorize(QDR)
+dat_qdr$risk <- with(dat_qdr, vQDR(gender = gender, age = age, bmi = bmi))
+```
+
+Or with _data.table_:
+
+```{r}
+library(data.table)
+dat_qdr[, risk := mapply(QDR, gender = gender, age = age, bmi = bmi)]
+```
+
+Or with _dplyr_:
+
+```{r}
+library(dplyr)
+dat_qdr <- dat_qdr %>%
+    mutate(risk = mapply(QDR, gender = gender, age = age, bmi = bmi))
+```
+
+## Using specific variants of the algorithm
+
+```{r}
+dat_qdr$qdra <- with(dat_qdr, mapply(QDRA, gender = gender, age = age, bmi = bmi)) # "A" variant.
+dat_qdr$qdrb <- with(dat_qdr, mapply(QDRB, gender = gender, age = age, bmi = bmi, fpg = fpg)) # "B" variant.
+dat_qdr$qdrc <- with(dat_qdr, mapply(QDRC, gender = gender, age = age, bmi = bmi, hba1c = hba1c)) # "C" variant.
+```
