@@ -7,7 +7,7 @@
 ### Notes ###
 # - fpg >= 2 & fpg < 7
 # - age >= 25 & age < 85
-# - height >= 140 & height <= 210
+# - height >= 1.40 & height <= 2.10
 # - weight >= 40 & weight <= 180
 # - bmi == 20 if bmi < 20
 # - bmi == 40 if bmi > 40
@@ -24,7 +24,7 @@ QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
   stopifnot(height >= 1.40 & height <= 2.10)
   stopifnot(weight >= 40 & weight <= 180)
   # stopifnot(townsend >= -6 & townsend <= 11)
-  
+
   ## BMI Pre-Processing ##
   if(all(c(!is.null(bmi), !is.null(height), !is.null(weight)))) warning("bmi, height & weight all specified, height & weight ignored", call. = F)
   if(is.null(bmi)) bmi <- weight/height^2
@@ -37,29 +37,33 @@ QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
     warning("bmi > 40. Setting bmi == 40.", call. = F)
     bmi <- 40
   }
-  
+
   ## Female ##
   if(gender == "Female"){
     # Ethnicity #
-    ethnicity <- switch(ethnicity,
-                        WhiteNA = 0,
-                        Indian = 0.9898906127239111000000000,
-                        Pakistani = 1.2511504196326508000000000,
-                        Bangladeshi = 1.4934757568196120000000000,
-                        OtherAsian = 0.9673887434565966400000000,
-                        BlackCaribbean = 0.4844644519593178100000000,
-                        BlackAfrican = 0.4784214955360102700000000,
-                        Chinese = 0.7520946270805577400000000,
-                        Other = 0.4050880741541424400000000)
-    
+    list_eth <- list(
+      WhiteNA = 0,
+      Indian = 0.9898906127239111000000000,
+      Pakistani = 1.2511504196326508000000000,
+      Bangladeshi = 1.4934757568196120000000000,
+      OtherAsian = 0.9673887434565966400000000,
+      BlackCaribbean = 0.4844644519593178100000000,
+      BlackAfrican = 0.4784214955360102700000000,
+      Chinese = 0.7520946270805577400000000,
+      Other = 0.4050880741541424400000000
+    )
+    ethnicity <- list_eth[[ethnicity]]
+
     # Smoking #
-    smoking <- switch(smoking,
-                      Non = 0,
-                      Ex = 0.0374156307236963230000000,
-                      Light = 0.2252973672514482800000000,
-                      Moderate = 0.3099736428023662800000000,
-                      Heavy = 0.4361942139496417500000000)
-    
+    list_smok <- list(
+      Non = 0,
+      Ex = 0.0374156307236963230000000,
+      Light = 0.2252973672514482800000000,
+      Moderate = 0.3099736428023662800000000,
+      Heavy = 0.4361942139496417500000000
+    )
+    smoking <- list_smok[[smoking]]
+
     # Age #
     dage <- age/10
     age_1 <- dage^0.5
@@ -67,7 +71,7 @@ QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
     age_1 <- age_1 - 2.123332023620606
     age_2 <- age_2 - 91.644744873046875
     age <- 3.7650129507517280000000000*age_1 - 0.0056043343436614941000000*age_2
-    
+
     # BMI #
     dbmi <- bmi/10
     bmi_1 <- dbmi
@@ -75,18 +79,18 @@ QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
     bmi_1 <- bmi_1 - 2.571253299713135
     bmi_2 <- bmi_2 - 16.999439239501953
     bmi <- 2.4410935031672469000000000*bmi_1 - 0.0421526334799096420000000*bmi_2
-    
+
     # Townsend #
     townsend <- townsend - 0.391116052865982
     townsend <- 0.0358046297663126500000000*townsend
-    
+
     # FPG #
     fpg_1 <- fpg^-1
     fpg_2 <- log(fpg)*fpg^-1
     fpg_1 <- fpg_1 - 0.208309367299080
     fpg_2 <- fpg_2 - 0.326781362295151
     fpg <- -2.1887891946337308000000000*fpg_1 - 69.9608419828660290000000000*fpg_2
-    
+
     # Binary Variables #
     antipsy <- 0.4748378550253853400000000*antipsy
     steroids <- 0.3767933443754728500000000*steroids
@@ -98,7 +102,7 @@ QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
     statins <- 0.5809287382718667500000000*statins
     hypertension <- 0.2836632020122907300000000*hypertension
     fh_diab <- 0.4522149766206111600000000*fh_diab
-    
+
     # Interaction Terms #
     int <- sum(-0.7683591642786522500000000*age_1*antipsy,
                -0.7983128124297588200000000*age_1*learndiff,
@@ -116,35 +120,39 @@ QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
                0.0199345308534312550000000*age_2*fpg_1,
                -0.0716677187529306680000000*age_2*fpg_2,
                0.0004523639671202325400000*age_2*fh_diab)
-    
+
     # Risk Score #
     score <- sum(ethnicity, smoking, bmi, age, townsend, antipsy, steroids, cvd, gestdiab, learndiff, schizobipo, pcos, statins, hypertension, fh_diab, fpg, int)
     risk <- 100*(1 - 0.990905702114105^exp(score))
   }
-  
+
   ## Male ##
   if(gender == "Male"){
     if(any(pcos, gestdiab)) stop("'pcos' and 'gestdiab' must be set to FALSE for male 'gender'")
     # Ethnicity #
-    ethnicity <- switch(ethnicity,
-                        WhiteNA = 0,
-                        Indian = 1.0081475800686235000000000,
-                        Pakistani = 1.3359138425778705000000000,
-                        Bangladeshi = 1.4815419524892652000000000,
-                        OtherAsian = 1.0384996851820663000000000,
-                        BlackCaribbean = 0.5202348070887524700000000,
-                        BlackAfrican = 0.8579673418258558800000000,
-                        Chinese = 0.6413108960765615500000000,
-                        Other = 0.4838340220821504800000000)
-    
+    list_eth <- list(
+      WhiteNA = 0,
+      Indian = 1.0081475800686235000000000,
+      Pakistani = 1.3359138425778705000000000,
+      Bangladeshi = 1.4815419524892652000000000,
+      OtherAsian = 1.0384996851820663000000000,
+      BlackCaribbean = 0.5202348070887524700000000,
+      BlackAfrican = 0.8579673418258558800000000,
+      Chinese = 0.6413108960765615500000000,
+      Other = 0.4838340220821504800000000
+    )
+    ethnicity <- list_eth[[ethnicity]]
+
     # Smoking #
-    smoking <- switch(smoking,
-                      Non = 0,
-                      Ex = 0.1119475792364162500000000,
-                      Light = 0.3110132095412204700000000,
-                      Moderate = 0.3328898469326042100000000,
-                      Heavy = 0.4257069026941993100000000)
-    
+    list_smok <- list(
+      Non = 0,
+      Ex = 0.1119475792364162500000000,
+      Light = 0.3110132095412204700000000,
+      Moderate = 0.3328898469326042100000000,
+      Heavy = 0.4257069026941993100000000
+    )
+    smoking <- list_smok[[smoking]]
+
     # Age #
     dage <- age/10
     age_1 <- log(dage)
@@ -152,7 +160,7 @@ QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
     age_1 <- age_1 - 1.496392488479614
     age_2 <- age_2 - 89.048171997070313
     age <- 4.1149143302364717000000000*age_1 - 0.0047593576668505362000000*age_2
-    
+
     # BMI #
     dbmi <- bmi/10
     bmi_1 <- dbmi^2
@@ -160,18 +168,18 @@ QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
     bmi_1 <- bmi_1 - 6.817805767059326
     bmi_2 <- bmi_2 - 17.801923751831055
     bmi <- 0.8169361587644297100000000*bmi_1 - 0.1250237740343336200000000*bmi_2
-    
+
     # Townsend #
     townsend <- townsend - 0.515986680984497
     townsend <- 0.0253741755198943560000000*townsend
-    
+
     # FPG #
     fpg_1 <- fpg^-0.5
     fpg_2 <- log(fpg)*fpg^-0.5
     fpg_1 <- fpg_1 - 0.448028832674026
     fpg_2 <- fpg_2 - 0.719442605972290
     fpg <- -54.8417881280971070000000000*fpg_1 - 53.1120784984813600000000000*fpg_2
-    
+
     # Binary Variables #
     antipsy <- 0.4417934088889577400000000*antipsy
     steroids <- 0.3413547348339454100000000*steroids
@@ -181,7 +189,7 @@ QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
     statins <- 0.5147657600111734700000000*statins
     hypertension <- 0.2467209287407037300000000*hypertension
     fh_diab <- 0.5749437333987512700000000*fh_diab
-    
+
     # Interaction Terms #
     int <- sum(-0.9502224313823126600000000*age_1*antipsy,
                -0.8358370163090045300000000*age_1*learndiff,
@@ -199,12 +207,12 @@ QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
                -0.0390046079223835270000000*age_2*fpg_1,
                -0.0411277198058959470000000*age_2*fpg_2,
                0.0006257588248859499300000*age_2*fh_diab)
-    
+
     # Risk Score #
     score <- sum(ethnicity, smoking, age, bmi, townsend, antipsy, steroids, cvd, learndiff, schizobipo, statins, hypertension, fh_diab, fpg, int)
     risk <- 100*(1 - 0.985019445419312^exp(score))
   }
-  
+
   ## Output ##
   return(risk)
 }

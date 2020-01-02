@@ -8,7 +8,7 @@
 # - fpg >= 2 & fpg < 7
 # - hba1c >= 15 & hba1c < 48
 # - age >= 25 & age < 85
-# - height >= 140 & height <= 210
+# - height >= 1.40 & height <= 2.10
 # - weight >= 40 & weight <= 180
 # - bmi == 20 if bmi < 20
 # - bmi == 40 if bmi > 40
@@ -27,5 +27,5 @@ QDR <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = N
   }
 
   ## Output ##
-  return(round(risk, 2))
+  return(risk)
 }
