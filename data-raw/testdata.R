@@ -32,4 +32,4 @@ dat_qdr <- data.frame(
 dat_qdr[["bmi"]] <- with(dat_qdr, round(weight/height^2, 2))
 dat_qdr <- dat_qdr[dat_qdr$bmi >= 20 & dat_qdr$bmi <= 40, ]
 
-save(dat_qdr, file = "data/dat_qdr.RData")
+save(dat_qdr, file = "data/dat_qdr.RData", version = 2)
