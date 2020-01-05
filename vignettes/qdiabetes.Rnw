@@ -45,18 +45,18 @@
 library(QDiabetes)
 @
 
-\section{Introduction}
+\section*{Introduction}
 
 Note: default values for the function are set as per the \href{https://qdiabetes.org/2018}{QDiabetes-2018 risk calculator}. The QDiabetes-2018 algorithm is actually six separate algorithms; three variants (A, B and C) per gender (male and female). Each of these variants may be invoked directly via the \texttt{QDRA()}, \texttt{QDRB()} and \texttt{QDRC()} functions. Alternatively, the \texttt{QDR()} function may be used, in which case the algorithm selection will mirror that of the QDiabetes website for any given information, i.e. if fasting plasma glucose (FPG) if available then the B variant is always used, if glycated haemoglobin (HbA\textsubscript{1c}) is available (but not FPG) then the C variant is used, if neither FPG nor HbA\textsubscript{1c} are available then the A variant is used. For convenience, I have also added the ability to specify body mass index or height and weight. Note, many of the default values of the \texttt{QDR()} algorithms assume the absence of comorbidities and concomittant pharmacotherapies. Hence, although you will be able to get an output from the \texttt{QDR()} or \texttt{QDRA()} functions with the spcification of only \texttt{gender}, \texttt{age} and \texttt{bmi}, this will likely underestimate the risk unless you specify the other parameters of the function.
 
-\section{Ad hoc usage}
+\section*{Ad hoc usage}
 
 <<>>=
 QDR(gender = "Female", age = 65, height = 1.65, weight = 70)
 QDR(gender = "Male", age = 54, bmi = 35)
 @
 
-\section{Data frame usage}
+\section*{Data frame usage}
 
 Load the sample data:
 
@@ -104,7 +104,7 @@ df_qdr %>%
   head()
 @
 
-\section{Using specific variants of the algorithm}
+\section*{Using specific variants of the algorithm}
 
 <<>>=
 # "A" Variant

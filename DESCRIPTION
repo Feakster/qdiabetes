@@ -10,3 +10,4 @@ License: MIT
 URL: https://github.com/Feakster/qdiabetes
 Encoding: UTF-8
 LazyData: true
+LazyLoad: true
