@@ -1,8 +1,9 @@
 
 bibentry(bibtype = "Manual",
-         title = "A Package for Survival Analysis in S",
+         title = "A Package to Calculate 10-Year Risk of Type 2 Diabetes",
          author = person(c("Benjamin G"), "Feakins"),
          year = 2020,
          note = "version 0.1.0",
+         url = "https://github.com/Feakster/qdiabetes",
          key = "QDiabetes"
 )
