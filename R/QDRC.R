@@ -5,12 +5,13 @@
 #================================#
 
 ### Notes ###
-# - hba1c >= 15 & hba1c < 48
 # - age >= 25 & age < 85
 # - height >= 1.40 & height <= 2.10
 # - weight >= 40 & weight <= 180
 # - bmi == 20 if bmi < 20
 # - bmi == 40 if bmi > 40
+# - hba1c >= 15 & hba1c < 48
+# - townsend >= -7.028634577 & townsend <= 13.3114711
 
 QDRC <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL, hba1c = NULL, ethnicity = "WhiteNA", smoking = "Non", townsend = 0, antipsy = F, steroids = F, cvd = F, gestdiab = F, learndiff = F, schizobipo = F, pcos = F, statins = F, hypertension = F, fh_diab = F){
   ## Stop Conditions ##
@@ -23,7 +24,7 @@ QDRC <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
   stopifnot(age >= 25 & age < 85)
   stopifnot(height >= 1.40 & height <= 2.10)
   stopifnot(weight >= 40 & weight <= 180)
-  # stopifnot(townsend >= -6 & townsend <= 11)
+  stopifnot(townsend >= -7.028634577 & townsend <= 13.3114711)
 
   ## BMI Pre-Processing ##
   if(all(c(!is.null(bmi), !is.null(height), !is.null(weight)))) warning("bmi, height & weight all specified, height & weight ignored", call. = F)

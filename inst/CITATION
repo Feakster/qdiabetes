@@ -5,5 +5,5 @@ bibentry(bibtype = "Manual",
          year = 2020,
          note = "version 0.1.0",
          url = "https://github.com/Feakster/qdiabetes",
-         key = "QDiabetes"
+         key = "QDiabetes-package"
 )

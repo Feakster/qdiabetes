@@ -1,2 +1,9 @@
+.git/
+.gitignore
 ^.*\.Rproj$
 ^\.Rproj\.user$
+README.md
+vignettes/.*.aux
+vignettes/.*.log
+vignettes/.*.tex
+vignettes/.*.pdf
