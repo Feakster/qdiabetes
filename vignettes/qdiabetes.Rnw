@@ -1,0 +1,132 @@
+% !Rnw weave = Sweave
+
+%==================================%
+%                                  %
+%%%% QDIABETES PACKAGE VIGNETTE %%%%
+%                                  %
+%==================================%
+
+%%% Document Class %%%
+\documentclass[10pt,a4paper]{article}
+
+%%% Load Packages %%%
+\usepackage{Sweave} % Weave R code into LaTeX.
+\usepackage[margin=2.5cm]{geometry} % 2.5cm margins all around.
+\usepackage[T1]{fontenc} % Allows more complex characters.
+\usepackage{microtype} % Better use of white space.
+\usepackage[british]{babel} % Better hyphenation.
+%\usepackage{parskip} % Removes indenting at the beginning of paragraphs.
+\usepackage[dvipsnames]{xcolor} % More colours.
+\usepackage[colorlinks=true,allcolors=MidnightBlue]{hyperref} % Coloured hyperlinks.
+\usepackage[numbers,square,comma]{natbib} % Better citations.
+\usepackage{doi} % Hyperlink DOIs.
+\usepackage{textcomp} % "Registered" symbol.
+
+%%% Customisations %%%
+%% Font Family Settings %%
+\renewcommand\familydefault{\sfdefault} % Alter default font family to sans serif.
+%% Set URL Style %%
+\urlstyle{same} % Non-monospace font.
+%% Citation Style %%
+\bibliographystyle{unsrtnat} % Unsorted: bibliography follows order of text citations.
+
+%%% Set Up Title Page %%%
+\title{QDiabetes Package Vignette}
+\author{Benjamin G Feakins}
+\date{}
+
+%%% Begin Document %%%
+\begin{document}
+\SweaveOpts{concordance = T, keep.source = T} % RStudio thing.
+
+\maketitle
+
+<<setup, echo = F>>=
+library(QDiabetes)
+@
+
+\section{Introduction}
+
+Note: default values for the function are set as per the \href{https://qdiabetes.org/2018}{QDiabetes-2018 risk calculator}. The QDiabetes-2018 algorithm is actually six separate algorithms; three variants (A, B and C) per gender (male and female). Each of these variants may be invoked directly via the \texttt{QDRA()}, \texttt{QDRB()} and \texttt{QDRC()} functions. Alternatively, the \texttt{QDR()} function may be used, in which case the algorithm selection will mirror that of the QDiabetes website for any given information, i.e. if fasting plasma glucose (FPG) if available then the B variant is always used, if glycated haemoglobin (HbA\textsubscript{1c}) is available (but not FPG) then the C variant is used, if neither FPG nor HbA\textsubscript{1c} are available then the A variant is used. For convenience, I have also added the ability to specify body mass index or height and weight. Note, many of the default values of the \texttt{QDR()} algorithms assume the absence of comorbidities and concomittant pharmacotherapies. Hence, although you will be able to get an output from the \texttt{QDR()} or \texttt{QDRA()} functions with the spcification of only \texttt{gender}, \texttt{age} and \texttt{bmi}, this will likely underestimate the risk unless you specify the other parameters of the function.
+
+\section{Ad hoc usage}
+
+<<>>=
+QDR(gender = "Female", age = 65, height = 1.65, weight = 70)
+QDR(gender = "Male", age = 54, bmi = 35)
+@
+
+\section{Data frame usage}
+
+Load the sample data:
+
+<<>>=
+data(dat_qdr)
+@
+
+For R's standard \textit{data.frame}:
+
+<<>>=
+dat_qdr$risk <- with(dat_qdr, mapply(QDR, gender = gender, age = age, bmi = bmi))
+@
+
+Or, for a vectorised (but not faster) syntax, try the following:
+
+<<>>=
+vQDR <- Vectorize(QDR)
+dat_qdr$risk <- with(dat_qdr, vQDR(gender = gender, age = age, bmi = bmi))
+@
+
+Or with \textit{data.table}:
+
+<<echo = T, eval = F>>=
+library(data.table)
+dt_qdr <- as.data.table(dat_qdr)
+dt_qdr[, risk := mapply(QDR, gender = gender, age = age, bmi = bmi)]
+head(dt_qdr[, .(gender, age, bmi, risk)])
+@
+<<echo = F, eval = F>>=
+library(data.table)
+dt_qdr <- invisible(as.data.table(dat_qdr))
+dt_qdr[, risk := mapply(QDR, gender = gender, age = age, bmi = bmi)]
+head(dt_qdr[, .(gender, age, bmi, risk)])
+@
+
+Or with \textit{dplyr}:
+
+<<message = F>>=
+library(dplyr)
+df_qdr <- as_tibble(dat_qdr)
+df_qdr <- df_qdr %>%
+  mutate(risk = mapply(QDR, gender = gender, age = age, bmi = bmi))
+df_qdr %>%
+  select(gender, age, bmi, risk) %>%
+  head()
+@
+
+\section{Using specific variants of the algorithm}
+
+<<>>=
+# "A" Variant
+dat_qdr$qdra <- with(dat_qdr, mapply(QDRA,
+                                     gender = gender,
+                                     age = age,
+                                     bmi = bmi))
+# "B" Variant
+dat_qdr$qdrb <- with(dat_qdr, mapply(QDRB,
+                                     gender = gender,
+                                     age = age,
+                                     bmi = bmi,
+                                     fpg = fpg))
+# "C" Variant
+dat_qdr$qdrc <- with(dat_qdr, mapply(QDRC,
+                                     gender = gender,
+                                     age = age,
+                                     bmi = bmi,
+                                     hba1c = hba1c))
+
+# Output
+head(dat_qdr[, c("gender", "age", "bmi", "fpg", "hba1c", "qdra", "qdrb", "qdrc")])
+@
+
+\end{document}

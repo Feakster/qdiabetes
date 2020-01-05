@@ -42,4 +42,4 @@ dat_qdr <- dat_qdr[, c("gender", "age", "height", "weight", "bmi", "ethnicity", 
                        "antipsy", "statins", "steroids",
                        "cvd", "gestdiab", "learndiff", "schizobipo", "pcos", "hypertension", "fh_diab")]
 
-save(dat_qdr, file = "data/dat_qdr.Rda", version = 2)
+save(dat_qdr, file = "data/dat_qdr.rda", version = 2)

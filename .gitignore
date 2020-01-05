@@ -1,1 +1,6 @@
 .Rproj.user/
+vignettes/*.aux
+vignettes/*.log
+vignettes/*.pdf
+vignettes/*.synctex.gz
+vignettes/*.tex
