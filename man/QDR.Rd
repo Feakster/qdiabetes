@@ -6,9 +6,9 @@ Calculate the 10-year risk of an individual developing type 2 diabetes.
 }
 \usage{
 QDR(gender, age, bmi, height, weight, fpg, hba1c, ethnicity = "WhiteNA",
-    smoking = "Non", townsend = 0, antipsy = F, steroids = F, cvd = F,
-    gestdiab = F, learndiff = F, schizobipo = F, pcos = F, statins = F,
-    hypertension = F, fh_diab = F)
+    smoking = "Non", townsend = 0, antipsy = FALSE, steroids = FALSE,
+    cvd = FALSE, gestdiab = FALSE, learndiff = FALSE, schizobipo = FALSE,
+    pcos = FALSE, statins = FALSE, hypertension = FALSE, fh_diab = FALSE)
 }
 \arguments{
 \item{gender}{Gender. Must be \code{"Male"} or \code{"Female"}.}
@@ -39,6 +39,12 @@ Risk (\%) of type 2 diabetes.
 \examples{
 QDR(gender = "Female", age = 76, height = 1.65, weight = 70)
 QDR(gender = "Male", age = 55, bmi = 42, ethnicity = "BlackCaribbean", Smoking = "Current", Townsend = 5)
-QDR(gender = "Female", age = 65, bmi = 35, cvd = T, fh_diab = T)
+QDR(gender = "Female", age = 65, bmi = 35, cvd = TRUE, fh_diab = TRUE)
+}
+\references{
+    Hippisley-Cox J. and Coupland C. (2017)
+    Development and validation of QDiabetes-2018 risk prediction algorithm to estimate future risk of type 2 diabetes: cohort study.
+    \emph{BMJ},
+    \bold{359}:j5019
 }
 \keyword{risk, diabetes, qresearch}

@@ -1,0 +1,8 @@
+
+bibentry(bibtype = "Manual",
+         title = "A Package for Survival Analysis in S",
+         author = person(c("Benjamin G"), "Feakins"),
+         year = 2020,
+         note = "version 0.1.0",
+         key = "QDiabetes"
+)
