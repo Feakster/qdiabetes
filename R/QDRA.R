@@ -12,7 +12,7 @@
 # - bmi == 40 if bmi > 40
 # - townsend >= -7.028634577 & townsend <= 13.3114711
 
-QDRA <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL, ethnicity = "WhiteNA", smoking = "Non", townsend = 0, antipsy = F, steroids = F, cvd = F, gestdiab = F, learndiff = F, schizobipo = F, pcos = F, statins = F, hypertension = F, fh_diab = F){
+QDRA <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL, ethnicity = "WhiteNA", smoking = "Non", townsend = 0, antipsy = FALSE, steroids = FALSE, cvd = FALSE, gestdiab = FALSE, learndiff = FALSE, schizobipo = FALSE, pcos = FALSE, statins = FALSE, hypertension = FALSE, fh_diab = FALSE){
   ## Stop Conditions ##
   if(any(c(is.null(gender), is.null(age)))) stop("gender & age must be specified")
   if(is.null(bmi) & any(c(is.null(height), is.null(weight)))) stop("either bmi or height & weight must be specified")
@@ -25,15 +25,15 @@ QDRA <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
   stopifnot(townsend >= -7.028634577 & townsend <= 13.3114711)
 
   ## BMI Pre-Processing ##
-  if(all(c(!is.null(bmi), !is.null(height), !is.null(weight)))) warning("bmi, height & weight all specified, height & weight ignored", call. = F)
+  if(all(c(!is.null(bmi), !is.null(height), !is.null(weight)))) warning("bmi, height & weight all specified, height & weight ignored", call. = FALSE)
   if(is.null(bmi)) bmi <- weight/height^2
   stopifnot(bmi >= 40/2.10^2 & bmi <= 180/1.4^2)
   if(bmi < 20){
-    warning("bmi < 20. Setting bmi == 20", call. = F)
+    warning("bmi < 20. Setting bmi == 20", call. = FALSE)
     bmi <- 20
   }
   if(bmi > 40){
-    warning("bmi > 40. Setting bmi == 40", call. = F)
+    warning("bmi > 40. Setting bmi == 40", call. = FALSE)
     bmi <- 40
   }
 

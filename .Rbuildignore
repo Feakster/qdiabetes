@@ -2,6 +2,7 @@
 .gitignore
 ^.*\.Rproj$
 ^\.Rproj\.user$
+data-raw/
 README.md
 vignettes/.*.aux
 vignettes/.*.log

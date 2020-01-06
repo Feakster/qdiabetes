@@ -6,12 +6,18 @@
 %                                  %
 %==================================%
 
+%%% Meta-Data %%%
+%\VignetteIndexEntry{QDiabetes-package}
+%\VignetteKeyword{QDiabetes}
+%\SweaveUTF8
+
 %%% Document Class %%%
 \documentclass[10pt,a4paper]{article}
 
 %%% Load Packages %%%
 \usepackage{Sweave} % Weave R code into LaTeX.
 \usepackage[margin=2.5cm]{geometry} % 2.5cm margins all around.
+\usepackage[utf8]{inputenc} % Input encoding.
 \usepackage[T1]{fontenc} % Allows more complex characters.
 \usepackage{microtype} % Better use of white space.
 \usepackage[british]{babel} % Better hyphenation.

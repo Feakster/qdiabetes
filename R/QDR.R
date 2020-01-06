@@ -13,7 +13,7 @@
 # - bmi == 20 if bmi < 20
 # - bmi == 40 if bmi > 40
 
-QDR <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL, fpg = NULL, hba1c = NULL, ethnicity = "WhiteNA", smoking = "Non", townsend = 0, antipsy = F, steroids = F, cvd = F, gestdiab = F, learndiff = F, schizobipo = F, pcos = F, statins = F, hypertension = F, fh_diab = F){
+QDR <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL, fpg = NULL, hba1c = NULL, ethnicity = "WhiteNA", smoking = "Non", townsend = 0, antipsy = FALSE, steroids = FALSE, cvd = FALSE, gestdiab = FALSE, learndiff = FALSE, schizobipo = FALSE, pcos = FALSE, statins = FALSE, hypertension = FALSE, fh_diab = FALSE){
   ## Warnings ##
   if(all(c(!is.null(fpg), !is.null(hba1c)))) warning("fpg & hba1c specified, hba1c ignored", call. = F)
 
