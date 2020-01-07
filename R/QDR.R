@@ -12,6 +12,7 @@
 # - weight >= 40 & weight <= 180
 # - bmi == 20 if bmi < 20
 # - bmi == 40 if bmi > 40
+# - townsend >= -7.028634577 & townsend <= 13.3114711
 
 QDR <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL, fpg = NULL, hba1c = NULL, ethnicity = "WhiteNA", smoking = "Non", townsend = 0, antipsy = FALSE, steroids = FALSE, cvd = FALSE, gestdiab = FALSE, learndiff = FALSE, schizobipo = FALSE, pcos = FALSE, statins = FALSE, hypertension = FALSE, fh_diab = FALSE){
   ## Warnings ##
