@@ -162,7 +162,7 @@ QDRA <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
     townsend <- 0.0259181820676787250000000*townsend
 
     # Binary Variables #
-    antipsy <- 0.4210109234600543600000000*antipsy # HERE!
+    antipsy <- 0.4210109234600543600000000*antipsy
     steroids <- 0.2218358093292538400000000*steroids
     cvd <- 0.2026960575629002100000000*cvd
     learndiff <- 0.2331532140798696100000000*learndiff
