@@ -34,11 +34,11 @@ QDR(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
   }  
   \item{smoking}{Smoking status. Must be one of:
   \itemize{
-    \item \code{"Non"} (Non-smoker - )
-    \item \code{"Ex"} (Ex-smoker - )
-    \item \code{"Light"} (Light smoker - less than 10)
-    \item \code{"Moderate"} (Moderate smoker - 10 to 19)
-    \item \code{"Heavy"} (Heavy smoker - 20 or over)
+    \item \code{"Non"} (Non-smoker)
+    \item \code{"Ex"} (Ex-smoker)
+    \item \code{"Light"} (Light smoker - less than 10 cigarettes per day)
+    \item \code{"Moderate"} (Moderate smoker - 10 to 19 cigarettes per day)
+    \item \code{"Heavy"} (Heavy smoker - 20 or more cigarettes per day)
     }
   }
   \item{townsend}{Townsend deprivation score.}

@@ -4,6 +4,7 @@
 ^\.Rproj\.user$
 data-raw/
 README.md
+ToDo
 vignettes/.*.aux
 vignettes/.*.log
 vignettes/.*.tex

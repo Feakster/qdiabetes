@@ -1,0 +1,15 @@
+#============#
+#            #
+#### ToDo ####
+#            #
+#============#
+
+- Sort where to put the wording of the Open Government License for the datasets obtained from the Office for National Statistics.
+- Sort whether or not the GNU AGPL v3 preamble is required for each source file using materials from ClinRisk's QDiabetes-2018 website, and who's details go in this.
+- Harmonise the QDR?() documentation.
+- Convert the data-raw/postcode_to_tds.R script from data.table to core R.
+- Write unit tests for the QDR(), QDRB(), QDRC() and getTDS() functions.
+- Properly accredit all co-authors and the funder in the DESCRIPTION file and the documentation.
+- Complete the vignette.
+- Check Townsend Deprivation Score ranges in all regional layers to find the minimum and maximum possible values.
+- Consider adding more power to the getTDS() function, like the ability to search using regex.
