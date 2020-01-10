@@ -19,8 +19,28 @@ QDR(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
   \item{weight}{Weight, in kg.}
   \item{fpg}{Fasting plasma glucose level, in mmol/L.}
   \item{hba1c}{Glycated haemoglobin A1c level, in mmol/mol.}
-  \item{ethnicity}{Ethnicity. Must be one of: \code{"WhiteNA"}, \code{"Indian"}, \code{"Pakistani"}, \code{"Bangladeshi"}, \code{"OtherAsian"}, \code{"BlackCaribbean"}, \code{"BlackAfrican"}, \code{"Chinese"} or \code{"Other"}.}
-  \item{smoking}{Smoking status. Must be one of: \code{"Non"}, \code{"Ex"}, \code{"Light"}, \code{"Moderate"} or \code{"Heavy"}.}
+  \item{ethnicity}{Ethnicity. Must be one of:
+  \itemize{
+    \item \code{"WhiteNA"} (White or not stated)
+    \item \code{"Indian"} (Indian)
+    \item \code{"Pakistani"} (Pakistani)
+    \item \code{"Bangladeshi"} (Bangladeshi)
+    \item \code{"OtherAsian"} (Other Asian)
+    \item \code{"BlackCaribbean"} (Black Caribbean)
+    \item \code{"BlackAfrican"} (Black African)
+    \item \code{"Chinese"} (Chinese)
+    \item \code{"Other"} (Other ethnic group)
+    }
+  }  
+  \item{smoking}{Smoking status. Must be one of:
+  \itemize{
+    \item \code{"Non"} (Non-smoker - )
+    \item \code{"Ex"} (Ex-smoker - )
+    \item \code{"Light"} (Light smoker - less than 10)
+    \item \code{"Moderate"} (Moderate smoker - 10 to 19)
+    \item \code{"Heavy"} (Heavy smoker - 20 or over)
+    }
+  }
   \item{townsend}{Townsend deprivation score.}
   \item{antipsy}{History of use of 2nd generation antipsychotics.}
   \item{steroids}{History of use of corticosteroids.}
@@ -34,7 +54,11 @@ QDR(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
   \item{fh_diab}{Family history of diabetes.}
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+The QDiabetes-2018 algorithm uses Townsend deprivation data from the 2011 Census. You can look up what this would be for your location as follows:
+\itemize{
+    \item Look up the lower layer super output area (LSOA) corresponding to your postcode \href{http://geoportal1-ons.opendata.arcgis.com/datasets/80628f9289574ba4b39a76ca7830b7e9_0.csv}{here}.
+    \item Look up the Townsend deprivation score corresponding to your LSOA \href{https://www.statistics.digitalresources.jisc.ac.uk/dataset/2011-uk-townsend-deprivation-scores/resource/0083b0bf-9241-4d73-bfdb-da33de2bd5cc}{here}. The values required are located in the "TDS" column.
+}
 }
 \value{Risk (\%) of type 2 diabetes.}
 \source{\url{https://qdiabetes.org/2018/src.php}}
