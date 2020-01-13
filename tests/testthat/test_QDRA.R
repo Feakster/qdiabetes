@@ -8,8 +8,21 @@
 # - 0.1 tolerance allowed in risk outputs to account for different rounding standards.
 # - Townsend score currently not easily testable.
 
-### Tolerance ###
-tol <- 0.1
+### Parameters ###
+tol <- 0.1 # Tolerance
+tiny <- 1e-8 # Small number
+
+### Test Data ###
+dat_test <- expand.grid(
+  age = c(seq(25, 84.5, 0.5), 85L - tiny),
+  height = seq(1.4, 2.1, 0.01),
+  weight = c(40, 180, 0.5),
+  townsend = c(-7.028634577 + tiny, -7:13, 13.3114711 - tiny),
+  KEEP.OUT.ATTRS = F
+)
+
+dat_test[["bmi"]] <- with(dat_test, weight/height^2)
+dat_test <- dat_test[dat_test$bmi >= 20 & dat_test$bmi <= 40, ]
 
 ### Redefine Function (Rounding) ###
 rQDRA <- function(...){round(QDRA(...), 1)}
@@ -20,6 +33,43 @@ rQDRA <- function(...){round(QDRA(...), 1)}
 
 ### Redefine Function (Gender) ###
 gQDRA <- function(...){rQDRA(gender = "Female", ...)}
+
+### Correct Output Format ###
+expect_type(gQDRA(age = 60, height = 1.83, weight = 90), "double")
+expect_length(gQDRA(age = 60, height = 1.83, weight = 90), 1)
+
+### Correct Range ###
+dat_test[["risk_min"]] <- with(dat_test, mapply(QDRA,
+                                                age = age,
+                                                height = height,
+                                                weight = weight,
+                                                townsend = townsend,
+                                                MoreArgs = list(
+                                                  gender = "Female",
+                                                  ethnicity = "WhiteNA",
+                                                  smoking = "Non")))
+dat_test[["risk_max"]] <- with(dat_test, mapply(QDRA,
+                                                age = age,
+                                                height = height, 
+                                                weight = weight,
+                                                townsend = townsend,
+                                                MoreArgs = list(
+                                                  gender = "Female",
+                                                  ethnicity = "Bangladeshi",
+                                                  smoking = "Heavy",
+                                                  steroids = T,
+                                                  cvd = T,
+                                                  gestdiab = T,
+                                                  learndiff = T,
+                                                  schizobipo = T,
+                                                  pcos = T,
+                                                  statins = T,
+                                                  hypertension = T,
+                                                  fh_diab = T)))
+
+expect_gte(min(dat_test[["risk_min"]]), 0)
+expect_lte(max(dat_test[["risk_max"]]), 100)
+dat_test[, c("risk_min", "risk_max")] <- NULL
 
 ### Variable Combinations ###
 ## Gender ##
@@ -54,19 +104,19 @@ expect_warning(tQDRA(bmi = 41))
 rm(tQDRA)
 
 ## Height ##
-tQDRA <- function(...){gQDR(age = 60, weight = 90, ...)}
+tQDRA <- function(...){gQDRA(age = 60, weight = 90, ...)}
 expect_error(tQDRA(height = 1.3))
 expect_error(tQDRA(height = 2.2))
 rm(tQDRA)
 
 ## Weight ##
-tQDRA <- function(...){gQDR(age = 60, height = 1.83, ...)}
+tQDRA <- function(...){gQDRA(age = 60, height = 1.83, ...)}
 expect_error(tQDRA(weight = 39))
 expect_error(tQDRA(weight = 181))
 rm(tQDRA)
 
 ## Townsend ##
-tQDRA <- function(...){gQDR(age = 60, height = 1.83, weight = 90, ...)}
+tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
 expect_error(tQDRA(townsend = -7.028634578))
 expect_error(tQDRA(townsend = 13.3114712))
 rm(tQDRA)
@@ -81,7 +131,7 @@ names(risk_web) <- vec_age
 risk_fun <- sapply(vec_age, tQDRA)
 names(risk_fun) <- vec_age
 
-expect_equal(risk_web, risk_fun, tolerance = tol)
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female Risk (age)", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
@@ -96,7 +146,7 @@ suppressWarnings({
 })
 names(risk_fun) <- round(vec_bmi, 1)
 
-expect_equal(risk_web, risk_fun, tolerance = tol)
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female Risk (bmi)", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
@@ -111,7 +161,7 @@ suppressWarnings({
 })
 names(risk_fun) <- vec_ht
 
-expect_equal(risk_web, risk_fun, tolerance = tol)
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female Risk (height)", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
@@ -126,7 +176,7 @@ suppressWarnings({
 })
 names(risk_fun) <- vec_wt
 
-expect_equal(risk_web, risk_fun, tolerance = tol)
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female Risk (weight)", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
@@ -141,7 +191,7 @@ names(risk_web) <- vec_eth
 risk_fun <- sapply(vec_eth, tQDRA)
 names(risk_fun) <- vec_eth
 
-expect_equal(risk_web, risk_fun, tolerance = tol)
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female Risk (etnicity)", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
@@ -155,7 +205,7 @@ names(risk_web) <- vec_smo
 risk_fun <- sapply(vec_smo, tQDRA)
 names(risk_fun) <- vec_smo
 
-expect_equal(risk_web, risk_fun, tolerance = tol)
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female Risk (smoke)", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
@@ -182,6 +232,41 @@ rm(gQDRA)
 
 ### Redefine Function (Gender) ###
 gQDRA <- function(...){rQDRA(gender = "Male", ...)}
+
+### Correct Output Format ###
+expect_type(gQDRA(age = 60, height = 1.83, weight = 90), "double")
+expect_length(gQDRA(age = 60, height = 1.83, weight = 90), 1)
+
+### Correct Range ###
+dat_test[["risk_min"]] <- with(dat_test, mapply(QDRA,
+                                                age = age,
+                                                height = height,
+                                                weight = weight,
+                                                townsend = townsend,
+                                                MoreArgs = list(
+                                                  gender = "Male",
+                                                  ethnicity = "WhiteNA",
+                                                  smoking = "Non")))
+dat_test[["risk_max"]] <- with(dat_test, mapply(QDRA,
+                                                age = age,
+                                                height = height, 
+                                                weight = weight,
+                                                townsend = townsend,
+                                                MoreArgs = list(
+                                                  gender = "Male",
+                                                  ethnicity = "Bangladeshi",
+                                                  smoking = "Heavy",
+                                                  steroids = T,
+                                                  cvd = T,
+                                                  learndiff = T,
+                                                  schizobipo = T,
+                                                  statins = T,
+                                                  hypertension = T,
+                                                  fh_diab = T)))
+
+expect_gte(min(dat_test[["risk_min"]]), 0)
+expect_lte(max(dat_test[["risk_max"]]), 100)
+dat_test[, c("risk_min", "risk_max")] <- NULL
 
 ### Variable Combinations ###
 ## Gender ##
@@ -221,19 +306,19 @@ expect_warning(tQDRA(bmi = 41))
 rm(tQDRA)
 
 ## Height ##
-tQDRA <- function(...){gQDR(age = 60, weight = 90, ...)}
+tQDRA <- function(...){gQDRA(age = 60, weight = 90, ...)}
 expect_error(tQDRA(height = 1.3))
 expect_error(tQDRA(height = 2.2))
 rm(tQDRA)
 
 ## Weight ##
-tQDRA <- function(...){gQDR(age = 60, height = 1.83, ...)}
+tQDRA <- function(...){gQDRA(age = 60, height = 1.83, ...)}
 expect_error(tQDRA(weight = 39))
 expect_error(tQDRA(weight = 181))
 rm(tQDRA)
 
 ## Townsend ##
-tQDRA <- function(...){gQDR(age = 60, height = 1.83, weight = 90, ...)}
+tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
 expect_error(tQDRA(townsend = -7.028634578))
 expect_error(tQDRA(townsend = 13.3114712))
 rm(tQDRA)
@@ -248,7 +333,7 @@ names(risk_web) <- vec_age
 risk_fun <- sapply(vec_age, tQDRA)
 names(risk_fun) <- vec_age
 
-expect_equal(risk_web, risk_fun, tolerance = tol)
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Male Risk (age)", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
@@ -263,7 +348,7 @@ suppressWarnings({
 })
 names(risk_fun) <- round(vec_bmi, 1)
 
-expect_equal(risk_web, risk_fun, tolerance = tol)
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Male Risk (bmi)", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
@@ -278,7 +363,7 @@ suppressWarnings({
 })
 names(risk_fun) <- vec_ht
 
-expect_equal(risk_web, risk_fun, tolerance = tol)
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Male Risk (height)", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
@@ -293,7 +378,7 @@ suppressWarnings({
 })
 names(risk_fun) <- vec_wt
 
-expect_equal(risk_web, risk_fun, tolerance = tol)
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Male Risk (weight)", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
@@ -308,7 +393,7 @@ names(risk_web) <- vec_eth
 risk_fun <- sapply(vec_eth, tQDRA)
 names(risk_fun) <- vec_eth
 
-expect_equal(risk_web, risk_fun, tolerance = tol)
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Male Risk (ethnicity)", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
@@ -322,7 +407,7 @@ names(risk_web) <- vec_smo
 risk_fun <- sapply(vec_smo, tQDRA)
 names(risk_fun) <- vec_smo
 
-expect_equal(risk_web, risk_fun, tolerance = tol)
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Male Risk (smoke)", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
@@ -345,4 +430,4 @@ rm(gQDRA)
 ### Tidy Up ###
 ###############
 
-rm(tol, rQDRA)
+rm(tol, tiny, dat_test, rQDRA)

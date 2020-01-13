@@ -8,7 +8,7 @@
 getTDS(postcode = NULL)
 }
 \arguments{
-  \item{postcode}{UK five--seven character UK postcode.}
+  \item{postcode}{Five--seven character UK postcode.}
 }
 \details{
   \code{getTDS} is a lookup function that queries a dataset of postcodes and Townsend Deprivation Scores.

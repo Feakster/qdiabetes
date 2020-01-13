@@ -1,11 +1,19 @@
 Package: QDiabetes
-Version: 0.1.0
+Version: 0.0.0.9000
 Date: 2020-01-02
 Title: 10-Year Type 2 Diabetes Risk Calculator (QDiabetes 2018)
-Authors@R: person(c("Benjamin", "G"), "Feakins", role = c("aut", "cre"), email = "benjamin.feakins@ndph.ox.ac.uk", comment = c(ORCID = "0000-0002-3928-6750"))
-Author: Benjamin G Feakins [aut, cre]
-Maintainer: Benjamin Feakins <benjamin.feakins@ndph.ox.ac.uk>
-Description: This function aims to calculate the risk of developing type 2 diabetes in the next 10 years. This package is based on published risk prediction algorithms <https://qdiabetes.org/src.php>.
+Authors@R: c(
+  person(c("Benjamin", "G"), "Feakins", role = c("aut", "cre"), email = "benjamin.feakins@ndph.ox.ac.uk", comment = c(ORCID = "0000-0002-3928-6750")),
+  person(c("Sarah", "L"), "Lay-Flurrie", role = "sad", email = "sarah.lay-flurrie@phc.ox.ac.uk", comment = c(ORCID = "0000-0003-1094-8455")),
+  person(c("Richard", "J"), "Stevens", role = "sad", email = "richard.stevens@phc.ox.ac.uk", comment = c(ORCID = "0000-0002-9258-4060")),
+  person("Trish", "Greenhalgh", role = "sad", email = "trish.greenhalgh@phc.ox.ac.uk", comment = c(ORCID = "0000-0003-2369-8088")),
+  person("Tim", "Holt", role = "sad", email = "tim.holt@phc.ox.ac.uk", comment = c(ORCID = "0000-0002-1214-1682")),
+  person("Evangelos", "Kontopantelis", role = "sad", email = "e.kontopantelis@manchester.ac.uk", comment = c(ORCID = "0000-0001-6450-5815")),
+  person(c("Dianna", "M"), "Smith", role = "sad", email = "d.m.smith@soton.ac.uk", comment = c(ORCID = "0000-0002-0650-6606")),
+  person("Bernard", "Gudgin", role = "csl"),
+  person("National Institute for Health Research School for Primary Care Research", role = "fnd"),
+  person("University of Oxford", role = c("cph", "sht")))
+Description: This package aims to calculate the risk of developing type 2 diabetes in the next 10 years. It is based on published risk prediction algorithms <https://qdiabetes.org/src.php>.
 Suggests: data.table, dplyr, testthat
 License: AGPL-3 + file LICENSE
 Copyrights: University of Oxford
