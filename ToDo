@@ -8,11 +8,11 @@
 - Sort whether or not the GNU AGPL v3 preamble is required for each source file using materials from ClinRisk's QDiabetes-2018 website, and who's details go in this.
 - Harmonise the QDR?() documentation.
 - Convert the data-raw/postcode_to_tds.R script from data.table to core R.
-- Write unit tests for the QDRB(), QDRC() and getTDS() functions.
-- Properly accredit all co-authors and the funder in the DESCRIPTION file and the documentation.
+- Write the remaining unit tests for the QDRB(), QDRC() and getTDS() functions.
 - Complete the vignette.
 - Check Townsend Deprivation Score ranges in all regional layers to find the minimum and maximum possible values.
 - Consider adding more power to the getTDS() function, like the ability to search using regex.
 - Add more input checks to the getTDS() function.
+- Add tests to check to non-0:1 and non-c(F, T) inputs to the binary variables of the QDRA(), QDRB() and QDRC() functions.
 - Vectorise the QDR(), QDRA(), QDRB() & QDRC() functions by experimenting with data.frames in the functions.
-- Consider using expand.grid() to make a test data.frame containing all possible permutations of values. Stratify this in order to have one data.frame to find the absolute lowest risk possible, and one data.frame to find the absolute higest risk possible.
+- Use GP data in the vignette to simulate a UK population & produce a risk map.

@@ -15,13 +15,34 @@ QDRB(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
 \arguments{
   \item{gender}{Gender. Must be \code{"Male"} or \code{"Female"}.}
   \item{age}{Age, in years.}
-  \item{bmi}{Body-mass index, in kg/m^2.}
-  \item{height}{Height, in m.}
-  \item{weight}{Weight, in kg.}
-  \item{fpg}{Fasting plasma glucose level, in mmol/L.}
-  \item{ethnicity}{Ethnicity. Must be one of: \code{"WhiteNA"}, \code{"Indian"}, \code{"Pakistani"}, \code{"Bangladeshi"}, \code{"OtherAsian"}, \code{"BlackCaribbean"}, \code{"BlackAfrican"}, \code{"Chinese"} or \code{"Other"}.}
-  \item{smoking}{Smoking status. Must be one of: \code{"Non"}, \code{"Ex"}, \code{"Light"}, \code{"Moderate"} or \code{"Heavy"}.}
-  \item{townsend}{Townsend deprivation score.}
+  \item{age}{Age, in years. Must be \eqn{\ge}25 and <85.}
+  \item{bmi}{Body-mass index, in kg/m^2. Must be \eqn{\ge}40/2.1^2 and \eqn{\le}180/1.4^2. Within this range, values >40 are set to 40, while values <20 are set to 20.}
+  \item{height}{Height, in m. Must be \eqn{\ge}1.4 and \eqn{\le}2.1.}
+  \item{weight}{Weight, in kg. Must be \eqn{\ge}40 and \eqn{\le}180.}
+  \item{fpg}{Fasting plasma glucose level, in mmol/L. Must be \eqn{\ge}2 and <7.}
+  \item{ethnicity}{Ethnicity. Must be one of:
+  \itemize{
+    \item \code{"WhiteNA"} (White or not stated)
+    \item \code{"Indian"} (Indian)
+    \item \code{"Pakistani"} (Pakistani)
+    \item \code{"Bangladeshi"} (Bangladeshi)
+    \item \code{"OtherAsian"} (Other Asian)
+    \item \code{"BlackCaribbean"} (Black Caribbean)
+    \item \code{"BlackAfrican"} (Black African)
+    \item \code{"Chinese"} (Chinese)
+    \item \code{"Other"} (Other ethnic group)
+    }
+  }
+  \item{smoking}{Smoking status. Must be one of:
+  \itemize{
+    \item \code{"Non"} (Non-smoker)
+    \item \code{"Ex"} (Ex-smoker)
+    \item \code{"Light"} (Light smoker - less than 10 cigarettes per day)
+    \item \code{"Moderate"} (Moderate smoker - 10 to 19 cigarettes per day)
+    \item \code{"Heavy"} (Heavy smoker - 20 or more cigarettes per day)
+    }
+  }
+  \item{townsend}{Townsend deprivation score. Must be \eqn{\ge}-7.028634577 and \eqn{\le}13.3114711}
   \item{antipsy}{History of use of 2nd generation antipsychotics.}
   \item{steroids}{History of use of corticosteroids.}
   \item{cvd}{History of cardiovascular disease.}
@@ -41,7 +62,7 @@ QDRB(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
     \emph{BMJ}
     \bold{359}, j5019
 }
-\author{Benjamin Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
+\author{Benjamin G Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
 \seealso{\code{\link{QDR}}, \code{\link{QDRA}}, \code{\link{QDRC}}}
 \examples{
 QDRB(gender = "Female", age = 76, height = 1.65, weight = 70, fpg = 4)

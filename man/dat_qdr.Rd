@@ -7,7 +7,7 @@
 }
 \usage{data("dat_qdr")}
 \format{
-  A data frame with 45 observations on the following 20 variables.
+  A data frame with 45 observations on the following 20 variables:
   \describe{
     \item{\code{gender}}{a factor vector of genders (possible values: \code{"Female"} or \code{"Male"})}
     \item{\code{age}}{an integer vector of ages (years)}
@@ -37,6 +37,7 @@
   The dataset contains no values or combination of values that would result in warnings or errors from any of the risk prediction functions in this package. It exists purely to allow for testing and exploration of the use of the these functions.
 }
 \source{Simulated dataset.}
+\author{Benjamin G Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
 \examples{
 data(dat_qdr)
 str(dat_qdr)

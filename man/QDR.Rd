@@ -13,12 +13,12 @@ QDR(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
 }
 \arguments{
   \item{gender}{Gender. Must be \code{"Male"} or \code{"Female"}.}
-  \item{age}{Age, in years.}
-  \item{bmi}{Body-mass index, in kg/m^2.}
-  \item{height}{Height, in m.}
-  \item{weight}{Weight, in kg.}
-  \item{fpg}{Fasting plasma glucose level, in mmol/L.}
-  \item{hba1c}{Glycated haemoglobin A1c level, in mmol/mol.}
+  \item{age}{Age, in years. Must be \eqn{\ge}25 and <85.}
+  \item{bmi}{Body-mass index, in kg/m^2. Must be \eqn{\ge}40/2.1^2 and \eqn{\le}180/1.4^2. Within this range, values >40 are set to 40, while values <20 are set to 20.}
+  \item{height}{Height, in m. Must be \eqn{\ge}1.4 and \eqn{\le}2.1.}
+  \item{weight}{Weight, in kg. Must be \eqn{\ge}40 and \eqn{\le}180.}
+  \item{fpg}{Fasting plasma glucose level, in mmol/L. Must be \eqn{\ge}2 and <7.}
+  \item{hba1c}{Glycated haemoglobin A1c level, in mmol/mol. Must be \eqn{\ge}15 and <48.}
   \item{ethnicity}{Ethnicity. Must be one of:
   \itemize{
     \item \code{"WhiteNA"} (White or not stated)
@@ -31,7 +31,7 @@ QDR(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
     \item \code{"Chinese"} (Chinese)
     \item \code{"Other"} (Other ethnic group)
     }
-  }  
+  }
   \item{smoking}{Smoking status. Must be one of:
   \itemize{
     \item \code{"Non"} (Non-smoker)
@@ -41,7 +41,7 @@ QDR(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
     \item \code{"Heavy"} (Heavy smoker - 20 or more cigarettes per day)
     }
   }
-  \item{townsend}{Townsend deprivation score.}
+  \item{townsend}{Townsend deprivation score. Must be \eqn{\ge}-7.028634577 and \eqn{\le}13.3114711}
   \item{antipsy}{History of use of 2nd generation antipsychotics.}
   \item{steroids}{History of use of corticosteroids.}
   \item{cvd}{History of cardiovascular disease.}
@@ -77,7 +77,7 @@ The \code{QDR} function replicates the behaviour of the interactive risk calcula
   }
 Should both fasting plasma glucose and glycated haemoglobin A1c be provided then the B-variant of the algorithm (\code{QDRB}) is used. However, unlike the website, a warning message will be displayed alongside the value.
 }
-\author{Benjamin Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
+\author{Benjamin G Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
 \seealso{\code{\link{QDRA}}, \code{\link{QDRB}}, \code{\link{QDRC}}}
 \examples{
 QDR(gender = "Female", age = 76, height = 1.65, weight = 70)

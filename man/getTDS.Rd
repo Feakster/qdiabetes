@@ -24,7 +24,7 @@ getTDS(postcode = NULL)
 \note{
   PO Box codes have no associated Townsend Deprivation Scores and will not work as function inputs.
 }
-\author{Benjamin Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
+\author{Benjamin G Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
 \examples{
 ## Case & white space insensitive
 getTDS(postcode = "OX37LF")

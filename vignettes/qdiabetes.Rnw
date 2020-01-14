@@ -6,13 +6,16 @@
 %                                  %
 %==================================%
 
+%%% Notes %%%
+% - 3D plot of the boundary space of height (x) & weight (y), and their effect on risk surface (z).
+
 %%% Meta-Data %%%
 %\VignetteIndexEntry{QDiabetes-package}
 %\VignetteKeyword{QDiabetes}
 %\SweaveUTF8
 
 %%% Document Class %%%
-\documentclass[10pt,a4paper]{article}
+\documentclass[9pt,a4paper]{article}
 
 %%% Load Packages %%%
 \usepackage{Sweave} % Weave R code into LaTeX.
@@ -133,6 +136,138 @@ dat_qdr$qdrc <- with(dat_qdr, mapply(QDRC,
 
 # Output
 head(dat_qdr[, c("gender", "age", "bmi", "fpg", "hba1c", "qdra", "qdrb", "qdrc")])
+@
+
+\section*{Visualising risk in QDiabetes}
+
+\subsection*{Visualising the impact of height and weight}
+
+Change in risk associated with changes in height and weight.
+
+<<fig = T>>=
+## Libraries
+library(lattice)
+
+## Simulate Data Ranges
+df <- expand.grid(height = seq(1.4, 2.1, length.out = 15),
+                  weight = seq(40, 180, length.out = 15),
+                  KEEP.OUT.ATTRS = F)
+
+## Estimate Risk
+suppressWarnings({
+df[["risk"]] <- with(df,  mapply(QDRA,
+                                 height = height,
+                                 weight = weight,
+                                 MoreArgs = list(
+                                   gender = "Male",
+                                   age = 65)))
+})
+
+## Colour Palette
+pal <- hsv(0.6, seq(0, 1, length.out = 1e3), 1)
+
+## 3D Wireframe Surface Plot
+wireframe(risk ~ height*weight, data = df,
+          drape = T, colorkey = T, col.regions = pal,
+          xlab = list(label = "Height\n(m)", cex = 0.8),
+          ylab = list("Weight\n(kg)", cex = 0.8),
+          zlab = list("Risk\n(%)", cex = 0.8),
+          scales = list(arrows = F, cex = 0.8))
+
+@
+
+\subsection*{Visualising age interactions}
+
+Change in risk associated with changes in age and BMI.
+
+<<fig = T>>=
+## Libraries
+library(lattice)
+
+## Simulate Data Ranges
+df <- expand.grid(age = seq(25, 84.99, length.out = 15),
+                  bmi = seq(20, 40, length.out = 15),
+                  KEEP.OUT.ATTRS = F)
+
+## Estimate Risk
+df[["risk"]] <- with(df,  mapply(QDRA,
+                                 age = age,
+                                 bmi = bmi,
+                                 MoreArgs = list(
+                                   gender = "Male")))
+
+## Colour Palette
+pal <- hsv(0.6, seq(0, 1, length.out = 1e3), 1)
+
+## 3D Wireframe Plot
+wireframe(risk ~ age*bmi, data = df,
+          drape = T, colorkey = T, col.regions = pal,
+          xlab = list(label = "Age\n(years)", cex = 0.8),
+          ylab = list("BMI\n(kg/m^2)", cex = 0.8),
+          zlab = list("Risk\n(%)", cex = 0.8),
+          scales = list(arrows = F, cex = 0.8))
+@
+
+Change in risk associated with changes in age and FPG.
+
+<<fig = T>>=
+## Libraries
+library(lattice)
+
+## Simulate Data Ranges
+df <- expand.grid(age = seq(25, 84.99, length.out = 15),
+                  fpg = seq(2, 6.99, length.out = 15),
+                  KEEP.OUT.ATTRS = F)
+
+## Estimate Risk
+df[["risk"]] <- with(df,  mapply(QDRB,
+                                 age = age,
+                                 fpg = fpg,
+                                 MoreArgs = list(
+                                   gender = "Male",
+                                   bmi = 30)))
+
+## Colour Palette
+pal <- hsv(0.6, seq(0, 1, length.out = 1e3), 1)
+
+## 3D Wireframe Plot
+wireframe(risk ~ age*fpg, data = df,
+          drape = T, colorkey = T, col.regions = pal,
+          xlab = list(label = "Age\n(years)", cex = 0.8),
+          ylab = list("FPG\n(mmol/L)", cex = 0.8),
+          zlab = list("Risk\n(%)", cex = 0.8),
+          scales = list(arrows = F, cex = 0.8))
+@
+
+Change in risk associated with changes in age and HbA\textsubscript{1c}.
+
+<<fig = T>>=
+## Libraries
+library(lattice)
+
+## Simulate Data Ranges
+df <- expand.grid(age = seq(25, 84.99, length.out = 15),
+                  hba1c = seq(15, 47.99, length.out = 15),
+                  KEEP.OUT.ATTRS = F)
+
+## Estimate Risk
+df[["risk"]] <- with(df,  mapply(QDRC,
+                                 age = age,
+                                 hba1c = hba1c,
+                                 MoreArgs = list(
+                                   gender = "Male",
+                                   bmi = 30)))
+
+## Colour Palette
+pal <- hsv(0.6, seq(0, 1, length.out = 1e3), 1)
+
+## 3D Wireframe Plot
+wireframe(risk ~ age*hba1c, data = df,
+          drape = T, colorkey = T, col.regions = pal,
+          xlab = list(label = "Age\n(years)", cex = 0.8),
+          ylab = list("HbA1c\n(mmol/mol)", cex = 0.8),
+          zlab = list("Risk\n(%)", cex = 0.8),
+          scales = list(arrows = F, cex = 0.8))
 @
 
 \end{document}

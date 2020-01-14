@@ -20,16 +20,17 @@ QDRC <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
   stopifnot(gender %in% c("Male", "Female"))
   stopifnot(ethnicity %in% c("WhiteNA", "Indian", "Pakistani", "Bangladeshi", "OtherAsian", "BlackCaribbean", "BlackAfrican", "Chinese", "Other"))
   stopifnot(smoking %in% c("Non", "Ex", "Light", "Moderate", "Heavy"))
+  stopifnot(all(c(antipsy, steroids, cvd, gestdiab, learndiff, schizobipo, pcos, statins, hypertension, fh_diab) %in% c(FALSE, TRUE)))
   stopifnot(hba1c >= 15 & hba1c < 48)
   stopifnot(age >= 25 & age < 85)
-  stopifnot(height >= 1.40 & height <= 2.10)
+  stopifnot(height >= 1.4 & height <= 2.1)
   stopifnot(weight >= 40 & weight <= 180)
   stopifnot(townsend >= -7.028634577 & townsend <= 13.3114711)
 
   ## BMI Pre-Processing ##
   if(all(c(!is.null(bmi), !is.null(height), !is.null(weight)))) warning("bmi, height & weight all specified, height & weight ignored", call. = FALSE)
   if(is.null(bmi)) bmi <- weight/height^2
-  stopifnot(bmi >= 40/2.10^2 & bmi <= 180/1.4^2)
+  stopifnot(bmi >= 40/2.1^2 & bmi <= 180/1.4^2)
   if(bmi < 20){
     warning("bmi < 20. Setting bmi == 20", call. = FALSE)
     bmi <- 20
