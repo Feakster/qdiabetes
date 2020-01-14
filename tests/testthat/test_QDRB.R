@@ -99,7 +99,7 @@ rm(tQDRB)
 
 ## BMI ##
 tQDRB <- function(...){gQDRB(age = 60, fpg = 4.5, ...)}
-expect_error(tQDRB(bmi = (40/2.10^2) - 1))
+expect_error(tQDRB(bmi = (40/2.1^2) - 1))
 expect_error(tQDRB(bmi = (180/1.4^2) + 1))
 expect_warning(tQDRB(bmi = 19))
 expect_warning(tQDRB(bmi = 41))
@@ -139,7 +139,7 @@ names(risk_web) <- vec_age
 risk_fun <- sapply(vec_age, tQDRB)
 names(risk_fun) <- vec_age
 
-expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRB-Female Risk (age)", expected.label = "Web Risk")
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRB-Female [range(age)]", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRB)
 
@@ -154,7 +154,7 @@ suppressWarnings({
 })
 names(risk_fun) <- round(vec_bmi, 1)
 
-expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRB-Female Risk (bmi)", expected.label = "Web Risk")
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRB-Female [range(bmi)]", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRB)
 
@@ -169,7 +169,7 @@ suppressWarnings({
 })
 names(risk_fun) <- vec_ht
 
-expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRB-Female Risk (height)", expected.label = "Web Risk")
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRB-Female [range(height)]", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRB)
 
@@ -184,7 +184,7 @@ suppressWarnings({
 })
 names(risk_fun) <- vec_wt
 
-expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRB-Female Risk (weight)", expected.label = "Web Risk")
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRB-Female [range(weight)]", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRB)
 
@@ -199,7 +199,7 @@ suppressWarnings({
 })
 names(risk_fun) <- vec_wt
 
-expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRB-Female Risk (weight)", expected.label = "Web Risk")
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRB-Female [range(weight)]", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRB)
 
@@ -214,7 +214,7 @@ names(risk_web) <- vec_eth
 risk_fun <- sapply(vec_eth, tQDRB)
 names(risk_fun) <- vec_eth
 
-expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRB-Female Risk (ethnicity)", expected.label = "Web Risk")
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRB-Female [range(ethnicity)]", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRB)
 
@@ -228,7 +228,7 @@ names(risk_web) <- vec_smo
 risk_fun <- sapply(vec_smo, tQDRB)
 names(risk_fun) <- vec_smo
 
-expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRB-Female Risk (smoke)", expected.label = "Web Risk")
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRB-Female [range(smoking)]", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRB)
 
@@ -318,7 +318,7 @@ rm(tQDRB)
 
 ## BMI ##
 tQDRB <- function(...){gQDRB(age = 60, fpg = 4.5, ...)}
-expect_error(tQDRB(bmi = (40/2.10^2) - 1))
+expect_error(tQDRB(bmi = (40/2.1^2) - 1))
 expect_error(tQDRB(bmi = (180/1.4^2) + 1))
 expect_warning(tQDRB(bmi = 19))
 expect_warning(tQDRB(bmi = 41))

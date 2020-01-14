@@ -67,58 +67,58 @@ dat_test[["risk_max"]] <- with(dat_test, mapply(QDRA,
                                                   hypertension = T,
                                                   fh_diab = T)))
 
-expect_gte(min(dat_test[["risk_min"]]), 0)
-expect_lte(max(dat_test[["risk_max"]]), 100)
+expect_gte(min(dat_test[["risk_min"]]), 0, label = "QDRA-Female [min(risk) >= 0]")
+expect_lte(max(dat_test[["risk_max"]]), 100, label = "QDRA-Female [max(risk) <= 100]")
 dat_test[, c("risk_min", "risk_max")] <- NULL
 
 ### Variable Combinations ###
 ## Gender ##
-expect_error(rQDRA(age = 60))
+expect_error(rQDRA(age = 60), label = "QDRA-Female [gender = NULL]")
 ## Age ##
-expect_error(gQDRA())
+expect_error(gQDRA(), label = "QDRA-Female [age = NULL]")
 ## BMI, Height & Weight ##
 tQDRA <- function(...){gQDRA(age = 60, ...)}
-expect_error(tQDRA(height = 1.83))
-expect_error(tQDRA(weight = 90))
-expect_warning(tQDRA(bmi = 30, height = 1.83, weight = 90))
+expect_error(tQDRA(height = 1.83), label = "QDRA-Female [c(weight, bmi) = NULL]")
+expect_error(tQDRA(weight = 90), label = "QDRA-Female [c(height, bmi) = NULL]")
+expect_warning(tQDRA(height = 1.83, weight = 90, bmi = 30), label = "QDRA-Female [c(height, weight, bmi) = NULL]")
 rm(tQDRA)
 ## FPG & HbA1c ##
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
-expect_error(tQDRA(fpg = 4.5))
-expect_error(tQDRA(hba1c = 31.5))
+expect_error(tQDRA(fpg = 4.5), label = "QDRA-Female [!is.null(fpg)]")
+expect_error(tQDRA(hba1c = 31.5), label = "QDRA-Female [!is.nulll(hba1c)]")
 rm(tQDRA)
 
 ### Boundaries ###
 ## Age ##
 tQDRA <- function(...){gQDRA(bmi = 30, ...)}
-expect_error(tQDRA(age = 24))
-expect_error(tQDRA(age = 85))
+expect_error(tQDRA(age = 24), label = "QDRA-Female [age < 25]")
+expect_error(tQDRA(age = 85), label = "QDRA-Female [age >= 85]]")
 rm(tQDRA)
 
 ## BMI ##
 tQDRA <- function(...){gQDRA(age = 60, ...)}
-expect_error(tQDRA(bmi = (40/2.10^2) - 1))
-expect_error(tQDRA(bmi = (180/1.4^2) + 1))
-expect_warning(tQDRA(bmi = 19))
-expect_warning(tQDRA(bmi = 41))
+expect_error(tQDRA(bmi = (40/2.1^2) - 1), label = "QDRA-Female [bmi < 40/2.1^2]")
+expect_error(tQDRA(bmi = (180/1.4^2) + 1), label = "QDRA-Female [bmi > 180/1.4^2]")
+expect_warning(tQDRA(bmi = 19), label = "QDRA-Female [bmi < 20]")
+expect_warning(tQDRA(bmi = 41), label = "QDRA-Female [bmi > 40]")
 rm(tQDRA)
 
 ## Height ##
 tQDRA <- function(...){gQDRA(age = 60, weight = 90, ...)}
-expect_error(tQDRA(height = 1.3))
-expect_error(tQDRA(height = 2.2))
+expect_error(tQDRA(height = 1.3), label = "QDRA-Female [height < 1.4]")
+expect_error(tQDRA(height = 2.2), label = "QDRA-Female [height > 2.1]")
 rm(tQDRA)
 
 ## Weight ##
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, ...)}
-expect_error(tQDRA(weight = 39))
-expect_error(tQDRA(weight = 181))
+expect_error(tQDRA(weight = 39), label = "QDRA-Female [weight < 40]")
+expect_error(tQDRA(weight = 181), label = "QDRA-Female [weight > 180]")
 rm(tQDRA)
 
 ## Townsend ##
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
-expect_error(tQDRA(townsend = -7.028634578))
-expect_error(tQDRA(townsend = 13.3114712))
+expect_error(tQDRA(townsend = -7.028634578), label = "QDRA-Female [townsend < LB]")
+expect_error(tQDRA(townsend = 13.3114712), label = "QDRA-Female [townsend > UB]")
 rm(tQDRA)
 
 ### Numerical Values ###
@@ -131,7 +131,7 @@ names(risk_web) <- vec_age
 risk_fun <- sapply(vec_age, tQDRA)
 names(risk_fun) <- vec_age
 
-expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female Risk (age)", expected.label = "Web Risk")
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female [range(age)]", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
@@ -146,7 +146,7 @@ suppressWarnings({
 })
 names(risk_fun) <- round(vec_bmi, 1)
 
-expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female Risk (bmi)", expected.label = "Web Risk")
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female [range(bmi)]", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
@@ -161,7 +161,7 @@ suppressWarnings({
 })
 names(risk_fun) <- vec_ht
 
-expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female Risk (height)", expected.label = "Web Risk")
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female [range(height)]", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
@@ -176,7 +176,7 @@ suppressWarnings({
 })
 names(risk_fun) <- vec_wt
 
-expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female Risk (weight)", expected.label = "Web Risk")
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female [range(weight)]", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
@@ -191,7 +191,7 @@ names(risk_web) <- vec_eth
 risk_fun <- sapply(vec_eth, tQDRA)
 names(risk_fun) <- vec_eth
 
-expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female Risk (etnicity)", expected.label = "Web Risk")
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female [range(etnicity)]", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
@@ -205,22 +205,22 @@ names(risk_web) <- vec_smo
 risk_fun <- sapply(vec_smo, tQDRA)
 names(risk_fun) <- vec_smo
 
-expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female Risk (smoke)", expected.label = "Web Risk")
+expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female [range(smoking)]", expected.label = "Web Risk")
 rm(list = ls(pattern = "^(risk|vec)_"))
 rm(tQDRA)
 
 ### Binary Variables ###
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
-expect_equal(tQDRA(antipsy = T), 5.1, tolerance = tol)
-expect_equal(tQDRA(steroids = T), 4.8, tolerance = tol)
-expect_equal(tQDRA(cvd = T), 4.4, tolerance = tol)
-expect_equal(tQDRA(gestdiab = T), 15.7, tolerance = tol)
-expect_equal(tQDRA(learndiff = T), 4, tolerance = tol)
-expect_equal(tQDRA(schizobipo = T), 4.7, tolerance = tol)
-expect_equal(tQDRA(pcos = T), 5.1, tolerance = tol)
-expect_equal(tQDRA(statins = T), 4.9, tolerance = tol)
-expect_equal(tQDRA(hypertension = T), 5.6, tolerance = tol)
-expect_equal(tQDRA(fh_diab = T), 5.9, tolerance = tol)
+expect_equal(tQDRA(antipsy = T), 5.1, tolerance = tol, label = "QDRA-Female [antipsy = T]", expected.label = "Web Risk")
+expect_equal(tQDRA(steroids = T), 4.8, tolerance = tol, label = "QDRA-Female [steroids = T]", expected.label = "Web Risk")
+expect_equal(tQDRA(cvd = T), 4.4, tolerance = tol, label = "QDRA-Female [cvd = T]", expected.label = "Web Risk")
+expect_equal(tQDRA(gestdiab = T), 15.7, tolerance = tol, label = "QDRA-Female [gestdiab = T]", expected.label = "Web Risk")
+expect_equal(tQDRA(learndiff = T), 4, tolerance = tol, label = "QDRA-Female [learndiff = T]", expected.label = "Web Risk")
+expect_equal(tQDRA(schizobipo = T), 4.7, tolerance = tol, label = "QDRA-Female [schizobipo = T]", expected.label = "Web Risk")
+expect_equal(tQDRA(pcos = T), 5.1, tolerance = tol, label = "QDRA-Female [pcos = T]", expected.label = "Web Risk")
+expect_equal(tQDRA(statins = T), 4.9, tolerance = tol, label = "QDRA-Female [statins = T]", expected.label = "Web Risk")
+expect_equal(tQDRA(hypertension = T), 5.6, tolerance = tol, label = "QDRA-Female [hypertension = T]", expected.label = "Web Risk")
+expect_equal(tQDRA(fh_diab = T), 5.9, tolerance = tol, label = "QDRA-Female [fh_diab = T]", expected.label = "Web Risk")
 rm(tQDRA)
 
 ### Tidy Up ###
@@ -264,20 +264,20 @@ dat_test[["risk_max"]] <- with(dat_test, mapply(QDRA,
                                                   hypertension = T,
                                                   fh_diab = T)))
 
-expect_gte(min(dat_test[["risk_min"]]), 0)
-expect_lte(max(dat_test[["risk_max"]]), 100)
+expect_gte(min(dat_test[["risk_min"]]), 0, label = "QDRA-Male [min(risk) >= 0]")
+expect_lte(max(dat_test[["risk_max"]]), 100, label = "QDRA-Male [max(risk) <= 100]")
 dat_test[, c("risk_min", "risk_max")] <- NULL
 
 ### Variable Combinations ###
 ## Gender ##
-expect_error(rQDRA(age = 60))
+expect_error(rQDRA(age = 60), label = "QDRA-Male [!is.null(gender)]")
 ## Age ##
-expect_error(gQDRA())
+expect_error(gQDRA(), lable = "QDRA-Male [!is.null(age)]")
 ## BMI, Height & Weight ##
 tQDRA <- function(...){gQDRA(age = 60, ...)}
-expect_error(tQDRA(height = 1.83))
-expect_error(tQDRA(weight = 90))
-expect_warning(tQDRA(bmi = 30, height = 1.83, weight = 90))
+expect_error(tQDRA(height = 1.83), label = "QDRA-Male [!is.null(weight) & !is.null(bmi)]")
+expect_error(tQDRA(weight = 90), label = "QDRA-Male [!is.null(height) & !is.null(bmi)]")
+expect_warning(tQDRA(bmi = 30, height = 1.83, weight = 90), lablel = "QDRA-Male [!complete.cases(height, weight, bmi)]")
 rm(tQDRA)
 ## FPG & HbA1c ##
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
@@ -299,7 +299,7 @@ rm(tQDRA)
 
 ## BMI ##
 tQDRA <- function(...){gQDRA(age = 60, ...)}
-expect_error(tQDRA(bmi = (40/2.10^2) - 1))
+expect_error(tQDRA(bmi = (40/2.1^2) - 1))
 expect_error(tQDRA(bmi = (180/1.4^2) + 1))
 expect_warning(tQDRA(bmi = 19))
 expect_warning(tQDRA(bmi = 41))
