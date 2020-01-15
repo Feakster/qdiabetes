@@ -13,6 +13,5 @@
 - Check Townsend Deprivation Score ranges in all regional layers to find the minimum and maximum possible values.
 - Consider adding more power to the getTDS() function, like the ability to search using regex.
 - Add more input checks to the getTDS() function.
-- Add tests to check to non-0:1 and non-c(F, T) inputs to the binary variables of the QDRA(), QDRB() and QDRC() functions.
 - Vectorise the QDR(), QDRA(), QDRB() & QDRC() functions by experimenting with data.frames in the functions.
 - Use GP data in the vignette to simulate a UK population & produce a risk map.

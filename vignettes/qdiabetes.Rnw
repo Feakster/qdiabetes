@@ -155,12 +155,12 @@ df <- expand.grid(height = seq(1.4, 2.1, length.out = 15),
 
 ## Estimate Risk
 suppressWarnings({
-df[["risk"]] <- with(df,  mapply(QDRA,
-                                 height = height,
-                                 weight = weight,
-                                 MoreArgs = list(
-                                   gender = "Male",
-                                   age = 65)))
+  df[["risk"]] <- with(df,  mapply(QDRA,
+                                   height = height,
+                                   weight = weight,
+                                   MoreArgs = list(
+                                     gender = "Male",
+                                     age = 65)))
 })
 
 ## Colour Palette
@@ -170,8 +170,8 @@ pal <- hsv(0.6, seq(0, 1, length.out = 1e3), 1)
 wireframe(risk ~ height*weight, data = df,
           drape = T, colorkey = T, col.regions = pal,
           xlab = list(label = "Height\n(m)", cex = 0.8),
-          ylab = list("Weight\n(kg)", cex = 0.8),
-          zlab = list("Risk\n(%)", cex = 0.8),
+          ylab = list(label = "Weight\n(kg)", cex = 0.8),
+          zlab = list(label = "Risk\n(%)", cex = 0.8),
           scales = list(arrows = F, cex = 0.8))
 
 @
@@ -203,8 +203,8 @@ pal <- hsv(0.6, seq(0, 1, length.out = 1e3), 1)
 wireframe(risk ~ age*bmi, data = df,
           drape = T, colorkey = T, col.regions = pal,
           xlab = list(label = "Age\n(years)", cex = 0.8),
-          ylab = list("BMI\n(kg/m^2)", cex = 0.8),
-          zlab = list("Risk\n(%)", cex = 0.8),
+          ylab = list(label = paste0("BMI\n(kg/m", "\u00B2", ")"), cex = 0.8),
+          zlab = list(label = "Risk\n(%)", cex = 0.8),
           scales = list(arrows = F, cex = 0.8))
 @
 
@@ -234,8 +234,8 @@ pal <- hsv(0.6, seq(0, 1, length.out = 1e3), 1)
 wireframe(risk ~ age*fpg, data = df,
           drape = T, colorkey = T, col.regions = pal,
           xlab = list(label = "Age\n(years)", cex = 0.8),
-          ylab = list("FPG\n(mmol/L)", cex = 0.8),
-          zlab = list("Risk\n(%)", cex = 0.8),
+          ylab = list(label = "FPG\n(mmol/L)", cex = 0.8),
+          zlab = list(label = "Risk\n(%)", cex = 0.8),
           scales = list(arrows = F, cex = 0.8))
 @
 
@@ -265,8 +265,8 @@ pal <- hsv(0.6, seq(0, 1, length.out = 1e3), 1)
 wireframe(risk ~ age*hba1c, data = df,
           drape = T, colorkey = T, col.regions = pal,
           xlab = list(label = "Age\n(years)", cex = 0.8),
-          ylab = list("HbA1c\n(mmol/mol)", cex = 0.8),
-          zlab = list("Risk\n(%)", cex = 0.8),
+          ylab = list(label = "HbA1c\n(mmol/mol)", cex = 0.8),
+          zlab = list(label = "Risk\n(%)", cex = 0.8),
           scales = list(arrows = F, cex = 0.8))
 @
 

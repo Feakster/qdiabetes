@@ -14,10 +14,10 @@ tiny <- 1e-8 # Small number
 
 ### Test Data ###
 dat_test <- expand.grid(
-  age = c(seq(25, 84.5, 0.5), 85L - tiny),
-  height = seq(1.4, 2.1, 0.01),
-  weight = c(40, 180, 0.5),
-  townsend = c(-7.028634577 + tiny, -7:13, 13.3114711 - tiny),
+  age = seq(25, 85 - tiny, length.out = 10),
+  height = seq(1.4, 2.1, length.out = 10),
+  weight = seq(40, 180, length.out = 10),
+  townsend = seq(-7.028634577 + tiny, 13.3114711 - tiny, length.out = 10),
   KEEP.OUT.ATTRS = F
 )
 
@@ -78,9 +78,9 @@ expect_error(rQDRA(age = 60), label = "QDRA-Female [is.null(gender)]")
 expect_error(gQDRA(), label = "QDRA-Female [is.null(age)]")
 ## BMI, Height & Weight ##
 tQDRA <- function(...){gQDRA(age = 60, ...)}
-expect_error(tQDRA(height = 1.83), label = "QDRA-Female [is.null(weight) & is.null(bmi)]")
-expect_error(tQDRA(weight = 90), label = "QDRA-Female [is.null(height) & is.null(bmi)]")
-expect_warning(tQDRA(bmi = 30, height = 1.83, weight = 90), label = "QDRA-Female [!is.null(height) & !is.null(weight) & !is.null(bmi)]")
+expect_error(tQDRA(height = 1.83), label = "QDRA-Female [is.null(bmi) & is.null(weight)]")
+expect_error(tQDRA(weight = 90), label = "QDRA-Female [is.null(bmi) & is.null(height)]")
+expect_warning(tQDRA(bmi = 30, height = 1.83, weight = 90), label = "QDRA-Female [!is.null(bmi) & !is.null(height) & !is.null(weight)]")
 rm(tQDRA)
 ## FPG & HbA1c ##
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
@@ -119,6 +119,20 @@ rm(tQDRA)
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
 expect_error(tQDRA(townsend = -7.028634578), label = "QDRA-Female [townsend < -7.028634577]")
 expect_error(tQDRA(townsend = 13.3114712), label = "QDRA-Female [townsend > 13.3114711]")
+rm(tQDRA)
+
+## Binary Variables ##
+tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
+expect_error(tQDRA(antipsy = -1), label = "QDRA-Female [!{antipsy %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(steroids = -1), label = "QDRA-Female [!{steroids %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(cvd = -1), label = "QDRA-Female [!{cvd %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(gestdiab = -1), label = "QDRA-Female [!{gestdiab %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(learndiff = -1), label = "QDRA-Female [!{learndiff %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(schizobipo = -1), label = "QDRA-Female [!{schizobipo %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(pcos = -1), label = "QDRA-Female [!{pcos %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(statins = -1), label = "QDRA-Female [!{statins %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(hypertension = -1), label = "QDRA-Female [!{hypertension %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(fh_diab = -1), label = "QDRA-Female [!{fh_diab %in% c(0, 1, F, T)}]")
 rm(tQDRA)
 
 ### Numerical Values ###
@@ -275,9 +289,9 @@ expect_error(rQDRA(age = 60), label = "QDRA-Male [is.null(gender)]")
 expect_error(gQDRA(), lable = "QDRA-Male [is.null(age)]")
 ## BMI, Height & Weight ##
 tQDRA <- function(...){gQDRA(age = 60, ...)}
-expect_error(tQDRA(height = 1.83), label = "QDRA-Male [is.null(weight) & is.null(bmi)]")
-expect_error(tQDRA(weight = 90), label = "QDRA-Male [is.null(height) & is.null(bmi)]")
-expect_warning(tQDRA(bmi = 30, height = 1.83, weight = 90), lablel = "QDRA-Male [!is.null(height) & !is.null(weight) & !is.null(bmi)]")
+expect_error(tQDRA(height = 1.83), label = "QDRA-Male [is.null(bmi) & is.null(weight)]")
+expect_error(tQDRA(weight = 90), label = "QDRA-Male [is.null(bmi) & is.null(height)]")
+expect_warning(tQDRA(bmi = 30, height = 1.83, weight = 90), lablel = "QDRA-Male [!is.null(bmi) & !is.null(height) & !is.null(weight)]")
 rm(tQDRA)
 ## FPG & HbA1c ##
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
@@ -321,6 +335,18 @@ rm(tQDRA)
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
 expect_error(tQDRA(townsend = -7.028634578), label = "QDRA-Male [townsend < -7.028634577]")
 expect_error(tQDRA(townsend = 13.3114712), label = "QDRA-Male [townsend > 13.3114711]")
+rm(tQDRA)
+
+## Binary Variables ##
+tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
+expect_error(tQDRA(antipsy = -1), label = "QDRA-Male [!{antipsy %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(steroids = -1), label = "QDRA-Male [!{steroids %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(cvd = -1), label = "QDRA-Male [!{cvd %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(learndiff = -1), label = "QDRA-Male [!{learndiff %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(schizobipo = -1), label = "QDRA-Male [!{schizobipo %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(statins = -1), label = "QDRA-Male [!{statins %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(hypertension = -1), label = "QDRA-Male [!{hypertension %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(fh_diab = -1), label = "QDRA-Male [!{fh_diab %in% c(0, 1, F, T)}]")
 rm(tQDRA)
 
 ### Numerical Values ###
