@@ -1,8 +1,8 @@
-#====================#
-#                    #
-#### QDRA() TESTS ####
-#                    #
-#====================#
+#=====================#
+#                     #
+#### vQDRA() TESTS ####
+#                     #
+#=====================#
 
 ### Notes ###
 # - 0.1 tolerance allowed in risk outputs to account for different rounding standards.
@@ -24,7 +24,7 @@ dat_test[["bmi"]] <- with(dat_test, weight/height^2)
 dat_test <- dat_test[dat_test$bmi >= 20 & dat_test$bmi <= 40, ]
 
 ### Redefine Function (Rounding) ###
-rQDRA <- function(...){round(QDRA(...), 1)}
+rQDRA <- function(...){round(vQDRA(...), 1)}
 
 ##############
 ### Female ###
@@ -38,34 +38,29 @@ expect_type(gQDRA(age = 60, height = 1.83, weight = 90), "double")
 expect_length(gQDRA(age = 60, height = 1.83, weight = 90), 1)
 
 ### Correct Range ###
-dat_test[["risk_min"]] <- with(dat_test, mapply(QDRA,
-                                                age = age,
-                                                height = height,
-                                                weight = weight,
-                                                MoreArgs = list(
-                                                  gender = "Female",
-                                                  ethnicity = "WhiteNA",
-                                                  smoking = "Non",
-                                                  townsend = -7.028634577)))
-dat_test[["risk_max"]] <- with(dat_test, mapply(QDRA,
-                                                age = age,
-                                                height = height, 
-                                                weight = weight,
-                                                MoreArgs = list(
-                                                  gender = "Female",
-                                                  ethnicity = "Bangladeshi",
-                                                  smoking = "Heavy",
-                                                  townsend = 13.3114711,
-                                                  antipsy = T,
-                                                  steroids = T,
-                                                  cvd = T,
-                                                  gestdiab = T,
-                                                  learndiff = T,
-                                                  schizobipo = T,
-                                                  pcos = T,
-                                                  statins = T,
-                                                  hypertension = T,
-                                                  fh_diab = T)))
+dat_test[["risk_min"]] <- with(dat_test, vQDRA(gender = "Female",
+                                               age = age,
+                                               height = height,
+                                               weight = weight,
+                                               townsend = -7.028634577))
+
+dat_test[["risk_max"]] <- with(dat_test, vQDRA(gender = "Female",
+                                               age = age,
+                                               height = height,
+                                               weight = weight,
+                                               ethnicity = "Bangladeshi",
+                                               smoking = "Heavy",
+                                               townsend = 13.3114711,
+                                               antipsy = T,
+                                               steroids = T,
+                                               cvd = T,
+                                               gestdiab = T,
+                                               learndiff = T,
+                                               schizobipo = T,
+                                               pcos = T,
+                                               statins = T,
+                                               hypertension = T,
+                                               fh_diab = T))
 
 expect_gte(min(dat_test[["risk_min"]]), 0, label = "QDRA-Female [min(risk) >= 0]")
 expect_lte(max(dat_test[["risk_max"]]), 100, label = "QDRA-Female [max(risk) <= 100]")
@@ -142,7 +137,7 @@ vec_age <- seq(25, 80, 5)
 risk_web <- c(0.2, 0.4, 0.7, 1.1, 1.7, 2.3, 3.0, 3.7, 4.2, 4.4, 4.4, 4.1)
 names(risk_web) <- vec_age
 
-risk_fun <- sapply(vec_age, tQDRA)
+risk_fun <- tQDRA(vec_age)
 names(risk_fun) <- vec_age
 
 expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female [range(age)]", expected.label = "ClinRisk")
@@ -156,7 +151,7 @@ risk_web <- c(14.2, 14.2, 10.4, 6.7, 4.2, 2.6, 1.7, 1.1)
 names(risk_web) <- round(vec_bmi, 1)
 
 suppressWarnings({
-  risk_fun <- sapply(vec_bmi, tQDRA)
+  risk_fun <- tQDRA(vec_bmi)
 })
 names(risk_fun) <- round(vec_bmi, 1)
 
@@ -171,7 +166,7 @@ risk_web <- c(14.2, 14.2, 10.4, 6.7, 4.2, 2.6, 1.7, 1.1)
 names(risk_web) <- vec_ht
 
 suppressWarnings({
-  risk_fun <- sapply(vec_ht, tQDRA)
+  risk_fun <- tQDRA(vec_ht)
 })
 names(risk_fun) <- vec_ht
 
@@ -186,7 +181,7 @@ risk_web <- c(1, 1, 1, 1.2, 2.2, 3.7, 5.7, 8.2, 11, 13.5, 14.2, 14.2, 14.2, 14.2
 names(risk_web) <- vec_wt
 
 suppressWarnings({
-  risk_fun <- sapply(vec_wt, tQDRA)
+  risk_fun <- tQDRA(vec_wt)
 })
 names(risk_fun) <- vec_wt
 
@@ -202,7 +197,7 @@ vec_eth <- c("WhiteNA", "Indian", "Pakistani", "Bangladeshi", "OtherAsian", "Bla
 risk_web <- c(3.7, 10.3, 13.3, 20.2, 10.9, 5.5, 4.8, 8.6, 5.2)
 names(risk_web) <- vec_eth
 
-risk_fun <- sapply(vec_eth, tQDRA)
+risk_fun <- tQDRA(vec_eth)
 names(risk_fun) <- vec_eth
 
 expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female [range(etnicity)]", expected.label = "ClinRisk")
@@ -216,7 +211,7 @@ vec_smo <- c("Non", "Ex", "Light", "Moderate", "Heavy")
 risk_web <- c(3.7, 3.9, 4.8, 5.2, 6.2)
 names(risk_web) <- vec_smo
 
-risk_fun <- sapply(vec_smo, tQDRA)
+risk_fun <- tQDRA(vec_smo)
 names(risk_fun) <- vec_smo
 
 expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Female [range(smoking)]", expected.label = "ClinRisk")
@@ -252,32 +247,28 @@ expect_type(gQDRA(age = 60, height = 1.83, weight = 90), "double")
 expect_length(gQDRA(age = 60, height = 1.83, weight = 90), 1)
 
 ### Correct Range ###
-dat_test[["risk_min"]] <- with(dat_test, mapply(QDRA,
-                                                age = age,
-                                                height = height,
-                                                weight = weight,
-                                                MoreArgs = list(
-                                                  gender = "Male",
-                                                  ethnicity = "WhiteNA",
-                                                  smoking = "Non",
-                                                  townsend = -7.028634577)))
-dat_test[["risk_max"]] <- with(dat_test, mapply(QDRA,
-                                                age = age,
-                                                height = height, 
-                                                weight = weight,
-                                                MoreArgs = list(
-                                                  gender = "Male",
-                                                  ethnicity = "Bangladeshi",
-                                                  smoking = "Heavy",
-                                                  townsend = 13.3114711,
-                                                  antipsy = T,
-                                                  steroids = T,
-                                                  cvd = T,
-                                                  learndiff = T,
-                                                  schizobipo = T,
-                                                  statins = T,
-                                                  hypertension = T,
-                                                  fh_diab = T)))
+dat_test[["risk_min"]] <- with(dat_test, vQDRA(gender = "Male",
+                                               age = age,
+                                               height = height,
+                                               weight = weight,
+                                               ethnicity = "WhiteNA",
+                                               smoking = "Non",
+                                               townsend = -7.028634577))
+dat_test[["risk_max"]] <- with(dat_test, vQDRA(gender = "Male",
+                                               age = age,
+                                               height = height, 
+                                               weight = weight,
+                                               ethnicity = "Bangladeshi",
+                                               smoking = "Heavy",
+                                               townsend = 13.3114711,
+                                               antipsy = T,
+                                               steroids = T,
+                                               cvd = T,
+                                               learndiff = T,
+                                               schizobipo = T,
+                                               statins = T,
+                                               hypertension = T,
+                                               fh_diab = T))
 
 expect_gte(min(dat_test[["risk_min"]]), 0, label = "QDRA-Male [min(risk) >= 0]")
 expect_lte(max(dat_test[["risk_max"]]), 100, label = "QDRA-Male [max(risk) <= 100]")
@@ -357,7 +348,7 @@ vec_age <- seq(25, 80, 5)
 risk_web <- c(0.3, 0.5, 1, 1.7, 2.5, 3.5, 4.4, 5.3, 5.9, 6.1, 6, 5.5)
 names(risk_web) <- vec_age
 
-risk_fun <- sapply(vec_age, tQDRA)
+risk_fun <- tQDRA(vec_age)
 names(risk_fun) <- vec_age
 
 expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Male [range(age)]", expected.label = "ClinRisk")
@@ -371,7 +362,7 @@ risk_web <- c(23.6, 23.6, 17.1, 10.5, 6.2, 3.7, 2.3, 1.6)
 names(risk_web) <- round(vec_bmi, 1)
 
 suppressWarnings({
-  risk_fun <- sapply(vec_bmi, tQDRA)
+  risk_fun <- tQDRA(vec_bmi)
 })
 names(risk_fun) <- round(vec_bmi, 1)
 
@@ -386,7 +377,7 @@ risk_web <- c(23.6, 23.6, 17.1, 10.5, 6.2, 3.7, 2.3, 1.6)
 names(risk_web) <- vec_ht
 
 suppressWarnings({
-  risk_fun <- sapply(vec_ht, tQDRA)
+  risk_fun <- tQDRA(vec_ht)
 })
 names(risk_fun) <- vec_ht
 
@@ -401,7 +392,7 @@ risk_web <- c(1.4, 1.4, 3.1, 8.7, 18.3, 23.6, 23.6, 23.6)
 names(risk_web) <- vec_wt
 
 suppressWarnings({
-  risk_fun <- sapply(vec_wt, tQDRA)
+  risk_fun <- tQDRA(vec_wt)
 })
 names(risk_fun) <- vec_wt
 
@@ -417,7 +408,7 @@ vec_eth <- c("WhiteNA", "Indian", "Pakistani", "Bangladeshi", "OtherAsian", "Bla
 risk_web <- c(5.3, 15.1, 17.9, 25.2, 15.6, 8.3, 10.4, 10.3, 7.9)
 names(risk_web) <- vec_eth
 
-risk_fun <- sapply(vec_eth, tQDRA)
+risk_fun <- tQDRA(vec_eth)
 names(risk_fun) <- vec_eth
 
 expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Male [range(ethnicity)]", expected.label = "ClinRisk")
@@ -431,7 +422,7 @@ vec_smo <- c("Non", "Ex", "Light", "Moderate", "Heavy")
 risk_web <- c(5.3, 6.2, 7.2, 7.2, 8.2)
 names(risk_web) <- vec_smo
 
-risk_fun <- sapply(vec_smo, tQDRA)
+risk_fun <- tQDRA(vec_smo)
 names(risk_fun) <- vec_smo
 
 expect_equal(risk_fun, risk_web, tolerance = tol, label = "QDRA-Male [range(smoke)]", expected.label = "ClinRisk")

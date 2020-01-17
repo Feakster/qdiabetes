@@ -26,6 +26,16 @@ QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
   stopifnot(height >= 1.4 & height <= 2.1)
   stopifnot(weight >= 40 & weight <= 180)
   stopifnot(townsend >= -7.028634577 & townsend <= 13.3114711)
+  stopifnot(antipsy %in% c(FALSE, TRUE))
+  stopifnot(steroids %in% c(FALSE, TRUE))
+  stopifnot(cvd %in% c(FALSE, TRUE))
+  stopifnot(gestdiab %in% c(FALSE, TRUE))
+  stopifnot(learndiff %in% c(FALSE, TRUE))
+  stopifnot(schizobipo %in% c(FALSE, TRUE))
+  stopifnot(pcos %in% c(FALSE, TRUE))
+  stopifnot(statins %in% c(FALSE, TRUE))
+  stopifnot(hypertension %in% c(FALSE, TRUE))
+  stopifnot(fh_diab %in% c(FALSE, TRUE))
 
   ## BMI Pre-Processing ##
   if(all(c(!is.null(bmi), !is.null(height), !is.null(weight)))) warning("bmi, height & weight all specified, height & weight ignored", call. = FALSE)

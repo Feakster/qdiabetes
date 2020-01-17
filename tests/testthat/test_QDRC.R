@@ -14,11 +14,10 @@ tiny <- 1e-8 # Small number
 
 ### Test Data ###
 dat_test <- expand.grid(
-  age = seq(25, 85 - tiny, length.out = 10),
-  height = seq(1.4, 2.1, length.out = 10),
-  weight = seq(40, 180, length.out = 10),
-  hba1c = seq(15, 48 - tiny, length.out = 10),
-  townsend = seq(-7.028634577 + tiny, 13.3114711 - tiny, length.out = 10),
+  age = seq(25, 85 - tiny, length.out = 20),
+  height = seq(1.4, 2.1, length.out = 20),
+  weight = seq(40, 180, length.out = 20),
+  hba1c = seq(15, 48 - tiny, length.out = 20),
   KEEP.OUT.ATTRS = F
 )
 
@@ -45,21 +44,22 @@ dat_test[["risk_min"]] <- with(dat_test, mapply(QDRC,
                                                 height = height,
                                                 weight = weight,
                                                 hba1c = hba1c,
-                                                townsend = townsend,
                                                 MoreArgs = list(
                                                   gender = "Female",
                                                   ethnicity = "WhiteNA",
-                                                  smoking = "Non")))
+                                                  smoking = "Non",
+                                                  townsend = -7.028634577)))
 dat_test[["risk_max"]] <- with(dat_test, mapply(QDRC,
                                                 age = age,
                                                 height = height, 
                                                 weight = weight,
                                                 hba1c = hba1c,
-                                                townsend = townsend,
                                                 MoreArgs = list(
                                                   gender = "Female",
                                                   ethnicity = "Bangladeshi",
                                                   smoking = "Heavy",
+                                                  townsend = 13.3114711,
+                                                  antipsy = T,
                                                   steroids = T,
                                                   cvd = T,
                                                   gestdiab = T,
@@ -282,21 +282,22 @@ dat_test[["risk_min"]] <- with(dat_test, mapply(QDRC,
                                                 height = height,
                                                 weight = weight,
                                                 hba1c = hba1c,
-                                                townsend = townsend,
                                                 MoreArgs = list(
                                                   gender = "Male",
                                                   ethnicity = "WhiteNA",
-                                                  smoking = "Non")))
+                                                  smoking = "Non",
+                                                  townsend = -7.028634577)))
 dat_test[["risk_max"]] <- with(dat_test, mapply(QDRC,
                                                 age = age,
                                                 height = height, 
                                                 weight = weight,
                                                 hba1c = hba1c,
-                                                townsend = townsend,
                                                 MoreArgs = list(
                                                   gender = "Male",
                                                   ethnicity = "Bangladeshi",
                                                   smoking = "Heavy",
+                                                  townsend = 13.3114711,
+                                                  antipsy = T,
                                                   steroids = T,
                                                   cvd = T,
                                                   learndiff = T,
