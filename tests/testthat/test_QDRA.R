@@ -49,7 +49,7 @@ dat_test[["risk_min"]] <- with(dat_test, mapply(QDRA,
                                                   townsend = -7.028634577)))
 dat_test[["risk_max"]] <- with(dat_test, mapply(QDRA,
                                                 age = age,
-                                                height = height, 
+                                                height = height,
                                                 weight = weight,
                                                 MoreArgs = list(
                                                   gender = "Female",
@@ -70,6 +70,37 @@ dat_test[["risk_max"]] <- with(dat_test, mapply(QDRA,
 expect_gte(min(dat_test[["risk_min"]]), 0, label = "QDRA-Female [min(risk) >= 0]")
 expect_lte(max(dat_test[["risk_max"]]), 100, label = "QDRA-Female [max(risk) <= 100]")
 dat_test[, c("risk_min", "risk_max")] <- NULL
+
+# tQDRA <- function(param){QDRA(gender = "Female", ethnicity = "Bangladeshi", smoking = "Heavy",
+#                                age = param["age"], bmi = param["bmi"], townsend = param["townsend"])}
+#
+# inits <- c(age = 55, bmi = 30, townsend = 3)
+#
+# param_min <- optim(par = inits, fn = tQDRA, method = "L-BFGS-B",
+#                    lower = c(age = 25, bmi = 20, townsend = -7.028634576),
+#                    upper = c(age = 84.9, bmi = 40, townsend = 13.3114710))[["par"]]
+#
+# param_max <- optim(par = inits, fn = tQDRA, method = "L-BFGS-B",
+#                    lower = c(age = 25, bmi = 20, townsend = -7.028634576),
+#                    upper = c(age = 84.9, bmi = 40, townsend = 13.3114710),
+#                    control = list(fnscale = -1))[["par"]]
+#
+# risk_min <- QDRA(gender = "Female",
+#                  age = param_min["age"],
+#                  bmi = param_min["bmi"],
+#                  townsend = param_min["townsend"])
+#
+# risk_max <- QDRA(gender = "Female",
+#                  age = param_max["age"],
+#                  bmi = param_max["bmi"],
+#                  townsend = param_max["townsend"],
+#                  antipsy = T, steroids = T, cvd = T, gestdiab = T, learndiff = T, schizobipo = T, pcos = T, statins = T, hypertension = T, fh_diab = T)
+#
+# expect_gte(risk_min, 0, "QDRA-Female [min(risk) >= 0]")
+# expect_lte(risk_min, 0.1, "QDRA-Female [min(risk) <= 0.1]")
+# expect_lte(risk_max, 100, "QDRA-Female [max(risk) <= 100]")
+# expect_gte(risk_max, 99.9, "QDRA-Female [max(risk) >= 99.9]")
+# rm(tQDRA, inits, param_min, param_max, risk_min, risk_max)
 
 ### Variable Combinations ###
 ## Gender ##
@@ -263,7 +294,7 @@ dat_test[["risk_min"]] <- with(dat_test, mapply(QDRA,
                                                   townsend = -7.028634577)))
 dat_test[["risk_max"]] <- with(dat_test, mapply(QDRA,
                                                 age = age,
-                                                height = height, 
+                                                height = height,
                                                 weight = weight,
                                                 MoreArgs = list(
                                                   gender = "Male",
@@ -282,6 +313,37 @@ dat_test[["risk_max"]] <- with(dat_test, mapply(QDRA,
 expect_gte(min(dat_test[["risk_min"]]), 0, label = "QDRA-Male [min(risk) >= 0]")
 expect_lte(max(dat_test[["risk_max"]]), 100, label = "QDRA-Male [max(risk) <= 100]")
 dat_test[, c("risk_min", "risk_max")] <- NULL
+
+# tQDRA <- function(param){QDRA(gender = "Male", ethnicity = "Bangladeshi", smoking = "Heavy",
+#                               age = param["age"], bmi = param["bmi"], townsend = param["townsend"])}
+#
+# inits <- c(age = 55, bmi = 30, townsend = 3)
+#
+# param_min <- optim(par = inits, fn = tQDRA, method = "L-BFGS-B",
+#                    lower = c(age = 25, bmi = 20, townsend = -7.028634576),
+#                    upper = c(age = 84.9, bmi = 40, townsend = 13.3114710))[["par"]]
+#
+# param_max <- optim(par = inits, fn = tQDRA, method = "L-BFGS-B",
+#                    lower = c(age = 25, bmi = 20, townsend = -7.028634576),
+#                    upper = c(age = 84.9, bmi = 40, townsend = 13.3114710),
+#                    control = list(fnscale = -1))[["par"]]
+#
+# risk_min <- QDRA(gender = "Male",
+#                  age = param_min["age"],
+#                  bmi = param_min["bmi"],
+#                  townsend = param_min["townsend"])
+#
+# risk_max <- QDRA(gender = "Male",
+#                  age = param_max["age"],
+#                  bmi = param_max["bmi"],
+#                  townsend = param_max["townsend"],
+#                  antipsy = T, steroids = T, cvd = T, learndiff = T, schizobipo = T, statins = T, hypertension = T, fh_diab = T)
+#
+# expect_gte(risk_min, 0, "QDRA-Male [min(risk) >= 0]")
+# expect_lte(risk_min, 0.1, "QDRA-Male [min(risk) <= 0.1]")
+# expect_lte(risk_max, 100, "QDRA-Male [max(risk) <= 100]")
+# expect_gte(risk_max, 99.9, "QDRA-Male [max(risk) >= 99.9]")
+# rm(tQDRA, inits, param_min, param_max, risk_min, risk_max)
 
 ### Variable Combinations ###
 ## Gender ##
@@ -440,14 +502,14 @@ rm(tQDRA)
 
 ### Binary Variables ###
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
-expect_equal(tQDRA(antipsy = T), 6, tolerance = tol, label = "QDRA-Male [antipsy = T]")
-expect_equal(tQDRA(steroids = T), 6.6, tolerance = tol, label = "QDRA-Male [steroids = T]")
-expect_equal(tQDRA(cvd = T), 6.4, tolerance = tol, label = "QDRA-Male [cvd = T]")
-expect_equal(tQDRA(learndiff = T), 5.5, tolerance = tol, label = "QDRA-Male [learndiff = T]")
-expect_equal(tQDRA(schizobipo = T), 6.6, tolerance = tol, label = "QDRA-Male [schizobipo = T]")
-expect_equal(tQDRA(statins = T), 6.7, tolerance = tol, label = "QDRA-Male [statins = T]")
-expect_equal(tQDRA(hypertension = T), 7.3, tolerance = tol, label = "QDRA-Male [hypertension = T]")
-expect_equal(tQDRA(fh_diab = T), 8.8, tolerance = tol, label = "QDRA-Male [fh_diab = T]")
+expect_equal(tQDRA(antipsy = T), 6, tolerance = tol, label = "QDRA-Male [antipsy = T]", expected.label = "ClinRisk")
+expect_equal(tQDRA(steroids = T), 6.6, tolerance = tol, label = "QDRA-Male [steroids = T]", expected.label = "ClinRisk")
+expect_equal(tQDRA(cvd = T), 6.4, tolerance = tol, label = "QDRA-Male [cvd = T]", expected.label = "ClinRisk")
+expect_equal(tQDRA(learndiff = T), 5.5, tolerance = tol, label = "QDRA-Male [learndiff = T]", expected.label = "ClinRisk")
+expect_equal(tQDRA(schizobipo = T), 6.6, tolerance = tol, label = "QDRA-Male [schizobipo = T]", expected.label = "ClinRisk")
+expect_equal(tQDRA(statins = T), 6.7, tolerance = tol, label = "QDRA-Male [statins = T]", expected.label = "ClinRisk")
+expect_equal(tQDRA(hypertension = T), 7.3, tolerance = tol, label = "QDRA-Male [hypertension = T]", expected.label = "ClinRisk")
+expect_equal(tQDRA(fh_diab = T), 8.8, tolerance = tol, label = "QDRA-Male [fh_diab = T]", expected.label = "ClinRisk")
 rm(tQDRA)
 
 ### Tidy Up ###

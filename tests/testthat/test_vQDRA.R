@@ -256,7 +256,7 @@ dat_test[["risk_min"]] <- with(dat_test, vQDRA(gender = "Male",
                                                townsend = -7.028634577))
 dat_test[["risk_max"]] <- with(dat_test, vQDRA(gender = "Male",
                                                age = age,
-                                               height = height, 
+                                               height = height,
                                                weight = weight,
                                                ethnicity = "Bangladeshi",
                                                smoking = "Heavy",
@@ -431,14 +431,14 @@ rm(tQDRA)
 
 ### Binary Variables ###
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
-expect_equal(tQDRA(antipsy = T), 6, tolerance = tol, label = "QDRA-Male [antipsy = T]")
-expect_equal(tQDRA(steroids = T), 6.6, tolerance = tol, label = "QDRA-Male [steroids = T]")
-expect_equal(tQDRA(cvd = T), 6.4, tolerance = tol, label = "QDRA-Male [cvd = T]")
-expect_equal(tQDRA(learndiff = T), 5.5, tolerance = tol, label = "QDRA-Male [learndiff = T]")
-expect_equal(tQDRA(schizobipo = T), 6.6, tolerance = tol, label = "QDRA-Male [schizobipo = T]")
-expect_equal(tQDRA(statins = T), 6.7, tolerance = tol, label = "QDRA-Male [statins = T]")
-expect_equal(tQDRA(hypertension = T), 7.3, tolerance = tol, label = "QDRA-Male [hypertension = T]")
-expect_equal(tQDRA(fh_diab = T), 8.8, tolerance = tol, label = "QDRA-Male [fh_diab = T]")
+expect_equal(tQDRA(antipsy = T), 6, tolerance = tol, label = "QDRA-Male [antipsy = T]", expected.label = "ClinRisk")
+expect_equal(tQDRA(steroids = T), 6.6, tolerance = tol, label = "QDRA-Male [steroids = T]", expected.label = "ClinRisk")
+expect_equal(tQDRA(cvd = T), 6.4, tolerance = tol, label = "QDRA-Male [cvd = T]", expected.label = "ClinRisk")
+expect_equal(tQDRA(learndiff = T), 5.5, tolerance = tol, label = "QDRA-Male [learndiff = T]", expected.label = "ClinRisk")
+expect_equal(tQDRA(schizobipo = T), 6.6, tolerance = tol, label = "QDRA-Male [schizobipo = T]", expected.label = "ClinRisk")
+expect_equal(tQDRA(statins = T), 6.7, tolerance = tol, label = "QDRA-Male [statins = T]", expected.label = "ClinRisk")
+expect_equal(tQDRA(hypertension = T), 7.3, tolerance = tol, label = "QDRA-Male [hypertension = T]", expected.label = "ClinRisk")
+expect_equal(tQDRA(fh_diab = T), 8.8, tolerance = tol, label = "QDRA-Male [fh_diab = T]", expected.label = "ClinRisk")
 rm(tQDRA)
 
 ### Tidy Up ###

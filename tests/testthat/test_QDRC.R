@@ -51,7 +51,7 @@ dat_test[["risk_min"]] <- with(dat_test, mapply(QDRC,
                                                   townsend = -7.028634577)))
 dat_test[["risk_max"]] <- with(dat_test, mapply(QDRC,
                                                 age = age,
-                                                height = height, 
+                                                height = height,
                                                 weight = weight,
                                                 hba1c = hba1c,
                                                 MoreArgs = list(
@@ -250,16 +250,16 @@ rm(tQDRC)
 
 ### Binary Variables ###
 tQDRC <- function(...){gQDRC(age = 60, height = 1.83, weight = 90, hba1c = 31.5, ...)}
-expect_equal(tQDRC(antipsy = T), 1.1, tolerance = tol, label = "QDRC-Female [antipsy = T]")
-expect_equal(tQDRC(steroids = T), 0.9, tolerance = tol, label = "QDRC-Female [steroids = T]")
-expect_equal(tQDRC(cvd = T), 0.9, tolerance = tol, label = "QDRC-Female [cvd = T]")
-expect_equal(tQDRC(gestdiab = T), 2.4, tolerance = tol, label = "QDRC-Female [gestdiab = T]")
-expect_equal(tQDRC(learndiff = T), 0.9, tolerance = tol, label = "QDRC-Female [learndiff = T]")
-expect_equal(tQDRC(schizobipo = T), 1.1, tolerance = tol, label = "QDRC-Female [schizobipo = T]")
-expect_equal(tQDRC(pcos = T), 1.1, tolerance = tol, label = "QDRC-Female [pcos = T]")
-expect_equal(tQDRC(statins = T), 0.9, tolerance = tol, label = "QDRC-Female [statins = T]")
-expect_equal(tQDRC(hypertension = T), 1.2, tolerance = tol, label = "QDRC-Female [hypertension = T]")
-expect_equal(tQDRC(fh_diab = T), 1.2, tolerance = tol, label = "QDRC-Female [fh_diab = T]")
+expect_equal(tQDRC(antipsy = T), 1.1, tolerance = tol, label = "QDRC-Female [antipsy = T]", expected.label = "ClinRisk")
+expect_equal(tQDRC(steroids = T), 0.9, tolerance = tol, label = "QDRC-Female [steroids = T]", expected.label = "ClinRisk")
+expect_equal(tQDRC(cvd = T), 0.9, tolerance = tol, label = "QDRC-Female [cvd = T]", expected.label = "ClinRisk")
+expect_equal(tQDRC(gestdiab = T), 2.4, tolerance = tol, label = "QDRC-Female [gestdiab = T]", expected.label = "ClinRisk")
+expect_equal(tQDRC(learndiff = T), 0.9, tolerance = tol, label = "QDRC-Female [learndiff = T]", expected.label = "ClinRisk")
+expect_equal(tQDRC(schizobipo = T), 1.1, tolerance = tol, label = "QDRC-Female [schizobipo = T]", expected.label = "ClinRisk")
+expect_equal(tQDRC(pcos = T), 1.1, tolerance = tol, label = "QDRC-Female [pcos = T]", expected.label = "ClinRisk")
+expect_equal(tQDRC(statins = T), 0.9, tolerance = tol, label = "QDRC-Female [statins = T]", expected.label = "ClinRisk")
+expect_equal(tQDRC(hypertension = T), 1.2, tolerance = tol, label = "QDRC-Female [hypertension = T]", expected.label = "ClinRisk")
+expect_equal(tQDRC(fh_diab = T), 1.2, tolerance = tol, label = "QDRC-Female [fh_diab = T]", expected.label = "ClinRisk")
 rm(tQDRC)
 
 ### Tidy Up ###
@@ -289,7 +289,7 @@ dat_test[["risk_min"]] <- with(dat_test, mapply(QDRC,
                                                   townsend = -7.028634577)))
 dat_test[["risk_max"]] <- with(dat_test, mapply(QDRC,
                                                 age = age,
-                                                height = height, 
+                                                height = height,
                                                 weight = weight,
                                                 hba1c = hba1c,
                                                 MoreArgs = list(
@@ -484,14 +484,14 @@ rm(tQDRC)
 
 ### Binary Variables ###
 tQDRC <- function(...){gQDRC(age = 60, height = 1.83, weight = 90, hba1c = 31.5, ...)}
-expect_equal(tQDRC(antipsy = T), 1.8, tolerance = tol, label = "QDRC-Male [antipsy = T]")
-expect_equal(tQDRC(steroids = T), 1.7, tolerance = tol, label = "QDRC-Male [steroids = T]")
-expect_equal(tQDRC(cvd = T), 1.7, tolerance = tol, label = "QDRC-Male [cvd = T]")
-expect_equal(tQDRC(learndiff = T), 1.6, tolerance = tol, label = "QDRC-Male [learndiff = T]")
-expect_equal(tQDRC(schizobipo = T), 1.9, tolerance = tol, label = "QDRC-Male [schizobipo = T]")
-expect_equal(tQDRC(statins = T), 1.6, tolerance = tol, label = "QDRC-Male [statins = T]")
-expect_equal(tQDRC(hypertension = T), 2, tolerance = tol, label = "QDRC-Male [hypertension = T]")
-expect_equal(tQDRC(fh_diab = T), 2.3, tolerance = tol, label = "QDRC-Male [fh_diab = T]")
+expect_equal(tQDRC(antipsy = T), 1.8, tolerance = tol, label = "QDRC-Male [antipsy = T]", expected.label = "ClinRisk")
+expect_equal(tQDRC(steroids = T), 1.7, tolerance = tol, label = "QDRC-Male [steroids = T]", expected.label = "ClinRisk")
+expect_equal(tQDRC(cvd = T), 1.7, tolerance = tol, label = "QDRC-Male [cvd = T]", expected.label = "ClinRisk")
+expect_equal(tQDRC(learndiff = T), 1.6, tolerance = tol, label = "QDRC-Male [learndiff = T]", expected.label = "ClinRisk")
+expect_equal(tQDRC(schizobipo = T), 1.9, tolerance = tol, label = "QDRC-Male [schizobipo = T]", expected.label = "ClinRisk")
+expect_equal(tQDRC(statins = T), 1.6, tolerance = tol, label = "QDRC-Male [statins = T]", expected.label = "ClinRisk")
+expect_equal(tQDRC(hypertension = T), 2, tolerance = tol, label = "QDRC-Male [hypertension = T]", expected.label = "ClinRisk")
+expect_equal(tQDRC(fh_diab = T), 2.3, tolerance = tol, label = "QDRC-Male [fh_diab = T]", expected.label = "ClinRisk")
 rm(tQDRC)
 
 ### Tidy Up ###
