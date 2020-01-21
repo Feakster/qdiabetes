@@ -349,12 +349,12 @@ dat_test[, c("risk_min", "risk_max")] <- NULL
 ## Gender ##
 expect_error(rQDRA(age = 60), label = "QDRA-Male [is.null(gender)]")
 ## Age ##
-expect_error(gQDRA(), lable = "QDRA-Male [is.null(age)]")
+expect_error(gQDRA(), label = "QDRA-Male [is.null(age)]")
 ## BMI, Height & Weight ##
 tQDRA <- function(...){gQDRA(age = 60, ...)}
 expect_error(tQDRA(height = 1.83), label = "QDRA-Male [is.null(bmi) & is.null(weight)]")
 expect_error(tQDRA(weight = 90), label = "QDRA-Male [is.null(bmi) & is.null(height)]")
-expect_warning(tQDRA(bmi = 30, height = 1.83, weight = 90), lablel = "QDRA-Male [!is.null(bmi) & !is.null(height) & !is.null(weight)]")
+expect_warning(tQDRA(bmi = 30, height = 1.83, weight = 90), label = "QDRA-Male [!is.null(bmi) & !is.null(height) & !is.null(weight)]")
 rm(tQDRA)
 ## FPG & HbA1c ##
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}

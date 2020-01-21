@@ -14,14 +14,10 @@ tiny <- 1e-8 # Small number
 
 ### Test Data ###
 dat_test <- expand.grid(
-  age = seq(25, 85 - tiny, length.out = 20),
-  height = seq(1.4, 2.1, length.out = 20),
-  weight = seq(40, 180, length.out = 20),
+  age = seq(25, 85 - tiny, length.out = 50),
+  bmi = seq(20, 40, length.out = 50),
   KEEP.OUT.ATTRS = F
 )
-
-dat_test[["bmi"]] <- with(dat_test, weight/height^2)
-dat_test <- dat_test[dat_test$bmi >= 20 & dat_test$bmi <= 40, ]
 
 ### Redefine Function (Rounding) ###
 rQDRA <- function(...){round(vQDRA(...), 1)}
@@ -40,14 +36,12 @@ expect_length(gQDRA(age = 60, height = 1.83, weight = 90), 1)
 ### Correct Range ###
 dat_test[["risk_min"]] <- with(dat_test, vQDRA(gender = "Female",
                                                age = age,
-                                               height = height,
-                                               weight = weight,
+                                               bmi = bmi,
                                                townsend = -7.028634577))
 
 dat_test[["risk_max"]] <- with(dat_test, vQDRA(gender = "Female",
                                                age = age,
-                                               height = height,
-                                               weight = weight,
+                                               bmi = bmi,
                                                ethnicity = "Bangladeshi",
                                                smoking = "Heavy",
                                                townsend = 13.3114711,
@@ -62,72 +56,135 @@ dat_test[["risk_max"]] <- with(dat_test, vQDRA(gender = "Female",
                                                hypertension = T,
                                                fh_diab = T))
 
-expect_gte(min(dat_test[["risk_min"]]), 0, label = "QDRA-Female [min(risk) >= 0]")
-expect_lte(max(dat_test[["risk_max"]]), 100, label = "QDRA-Female [max(risk) <= 100]")
+expect_gte(min(dat_test[["risk_min"]]), 0, label = "QDRB-Female [min(risk) >= 0]")
+expect_lte(min(dat_test[["risk_min"]]), 0.1, label = "QDRB-Female [min(risk) <= 0.1]")
+expect_lte(max(dat_test[["risk_max"]]), 100, label = "QDRB-Female [max(risk) <= 100]")
+expect_gte(max(dat_test[["risk_max"]]), 99.9, label = "QDRB-Female [max(risk) >= 99.9]")
 dat_test[, c("risk_min", "risk_max")] <- NULL
 
 ### Variable Combinations ###
 ## Gender ##
-expect_error(rQDRA(age = 60), label = "QDRA-Female [is.null(gender)]")
+expect_error(rQDRA(age = 60),
+             regexp = "gender & age must be specified",
+             label = "QDRA-Female [is.null(gender)]")
+
 ## Age ##
-expect_error(gQDRA(), label = "QDRA-Female [is.null(age)]")
+expect_error(gQDRA(),
+             regexp = "gender & age must be specified",
+             label = "QDRA-Female [is.null(age)]")
+
 ## BMI, Height & Weight ##
 tQDRA <- function(...){gQDRA(age = 60, ...)}
-expect_error(tQDRA(height = 1.83), label = "QDRA-Female [is.null(bmi) & is.null(weight)]")
-expect_error(tQDRA(weight = 90), label = "QDRA-Female [is.null(bmi) & is.null(height)]")
-expect_warning(tQDRA(bmi = 30, height = 1.83, weight = 90), label = "QDRA-Female [!is.null(bmi) & !is.null(height) & !is.null(weight)]")
+expect_error(tQDRA(height = 1.83),
+             regexp = "either bmi or height & weight must be specified",
+             label = "QDRA-Female [is.null(bmi) & is.null(weight)]")
+expect_error(tQDRA(weight = 90),
+             regexp = "either bmi or height & weight must be specified",
+             label = "QDRA-Female [is.null(bmi) & is.null(height)]")
+expect_warning(tQDRA(bmi = 30, height = 1.83, weight = 90),
+               regexp = "bmi, height & weight all specified, height & weight ignored",
+               label = "QDRA-Female [!is.null(bmi) & !is.null(height) & !is.null(weight)]")
 rm(tQDRA)
+
 ## FPG & HbA1c ##
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
-expect_error(tQDRA(fpg = 4.5), label = "QDRA-Female [!is.null(fpg)]")
-expect_error(tQDRA(hba1c = 31.5), label = "QDRA-Female [!is.nulll(hba1c)]")
+expect_error(tQDRA(fpg = 4.5),
+             regexp = "unused argument",
+             label = "QDRA-Female [!is.null(fpg)]")
+expect_error(tQDRA(hba1c = 31.5),
+             regexp = "unused argument",
+             label = "QDRA-Female [!is.nulll(hba1c)]")
 rm(tQDRA)
 
 ### Boundaries ###
 ## Age ##
 tQDRA <- function(...){gQDRA(bmi = 30, ...)}
-expect_error(tQDRA(age = 24), label = "QDRA-Female [age < 25]")
-expect_error(tQDRA(age = 85), label = "QDRA-Female [age >= 85]]")
+expect_error(tQDRA(age = 24),
+             regexp = "all\\(age >= 25 & age < 85\\) is not TRUE",
+             label = "QDRA-Female [age < 25]")
+expect_error(tQDRA(age = 85),
+             regexp = "all\\(age >= 25 & age < 85\\) is not TRUE",
+             label = "QDRA-Female [age >= 85]]")
 rm(tQDRA)
 
 ## BMI ##
 tQDRA <- function(...){gQDRA(age = 60, ...)}
-expect_error(tQDRA(bmi = (40/2.1^2) - 1), label = "QDRA-Female [bmi < 40/2.1^2]")
-expect_error(tQDRA(bmi = (180/1.4^2) + 1), label = "QDRA-Female [bmi > 180/1.4^2]")
-expect_warning(tQDRA(bmi = 19), label = "QDRA-Female [bmi < 20]")
-expect_warning(tQDRA(bmi = 41), label = "QDRA-Female [bmi > 40]")
+expect_error(tQDRA(bmi = (40/2.1^2) - 1),
+             regexp = "all\\(bmi >= 40/2\\.1\\^2 & bmi <= 180/1\\.4\\^2\\) is not TRUE",
+             label = "QDRA-Female [bmi < 40/2.1^2]")
+expect_error(tQDRA(bmi = (180/1.4^2) + 1),
+             regexp = "all\\(bmi >= 40/2\\.1\\^2 & bmi <= 180/1\\.4\\^2\\) is not TRUE",
+             label = "QDRA-Female [bmi > 180/1.4^2]")
+expect_warning(tQDRA(bmi = 19),
+               regexp = "bmi < 20\\. Setting bmi == 20",
+               label = "QDRA-Female [bmi < 20]")
+expect_warning(tQDRA(bmi = 41),
+               regexp = "bmi > 40\\. Setting bmi == 40",
+               label = "QDRA-Female [bmi > 40]")
 rm(tQDRA)
 
 ## Height ##
 tQDRA <- function(...){gQDRA(age = 60, weight = 90, ...)}
-expect_error(tQDRA(height = 1.3), label = "QDRA-Female [height < 1.4]")
-expect_error(tQDRA(height = 2.2), label = "QDRA-Female [height > 2.1]")
+expect_error(tQDRA(height = 1.3),
+             regexp = "all\\(height >= 1\\.4 & height <= 2\\.1\\) is not TRUE",
+             label = "QDRA-Female [height < 1.4]")
+expect_error(tQDRA(height = 2.2),
+             regexp = "all\\(height >= 1\\.4 & height <= 2\\.1\\) is not TRUE",
+             label = "QDRA-Female [height > 2.1]")
 rm(tQDRA)
 
 ## Weight ##
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, ...)}
-expect_error(tQDRA(weight = 39), label = "QDRA-Female [weight < 40]")
-expect_error(tQDRA(weight = 181), label = "QDRA-Female [weight > 180]")
+expect_error(tQDRA(weight = 39),
+             regexp = "all\\(weight >= 40 & weight <= 180\\) is not TRUE",
+             label = "QDRA-Female [weight < 40]")
+expect_error(tQDRA(weight = 181),
+             regexp = "all\\(weight >= 40 & weight <= 180\\) is not TRUE",
+             label = "QDRA-Female [weight > 180]")
 rm(tQDRA)
 
 ## Townsend ##
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
-expect_error(tQDRA(townsend = -7.028634578), label = "QDRA-Female [townsend < -7.028634577]")
-expect_error(tQDRA(townsend = 13.3114712), label = "QDRA-Female [townsend > 13.3114711]")
+expect_error(tQDRA(townsend = -7.028634578),
+             regexp = "all\\(townsend >= -7\\.\\d+ & townsend <= 13\\.\\d+\\) is not TRUE",
+             label = "QDRA-Female [townsend < -7.028634577]")
+expect_error(tQDRA(townsend = 13.3114712),
+             regexp = "all\\(townsend >= -7\\.\\d+ & townsend <= 13\\.\\d+\\) is not TRUE",
+             label = "QDRA-Female [townsend > 13.3114711]")
 rm(tQDRA)
 
 ## Binary Variables ##
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
-expect_error(tQDRA(antipsy = -1), label = "QDRA-Female [!{antipsy %in% c(0, 1, F, T)}]")
-expect_error(tQDRA(steroids = -1), label = "QDRA-Female [!{steroids %in% c(0, 1, F, T)}]")
-expect_error(tQDRA(cvd = -1), label = "QDRA-Female [!{cvd %in% c(0, 1, F, T)}]")
-expect_error(tQDRA(gestdiab = -1), label = "QDRA-Female [!{gestdiab %in% c(0, 1, F, T)}]")
-expect_error(tQDRA(learndiff = -1), label = "QDRA-Female [!{learndiff %in% c(0, 1, F, T)}]")
-expect_error(tQDRA(schizobipo = -1), label = "QDRA-Female [!{schizobipo %in% c(0, 1, F, T)}]")
-expect_error(tQDRA(pcos = -1), label = "QDRA-Female [!{pcos %in% c(0, 1, F, T)}]")
-expect_error(tQDRA(statins = -1), label = "QDRA-Female [!{statins %in% c(0, 1, F, T)}]")
-expect_error(tQDRA(hypertension = -1), label = "QDRA-Female [!{hypertension %in% c(0, 1, F, T)}]")
-expect_error(tQDRA(fh_diab = -1), label = "QDRA-Female [!{fh_diab %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(antipsy = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Female [!{antipsy %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(steroids = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Female [!{steroids %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(cvd = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Female [!{cvd %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(gestdiab = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Female [!{gestdiab %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(learndiff = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Female [!{learndiff %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(schizobipo = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Female [!{schizobipo %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(pcos = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Female [!{pcos %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(statins = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Female [!{statins %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(hypertension = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Female [!{hypertension %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(fh_diab = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Female [!{fh_diab %in% c(0, 1, F, T)}]")
 rm(tQDRA)
 
 ### Numerical Values ###
@@ -192,7 +249,9 @@ rm(tQDRA)
 ### Categorical Variables ###
 ## Ethnicity ##
 tQDRA <- function(x){gQDRA(ethnicity = x, age = 60, height = 1.83, weight = 90)}
-expect_error(tQDRA(x = "Blue"), label = "QDRA-Female [ethnicity = 'Blue']")
+expect_error(tQDRA(x = "Blue"),
+             regexp = "all\\(ethnicity %in% .+ is not TRUE",
+             label = "QDRA-Female [ethnicity == 'Blue']")
 vec_eth <- c("WhiteNA", "Indian", "Pakistani", "Bangladeshi", "OtherAsian", "BlackCaribbean", "BlackAfrican", "Chinese", "Other")
 risk_web <- c(3.7, 10.3, 13.3, 20.2, 10.9, 5.5, 4.8, 8.6, 5.2)
 names(risk_web) <- vec_eth
@@ -206,7 +265,9 @@ rm(tQDRA)
 
 ## Smoking ##
 tQDRA <- function(x){gQDRA(smoking = x, age = 60, height = 1.83, weight = 90)}
-expect_error(tQDRA(x = "Maybe"), label = "QDRA-Female [smoking = 'Maybe']")
+expect_error(tQDRA(x = "Maybe"),
+             regexpr = "all\\(smoking %in% .+ is not TRUE",
+             label = "QDRA-Female [smoking == 'Maybe']")
 vec_smo <- c("Non", "Ex", "Light", "Moderate", "Heavy")
 risk_web <- c(3.7, 3.9, 4.8, 5.2, 6.2)
 names(risk_web) <- vec_smo
@@ -249,15 +310,13 @@ expect_length(gQDRA(age = 60, height = 1.83, weight = 90), 1)
 ### Correct Range ###
 dat_test[["risk_min"]] <- with(dat_test, vQDRA(gender = "Male",
                                                age = age,
-                                               height = height,
-                                               weight = weight,
+                                               bmi = bmi,
                                                ethnicity = "WhiteNA",
                                                smoking = "Non",
                                                townsend = -7.028634577))
 dat_test[["risk_max"]] <- with(dat_test, vQDRA(gender = "Male",
                                                age = age,
-                                               height = height,
-                                               weight = weight,
+                                               bmi = bmi,
                                                ethnicity = "Bangladeshi",
                                                smoking = "Heavy",
                                                townsend = 13.3114711,
@@ -270,75 +329,139 @@ dat_test[["risk_max"]] <- with(dat_test, vQDRA(gender = "Male",
                                                hypertension = T,
                                                fh_diab = T))
 
-expect_gte(min(dat_test[["risk_min"]]), 0, label = "QDRA-Male [min(risk) >= 0]")
-expect_lte(max(dat_test[["risk_max"]]), 100, label = "QDRA-Male [max(risk) <= 100]")
+expect_gte(min(dat_test[["risk_min"]]), 0, label = "QDRB-Male [min(risk) >= 0]")
+expect_lte(min(dat_test[["risk_min"]]), 0.1, label = "QDRB-Male [min(risk) <= 0.1]")
+expect_lte(max(dat_test[["risk_max"]]), 100, label = "QDRB-Male [max(risk) <= 100]")
+expect_gte(max(dat_test[["risk_max"]]), 99.9, label = "QDRB-Male [max(risk) >= 99.9]")
 dat_test[, c("risk_min", "risk_max")] <- NULL
 
 ### Variable Combinations ###
 ## Gender ##
-expect_error(rQDRA(age = 60), label = "QDRA-Male [is.null(gender)]")
+expect_error(rQDRA(age = 60),
+             regexp = "gender & age must be specified",
+             label = "QDRA-Male [is.null(gender)]")
+
 ## Age ##
-expect_error(gQDRA(), lable = "QDRA-Male [is.null(age)]")
+expect_error(gQDRA(),
+             regexp = "gender & age must be specified",
+             label = "QDRA-Male [is.null(age)]")
+
 ## BMI, Height & Weight ##
 tQDRA <- function(...){gQDRA(age = 60, ...)}
-expect_error(tQDRA(height = 1.83), label = "QDRA-Male [is.null(bmi) & is.null(weight)]")
-expect_error(tQDRA(weight = 90), label = "QDRA-Male [is.null(bmi) & is.null(height)]")
-expect_warning(tQDRA(bmi = 30, height = 1.83, weight = 90), lablel = "QDRA-Male [!is.null(bmi) & !is.null(height) & !is.null(weight)]")
+expect_error(tQDRA(height = 1.83),
+             regexp = "either bmi or height & weight must be specified",
+             label = "QDRA-Male [is.null(bmi) & is.null(weight)]")
+expect_error(tQDRA(weight = 90),
+             regexp = "either bmi or height & weight must be specified",
+             label = "QDRA-Male [is.null(bmi) & is.null(height)]")
+expect_warning(tQDRA(bmi = 30, height = 1.83, weight = 90),
+               regexp = "bmi, height & weight all specified, height & weight ignored",
+               label = "QDRA-Male [!is.null(bmi) & !is.null(height) & !is.null(weight)]")
 rm(tQDRA)
+
 ## FPG & HbA1c ##
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
-expect_error(tQDRA(fpg = 4.5), label = "QDRA-Male [!is.null(fpg)]")
-expect_error(tQDRA(hba1c = 31.5), label = "QDRA-Male [!is.null(hba1c)]")
+expect_error(tQDRA(fpg = 4.5),
+             regexp = "unused argument",
+             label = "QDRA-Male [!is.null(fpg)]")
+expect_error(tQDRA(hba1c = 31.5),
+             regexp = "unused argument",
+             label = "QDRA-Male [!is.null(hba1c)]")
 rm(tQDRA)
+
 ## Gestational Diabetes & PCOS ##
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
-expect_error(tQDRA(gestdiab = T), label = "QDRA-Male [gestdiab = T]")
-expect_error(tQDRA(pcos = T), label = "QDRA-Male [pcos = T]")
+expect_error(tQDRA(gestdiab = T),
+             regexp = "'pcos' and 'gestdiab' must be set to FALSE for male 'gender'",
+             label = "QDRA-Male [gestdiab = T]")
+expect_error(tQDRA(pcos = T),
+             regexp = "'pcos' and 'gestdiab' must be set to FALSE for male 'gender'",
+             label = "QDRA-Male [pcos = T]")
 rm(tQDRA)
 
 ### Boundaries ###
 ## Age ##
 tQDRA <- function(...){gQDRA(bmi = 30, ...)}
-expect_error(tQDRA(age = 24), label = "QDRA-Male [age < 25]")
-expect_error(tQDRA(age = 85), label = "QDRA-Male [age >= 85]")
+expect_error(tQDRA(age = 24),
+             regexp = "all\\(age >= 25 & age < 85\\) is not TRUE",
+             label = "QDRA-Male [age < 25]")
+expect_error(tQDRA(age = 85),
+             regexp = "all\\(age >= 25 & age < 85\\) is not TRUE",
+             label = "QDRA-Male [age >= 85]")
 rm(tQDRA)
 
 ## BMI ##
 tQDRA <- function(...){gQDRA(age = 60, ...)}
-expect_error(tQDRA(bmi = (40/2.1^2) - 1), label = "QDRA-Male [bmi < 40/2.1^2]")
-expect_error(tQDRA(bmi = (180/1.4^2) + 1), label = "QDRA-Male [bmi > 180/1.4^2]")
-expect_warning(tQDRA(bmi = 19), label = "QDRA-Male [bmi < 20]")
-expect_warning(tQDRA(bmi = 41), label = "QDRA-Male [bmi > 40]")
+expect_error(tQDRA(bmi = (40/2.1^2) - 1),
+             regexp = "all\\(bmi >= 40/2\\.1\\^2 & bmi <= 180/1\\.4\\^2\\) is not TRUE",
+             label = "QDRA-Male [bmi < 40/2.1^2]")
+expect_error(tQDRA(bmi = (180/1.4^2) + 1),
+             regexp = "all\\(bmi >= 40/2\\.1\\^2 & bmi <= 180/1\\.4\\^2\\) is not TRUE",
+             label = "QDRA-Male [bmi > 180/1.4^2]")
+expect_warning(tQDRA(bmi = 19),
+               regexp = "bmi < 20\\. Setting bmi == 20",
+               label = "QDRA-Male [bmi < 20]")
+expect_warning(tQDRA(bmi = 41),
+               regexp = "bmi > 40\\. Setting bmi == 40",
+               label = "QDRA-Male [bmi > 40]")
 rm(tQDRA)
 
 ## Height ##
 tQDRA <- function(...){gQDRA(age = 60, weight = 90, ...)}
-expect_error(tQDRA(height = 1.3), label = "QDRA-Male [height < 1.4]")
-expect_error(tQDRA(height = 2.2), label = "QDRA-Male [height > 2.1]")
+expect_error(tQDRA(height = 1.3),
+             regexp = "all\\(height >= 1\\.4 & height <= 2\\.1\\) is not TRUE",
+             label = "QDRA-Male [height < 1.4]")
+expect_error(tQDRA(height = 2.2),
+             regexp = "all\\(height >= 1\\.4 & height <= 2\\.1\\) is not TRUE",
+             label = "QDRA-Male [height > 2.1]")
 rm(tQDRA)
 
 ## Weight ##
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, ...)}
-expect_error(tQDRA(weight = 39), label = "QDRA-Male [weight < 40]")
-expect_error(tQDRA(weight = 181), label = "QDRA-Male [weight > 180]")
+expect_error(tQDRA(weight = 39),
+             regexp = "all\\(weight >= 40 & weight <= 180\\) is not TRUE",
+             label = "QDRA-Male [weight < 40]")
+expect_error(tQDRA(weight = 181),
+             regexp = "all\\(weight >= 40 & weight <= 180\\) is not TRUE",
+             label = "QDRA-Male [weight > 180]")
 rm(tQDRA)
 
 ## Townsend ##
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
-expect_error(tQDRA(townsend = -7.028634578), label = "QDRA-Male [townsend < -7.028634577]")
-expect_error(tQDRA(townsend = 13.3114712), label = "QDRA-Male [townsend > 13.3114711]")
+expect_error(tQDRA(townsend = -7.028634578),
+             regexp = "all\\(townsend >= -7\\.\\d+ & townsend <= 13\\.\\d+\\) is not TRUE",
+             label = "QDRA-Male [townsend < -7.028634577]")
+expect_error(tQDRA(townsend = 13.3114712),
+             regexp = "all\\(townsend >= -7\\.\\d+ & townsend <= 13\\.\\d+\\) is not TRUE",
+             label = "QDRA-Male [townsend > 13.3114711]")
 rm(tQDRA)
 
 ## Binary Variables ##
 tQDRA <- function(...){gQDRA(age = 60, height = 1.83, weight = 90, ...)}
-expect_error(tQDRA(antipsy = -1), label = "QDRA-Male [!{antipsy %in% c(0, 1, F, T)}]")
-expect_error(tQDRA(steroids = -1), label = "QDRA-Male [!{steroids %in% c(0, 1, F, T)}]")
-expect_error(tQDRA(cvd = -1), label = "QDRA-Male [!{cvd %in% c(0, 1, F, T)}]")
-expect_error(tQDRA(learndiff = -1), label = "QDRA-Male [!{learndiff %in% c(0, 1, F, T)}]")
-expect_error(tQDRA(schizobipo = -1), label = "QDRA-Male [!{schizobipo %in% c(0, 1, F, T)}]")
-expect_error(tQDRA(statins = -1), label = "QDRA-Male [!{statins %in% c(0, 1, F, T)}]")
-expect_error(tQDRA(hypertension = -1), label = "QDRA-Male [!{hypertension %in% c(0, 1, F, T)}]")
-expect_error(tQDRA(fh_diab = -1), label = "QDRA-Male [!{fh_diab %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(antipsy = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Male [!{antipsy %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(steroids = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Male [!{steroids %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(cvd = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Male [!{cvd %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(learndiff = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Male [!{learndiff %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(schizobipo = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Male [!{schizobipo %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(statins = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Male [!{statins %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(hypertension = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Male [!{hypertension %in% c(0, 1, F, T)}]")
+expect_error(tQDRA(fh_diab = -1),
+             regexp = "all\\(\\w+ %in% c\\(FALSE, TRUE\\)\\) is not TRUE",
+             label = "QDRA-Male [!{fh_diab %in% c(0, 1, F, T)}]")
 rm(tQDRA)
 
 ### Numerical Values ###
@@ -403,7 +526,9 @@ rm(tQDRA)
 ### Categorical Variables ###
 ## Ethnicity ##
 tQDRA <- function(x){gQDRA(ethnicity = x, age = 60, height = 1.83, weight = 90)}
-expect_error(tQDRA(x = "Blue"))
+expect_error(tQDRA(x = "Blue"),
+             regexp = "all\\(ethnicity %in% .+ is not TRUE",
+             label = "QDRB-Male [ethnicity == 'Blue']")
 vec_eth <- c("WhiteNA", "Indian", "Pakistani", "Bangladeshi", "OtherAsian", "BlackCaribbean", "BlackAfrican", "Chinese", "Other")
 risk_web <- c(5.3, 15.1, 17.9, 25.2, 15.6, 8.3, 10.4, 10.3, 7.9)
 names(risk_web) <- vec_eth
@@ -417,7 +542,9 @@ rm(tQDRA)
 
 ## Smoking ##
 tQDRA <- function(x){gQDRA(smoking = x, age = 60, height = 1.83, weight = 90)}
-expect_error(tQDRA(x = "Maybe"))
+expect_error(tQDRA(x = "Maybe"),
+             regexp = "all\\(smoking %in% .+ is not TRUE",
+             label = "QDRB-Male [smoking == 'Maybe']")
 vec_smo <- c("Non", "Ex", "Light", "Moderate", "Heavy")
 risk_web <- c(5.3, 6.2, 7.2, 7.2, 8.2)
 names(risk_web) <- vec_smo

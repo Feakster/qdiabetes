@@ -49,5 +49,5 @@ dat_oa <- dat_oa[, .(postcode, tds)]
 setkey(dat_oa, postcode)
 
 ### Export ###
-dat_oa <- as.data.frame(dat_oa)
-save(dat_oa, file = "R/sysdata.rda", version = 2, compress = "xz"); rm(dat_oa)
+.dat_oa <- as.data.frame(dat_oa); rm(dat_oa)
+save(.dat_oa, file = "R/sysdata.rda", version = 2, compress = "xz"); rm(.dat_oa)

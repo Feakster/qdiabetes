@@ -22,7 +22,7 @@ getTDS <- function(postcode = NULL){
   postcode <- gsub("\\s+", "", postcode)
   postcode <- toupper(postcode)
   if(any(!grepl("^(([A-Z]{1,2}\\d[A-Z]|[A-Z]{1,2}\\d{1,2}|NPT)\\d[A-Z]{2})$", postcode))) stop("Postcode is not in a recognisable format.")
-  tds <- dat_oa[match(postcode, dat_oa$postcode), "tds"]
+  tds <- .dat_oa[match(postcode, .dat_oa$postcode), "tds"]
   if(any(is.na(tds))) stop("One or more postcodes could not be linked to a Townsend deprivation score.")
   return(tds)
 }

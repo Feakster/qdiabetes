@@ -17,7 +17,7 @@ vQDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight =
   ## Stop Conditions ##
   if(any(c(is.null(gender), is.null(age), is.null(fpg)))) stop("gender, age & fpg must be specified")
   if(is.null(bmi) & any(c(is.null(height), is.null(weight)))) stop("either bmi or height & weight must be specified")
-  inputs <- list(gender, age, bmi, height, weight, ethnicity, smoking, townsend, antipsy, steroids, cvd, gestdiab, learndiff, schizobipo, pcos, statins, hypertension, fh_diab)
+  inputs <- list(gender, age, bmi, height, weight, fpg, ethnicity, smoking, townsend, antipsy, steroids, cvd, gestdiab, learndiff, schizobipo, pcos, statins, hypertension, fh_diab)
   inputs_length <- sapply(inputs, length)
   n <- max(inputs_length)
   stopifnot(all(inputs_length %in% c(0:1, n)))
