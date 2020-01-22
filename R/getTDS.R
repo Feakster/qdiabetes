@@ -4,6 +4,11 @@
 #                                     #
 #=====================================#
 
+### License Information ###
+# - Contains OS data © Crown copyright and database right 2020
+# - Contains Royal Mail data © Royal Mail copyright and database right 2020
+# - Source: Office for National Statistics licensed under the Open Government Licence v.3.0
+
 ### Notes ###
 # - https://en.wikipedia.org/wiki/Postcodes_in_the_United_Kingdom
 # Historic ^NPT (Newport) postcodes appear to be present in the postcode database alongside the newer counterparts.

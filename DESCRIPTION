@@ -14,8 +14,8 @@ Authors@R: c(
   person("National Institute for Health Research School for Primary Care Research", role = "fnd"),
   person("University of Oxford", role = c("cph", "sht")))
 Description: This package aims to calculate the risk of developing type 2 diabetes in the next 10 years. It is based on published risk prediction algorithms <https://qdiabetes.org/src.php>.
-Suggests: data.table, dplyr, lattice, testthat
-License: AGPL-3 + file LICENSE
+Suggests: data.table, dplyr, lattice, testthat, utils
+License: AGPL-3
 Copyrights: University of Oxford
 URL: https://github.com/Feakster/qdiabetes
 BugReports: https://github.com/Feakster/qdiabetes/issues

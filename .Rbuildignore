@@ -3,6 +3,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 data-raw/
+LICENSE.md
 README.md
 ToDo
 vignettes/.*.aux
