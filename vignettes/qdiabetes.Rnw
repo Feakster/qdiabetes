@@ -56,13 +56,13 @@ library(QDiabetes)
 
 \section*{Introduction}
 
-Note: default values for the function are set as per the \href{https://qdiabetes.org/2018}{QDiabetes-2018 risk calculator}. The QDiabetes-2018 algorithm is actually six separate algorithms; three variants (A, B and C) per gender (male and female). Each of these variants may be invoked directly via the \texttt{QDRA()}, \texttt{QDRB()} and \texttt{QDRC()} functions. Alternatively, the \texttt{QDR()} function may be used, in which case the algorithm selection will mirror that of the QDiabetes website for any given information, i.e. if fasting plasma glucose (FPG) if available then the B variant is always used, if glycated haemoglobin (HbA\textsubscript{1c}) is available (but not FPG) then the C variant is used, if neither FPG nor HbA\textsubscript{1c} are available then the A variant is used. For convenience, I have also added the ability to specify body mass index or height and weight. Note, many of the default values of the \texttt{QDR()} algorithms assume the absence of comorbidities and concomittant pharmacotherapies. Hence, although you will be able to get an output from the \texttt{QDR()} or \texttt{QDRA()} functions with the spcification of only \texttt{gender}, \texttt{age} and \texttt{bmi}, this will likely underestimate the risk unless you specify the other parameters of the function.
+Note: default values for the function are set as per the \href{https://qdiabetes.org/2018}{QDiabetes-2018 risk calculator}. The QDiabetes-2018 algorithm is actually six separate algorithms; three variants (A, B and C) per gender (male and female). Each of these variants may be invoked directly via the \texttt{QDRA()}, \texttt{QDRB()} and \texttt{QDRC()} functions. For convenience, I have added the ability to specify body mass index or height and weight. Note, many of the default values of these algorithms assume the absence of comorbidities and concomittant pharmacotherapies. Hence, although you will be able to get an output from the \texttt{QDRA()} function with the spcification of only \texttt{gender}, \texttt{age} and \texttt{bmi}, this will likely underestimate the risk unless you accurately specify the other parameters of the function.
 
 \section*{Ad hoc usage}
 
 <<>>=
-QDR(gender = "Female", age = 65, height = 1.65, weight = 70)
-QDR(gender = "Male", age = 54, bmi = 35)
+QDRA(gender = "Female", age = 65, height = 1.65, weight = 70)
+QDRA(gender = "Male", age = 54, bmi = 35)
 @
 
 \section*{Data frame usage}
@@ -76,14 +76,7 @@ data(dat_qdr)
 For R's standard \textit{data.frame}:
 
 <<>>=
-dat_qdr$risk <- with(dat_qdr, mapply(QDR, gender = gender, age = age, bmi = bmi))
-@
-
-Or, for a vectorised (but not faster) syntax, try the following:
-
-<<>>=
-vQDR <- Vectorize(QDR)
-dat_qdr$risk <- with(dat_qdr, vQDR(gender = gender, age = age, bmi = bmi))
+dat_qdr[["risk"]] <- with(dat_qdr, QDRA(gender = gender, age = age, bmi = bmi))
 @
 
 Or with \textit{data.table}:
@@ -91,13 +84,13 @@ Or with \textit{data.table}:
 <<echo = T, eval = F>>=
 library(data.table)
 dt_qdr <- as.data.table(dat_qdr)
-dt_qdr[, risk := mapply(QDR, gender = gender, age = age, bmi = bmi)]
+dt_qdr[, risk := QDRA(gender = gender, age = age, bmi = bmi)]
 head(dt_qdr[, .(gender, age, bmi, risk)])
 @
 <<echo = F, eval = F>>=
 library(data.table)
 dt_qdr <- invisible(as.data.table(dat_qdr))
-dt_qdr[, risk := mapply(QDR, gender = gender, age = age, bmi = bmi)]
+dt_qdr[, risk := QDRA(gender = gender, age = age, bmi = bmi)]
 head(dt_qdr[, .(gender, age, bmi, risk)])
 @
 
@@ -107,7 +100,7 @@ Or with \textit{dplyr}:
 library(dplyr)
 df_qdr <- as_tibble(dat_qdr)
 df_qdr <- df_qdr %>%
-  mutate(risk = mapply(QDR, gender = gender, age = age, bmi = bmi))
+  mutate(risk = QDRA(gender = gender, age = age, bmi = bmi))
 df_qdr %>%
   select(gender, age, bmi, risk) %>%
   head()
@@ -117,22 +110,19 @@ df_qdr %>%
 
 <<>>=
 # "A" Variant
-dat_qdr$qdra <- with(dat_qdr, mapply(QDRA,
-                                     gender = gender,
-                                     age = age,
-                                     bmi = bmi))
+dat_qdr[["qdra"]] <- with(dat_qdr, QDRA(gender = gender,
+                                        age = age,
+                                        bmi = bmi))
 # "B" Variant
-dat_qdr$qdrb <- with(dat_qdr, mapply(QDRB,
-                                     gender = gender,
-                                     age = age,
-                                     bmi = bmi,
-                                     fpg = fpg))
+dat_qdr[["qdrb"]] <- with(dat_qdr, QDRB(gender = gender,
+                                        age = age,
+                                        bmi = bmi,
+                                        fpg = fpg))
 # "C" Variant
-dat_qdr$qdrc <- with(dat_qdr, mapply(QDRC,
-                                     gender = gender,
-                                     age = age,
-                                     bmi = bmi,
-                                     hba1c = hba1c))
+dat_qdr[["qdrc"]] <- with(dat_qdr, QDRC(gender = gender,
+                                        age = age,
+                                        bmi = bmi,
+                                        hba1c = hba1c))
 
 # Output
 head(dat_qdr[, c("gender", "age", "bmi", "fpg", "hba1c", "qdra", "qdrb", "qdrc")])
@@ -155,12 +145,10 @@ df <- expand.grid(height = seq(1.4, 2.1, length.out = 15),
 
 ## Estimate Risk
 suppressWarnings({
-  df[["risk"]] <- with(df,  mapply(QDRA,
-                                   height = height,
-                                   weight = weight,
-                                   MoreArgs = list(
-                                     gender = "Male",
-                                     age = 65)))
+  df[["risk"]] <- with(df,  QDRA(gender = "Male",
+                                 age = 65,
+                                 height = height,
+                                 weight = weight))
 })
 
 ## Colour Palette
@@ -190,11 +178,9 @@ df <- expand.grid(age = seq(25, 84.99, length.out = 15),
                   KEEP.OUT.ATTRS = F)
 
 ## Estimate Risk
-df[["risk"]] <- with(df,  mapply(QDRA,
-                                 age = age,
-                                 bmi = bmi,
-                                 MoreArgs = list(
-                                   gender = "Male")))
+df[["risk"]] <- with(df,  QDRA(gender = "Male",
+                               age = age,
+                               bmi = bmi))
 
 ## Colour Palette
 pal <- hsv(0.6, seq(0, 1, length.out = 1e3), 1)
@@ -220,12 +206,10 @@ df <- expand.grid(age = seq(25, 84.99, length.out = 15),
                   KEEP.OUT.ATTRS = F)
 
 ## Estimate Risk
-df[["risk"]] <- with(df,  mapply(QDRB,
-                                 age = age,
-                                 fpg = fpg,
-                                 MoreArgs = list(
-                                   gender = "Male",
-                                   bmi = 30)))
+df[["risk"]] <- with(df,  QDRB(gender = "Male",
+                               age = age,
+                               bmi = 30,
+                               fpg = fpg))
 
 ## Colour Palette
 pal <- hsv(0.6, seq(0, 1, length.out = 1e3), 1)
@@ -251,12 +235,10 @@ df <- expand.grid(age = seq(25, 84.99, length.out = 15),
                   KEEP.OUT.ATTRS = F)
 
 ## Estimate Risk
-df[["risk"]] <- with(df,  mapply(QDRC,
-                                 age = age,
-                                 hba1c = hba1c,
-                                 MoreArgs = list(
-                                   gender = "Male",
-                                   bmi = 30)))
+df[["risk"]] <- with(df,  QDRC(gender = "Male",
+                               age = age,
+                               bmi = 30,
+                               hba1c = hba1c))
 
 ## Colour Palette
 pal <- hsv(0.6, seq(0, 1, length.out = 1e3), 1)

@@ -12,7 +12,7 @@ expect_error(getTDS(23), label = "!is.character(postcode)")
 expect_length(getTDS(c("OX2 6GG", "OX2 6NW", "OX3 7LF")), 3)
 
 ### Validity of All Database Postcodes ###
-expect_equal(length(getTDS(dat_oa$postcode)), nrow(dat_oa), label = "Database Matches", expected.label = "Database Rows")
+expect_equal(length(getTDS(.dat_oa$postcode)), nrow(.dat_oa), label = "Database Matches", expected.label = "Database Rows")
 
 ### Output Type ###
 expect_type(getTDS("OX2 6GG"), "double")

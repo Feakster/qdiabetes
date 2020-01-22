@@ -5,7 +5,7 @@
 #================================#
 
 ### License Information ###
-# The QDRB function is part of the QDiabetes package, and is for
+# The vQDRB function is part of the QDiabetes package, and is for
 # calculating the 10-year risk of developing type-2 diabetes.
 # Copyright (C) 2020  University of Oxford
 
@@ -49,216 +49,231 @@
 
 QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL, fpg = NULL, ethnicity = "WhiteNA", smoking = "Non", townsend = 0, antipsy = FALSE, steroids = FALSE, cvd = FALSE, gestdiab = FALSE, learndiff = FALSE, schizobipo = FALSE, pcos = FALSE, statins = FALSE, hypertension = FALSE, fh_diab = FALSE){
   ## Stop Conditions ##
-  if(any(c(is.null(gender), is.null(age), is.null(fpg)))) stop("gender, age & fpg must be specified")
-  if(is.null(bmi) & any(c(is.null(height), is.null(weight)))) stop("either bmi or height & weight must be specified")
-  stopifnot(gender %in% c("Male", "Female"))
-  stopifnot(ethnicity %in% c("WhiteNA", "Indian", "Pakistani", "Bangladeshi", "OtherAsian", "BlackCaribbean", "BlackAfrican", "Chinese", "Other"))
-  stopifnot(smoking %in% c("Non", "Ex", "Light", "Moderate", "Heavy"))
-  stopifnot(all(c(antipsy, steroids, cvd, gestdiab, learndiff, schizobipo, pcos, statins, hypertension, fh_diab) %in% c(FALSE, TRUE)))
-  stopifnot(fpg >= 2 & fpg < 7)
-  stopifnot(age >= 25 & age < 85)
-  stopifnot(height >= 1.4 & height <= 2.1)
-  stopifnot(weight >= 40 & weight <= 180)
-  stopifnot(townsend >= -7.028634577 & townsend <= 13.3114711)
-  stopifnot(antipsy %in% c(FALSE, TRUE))
-  stopifnot(steroids %in% c(FALSE, TRUE))
-  stopifnot(cvd %in% c(FALSE, TRUE))
-  stopifnot(gestdiab %in% c(FALSE, TRUE))
-  stopifnot(learndiff %in% c(FALSE, TRUE))
-  stopifnot(schizobipo %in% c(FALSE, TRUE))
-  stopifnot(pcos %in% c(FALSE, TRUE))
-  stopifnot(statins %in% c(FALSE, TRUE))
-  stopifnot(hypertension %in% c(FALSE, TRUE))
-  stopifnot(fh_diab %in% c(FALSE, TRUE))
-
-  ## BMI Pre-Processing ##
-  if(all(c(!is.null(bmi), !is.null(height), !is.null(weight)))) warning("bmi, height & weight all specified, height & weight ignored", call. = FALSE)
-  if(is.null(bmi)) bmi <- weight/height^2
-  stopifnot(bmi >= 40/2.1^2 & bmi <= 180/1.4^2)
-  if(bmi < 20){
-    warning("bmi < 20. Setting bmi == 20.", call. = FALSE)
-    bmi <- 20
+  if(any(is.null(gender), is.null(age), is.null(fpg))) stop("gender, age & fpg must be specified")
+  if(is.null(bmi) & any(is.null(height), is.null(weight))) stop("either bmi or height & weight must be specified")
+  inputs <- list(gender, age, bmi, height, weight, fpg, ethnicity, smoking, townsend, antipsy, steroids, cvd, gestdiab, learndiff, schizobipo, pcos, statins, hypertension, fh_diab)
+  inputs_length <- sapply(inputs, length)
+  n <- max(inputs_length)
+  stopifnot(all(inputs_length %in% c(0:1, n)))
+  stopifnot(all(gender %in% c("Female", "Male")))
+  stopifnot(all(ethnicity %in% c("WhiteNA", "Indian", "Pakistani", "Bangladeshi", "OtherAsian", "BlackCaribbean", "BlackAfrican", "Chinese", "Other")))
+  stopifnot(all(smoking %in% c("Non", "Ex", "Light", "Moderate", "Heavy")))
+  stopifnot(all(age >= 25 & age < 85))
+  stopifnot(all(height >= 1.4 & height <= 2.1))
+  stopifnot(all(weight >= 40 & weight <= 180))
+  stopifnot(all(fpg >= 2 & fpg < 7))
+  stopifnot(all(townsend >= -7.028634577 & townsend <= 13.3114711))
+  if(any(gender == "Male" & (pcos | gestdiab))) stop("'pcos' and 'gestdiab' must be set to FALSE for male 'gender'")
+  stopifnot(all(antipsy %in% c(FALSE, TRUE)))
+  stopifnot(all(steroids %in% c(FALSE, TRUE)))
+  stopifnot(all(cvd %in% c(FALSE, TRUE)))
+  stopifnot(all(gestdiab %in% c(FALSE, TRUE)))
+  stopifnot(all(learndiff %in% c(FALSE, TRUE)))
+  stopifnot(all(schizobipo %in% c(FALSE, TRUE)))
+  stopifnot(all(pcos %in% c(FALSE, TRUE)))
+  stopifnot(all(statins %in% c(FALSE, TRUE)))
+  stopifnot(all(hypertension %in% c(FALSE, TRUE)))
+  stopifnot(all(fh_diab %in% c(FALSE, TRUE)))
+  
+  ## BMI Pre-Procession ##
+  if(!is.null(bmi) & !is.null(height) & !is.null(weight)){
+    warning("bmi, height & weight all specified, height & weight ignored", call. = FALSE)
+    bmi[is.na(bmi)] <- weight/height^2
+  } else if(is.null(bmi)) bmi <- weight/height^2
+  stopifnot(all(bmi >= 40/2.1^2 & bmi <= 180/1.4^2))
+  if(any(bmi < 20)){
+    warning("bmi < 20. Setting bmi == 20", call. = FALSE)
+    bmi[bmi < 20] <- 20
   }
-  if(bmi > 40){
-    warning("bmi > 40. Setting bmi == 40.", call. = FALSE)
-    bmi <- 40
+  if(any(bmi > 40)){
+    warning("bmi > 40. Setting bmi == 40", call. = FALSE)
+    bmi[bmi > 40] <- 40
   }
-
+  
+  ## Harmonize Input Lengths ##
+  if(length(gender) == 1) gender <- rep(gender, n)
+  if(length(age) == 1) age <- rep(age, n)
+  if(length(bmi) == 1) bmi <- rep(bmi, n)
+  if(length(fpg) == 1) fpg <- rep(fpg, n)
+  if(length(ethnicity) == 1) ethnicity <- rep(ethnicity, n)
+  if(length(smoking) == 1) smoking <- rep(smoking, n)
+  if(length(townsend) == 1) townsend <- rep(townsend, n)
+  if(length(antipsy) == 1) antipsy <- rep(antipsy, n)
+  if(length(steroids) == 1) steroids <- rep(steroids, n)
+  if(length(cvd) == 1) cvd <- rep(cvd, n)
+  if(length(gestdiab) == 1) gestdiab <- rep(gestdiab, n)
+  if(length(learndiff) == 1) learndiff <- rep(learndiff, n)
+  if(length(schizobipo) == 1) schizobipo <- rep(schizobipo, n)
+  if(length(pcos) == 1) pcos <- rep(pcos, n)
+  if(length(statins) == 1) statins <- rep(statins, n)
+  if(length(hypertension) == 1) hypertension <- rep(hypertension, n)
+  if(length(fh_diab) == 1) fh_diab <- rep(fh_diab, n)
+  
+  ## Intermediate Vectors ##
+  vec_eth <- rep(0, n)
+  vec_smok <- rep(0, n)
+  dage <- age/10
+  age_1 <- rep(NA_real_, n)
+  age_2 <- rep(NA_real_, n)
+  age_2 <- dage^3
+  dbmi <- bmi/10
+  bmi_1 <- rep(NA_real_, n)
+  bmi_2 <- rep(NA_real_, n)
+  bmi_2 <- dbmi^3
+  fpg_1 <- rep(NA_real_, n)
+  fpg_2 <- rep(NA_real_, n)
+  risk <- rep(NA_real_, n)
+  int <- rep(NA_real_, n)
+  
+  ## Gender Indices ##
+  ind_f <- which(gender == "Female")
+  ind_m <- which(gender == "Male")
+  
   ## Female ##
-  if(gender == "Female"){
-    # Ethnicity #
-    list_eth <- list(
-      WhiteNA = 0,
-      Indian = 0.9898906127239111000000000,
-      Pakistani = 1.2511504196326508000000000,
-      Bangladeshi = 1.4934757568196120000000000,
-      OtherAsian = 0.9673887434565966400000000,
-      BlackCaribbean = 0.4844644519593178100000000,
-      BlackAfrican = 0.4784214955360102700000000,
-      Chinese = 0.7520946270805577400000000,
-      Other = 0.4050880741541424400000000
-    )
-    ethnicity <- list_eth[[ethnicity]]
-
-    # Smoking #
-    list_smok <- list(
-      Non = 0,
-      Ex = 0.0374156307236963230000000,
-      Light = 0.2252973672514482800000000,
-      Moderate = 0.3099736428023662800000000,
-      Heavy = 0.4361942139496417500000000
-    )
-    smoking <- list_smok[[smoking]]
-
-    # Age #
-    dage <- age/10
-    age_1 <- dage^0.5
-    age_2 <- dage^3
-    age_1 <- age_1 - 2.123332023620606
-    age_2 <- age_2 - 91.644744873046875
-    age <- 3.7650129507517280000000000*age_1 - 0.0056043343436614941000000*age_2
-
-    # BMI #
-    dbmi <- bmi/10
-    bmi_1 <- dbmi
-    bmi_2 <- dbmi^3
-    bmi_1 <- bmi_1 - 2.571253299713135
-    bmi_2 <- bmi_2 - 16.999439239501953
-    bmi <- 2.4410935031672469000000000*bmi_1 - 0.0421526334799096420000000*bmi_2
-
-    # Townsend #
-    townsend <- townsend - 0.391116052865982
-    townsend <- 0.0358046297663126500000000*townsend
-
-    # FPG #
-    fpg_1 <- fpg^-1
-    fpg_2 <- log(fpg)*fpg^-1
-    fpg_1 <- fpg_1 - 0.208309367299080
-    fpg_2 <- fpg_2 - 0.326781362295151
-    fpg <- -2.1887891946337308000000000*fpg_1 - 69.9608419828660290000000000*fpg_2
-
-    # Binary Variables #
-    antipsy <- 0.4748378550253853400000000*antipsy
-    steroids <- 0.3767933443754728500000000*steroids
-    cvd <- 0.1967261568066525100000000*cvd
-    gestdiab <- 1.0689325033692647000000000*gestdiab
-    learndiff <- 0.4542293408951034700000000*learndiff
-    schizobipo <- 0.1616171889084260500000000*schizobipo
-    pcos <- 0.3565365789576717100000000*pcos
-    statins <- 0.5809287382718667500000000*statins
-    hypertension <- 0.2836632020122907300000000*hypertension
-    fh_diab <- 0.4522149766206111600000000*fh_diab
-
-    # Interaction Terms #
-    int <- sum(-0.7683591642786522500000000*age_1*antipsy,
-               -0.7983128124297588200000000*age_1*learndiff,
-               -1.9033508839833257000000000*age_1*statins,
-               0.4844747602404915200000000*age_1*bmi_1,
-               -0.0319399883071813450000000*age_1*bmi_2,
-               2.2442903047404350000000000*age_1*fpg_1,
-               13.0068388699783030000000000*age_1*fpg_2,
-               -0.3040627374034501300000000*age_1*fh_diab,
-               0.0005194455624413476200000*age_2*antipsy,
-               0.0003028327567161890600000*age_2*learndiff,
-               0.0024397111406018711000000*age_2*statins,
-               -0.0041572976682154057000000*age_2*bmi_1,
-               0.0001126882194204252200000*age_2*bmi_2,
-               0.0199345308534312550000000*age_2*fpg_1,
-               -0.0716677187529306680000000*age_2*fpg_2,
-               0.0004523639671202325400000*age_2*fh_diab)
-
-    # Risk Score #
-    score <- sum(ethnicity, smoking, bmi, age, townsend, antipsy, steroids, cvd, gestdiab, learndiff, schizobipo, pcos, statins, hypertension, fh_diab, fpg, int)
-    risk <- 100*(1 - 0.990905702114105^exp(score))
-  }
-
+  # Ethnicity #
+  vec_eth[gender == "Female" & ethnicity == "Indian"] <- 0.9898906127239111
+  vec_eth[gender == "Female" & ethnicity == "Pakistani"] <- 1.2511504196326508
+  vec_eth[gender == "Female" & ethnicity == "Bangladeshi"] <- 1.493475756819612
+  vec_eth[gender == "Female" & ethnicity == "OtherAsian"] <- 0.96738874345659664
+  vec_eth[gender == "Female" & ethnicity == "BlackCaribbean"] <- 0.48446445195931781
+  vec_eth[gender == "Female" & ethnicity == "BlackAfrican"] <- 0.47842149553601027
+  vec_eth[gender == "Female" & ethnicity == "Chinese"] <- 0.75209462708055774
+  vec_eth[gender == "Female" & ethnicity == "Other"] <- 0.40508807415414244
+  
+  # Smoking #
+  vec_smok[gender == "Female" & smoking == "Ex"] <- 0.037415630723696323
+  vec_smok[gender == "Female" & smoking == "Light"] <- 0.22529736725144828
+  vec_smok[gender == "Female" & smoking == "Moderate"] <- 0.30997364280236628
+  vec_smok[gender == "Female" & smoking == "Heavy"] <- 0.43619421394964175
+  
+  # Age #
+  age_1[ind_f] <- dage[ind_f]^0.5
+  age_1[ind_f] <- age_1[ind_f] - 2.123332023620606
+  age_2[ind_f] <- age_2[ind_f] - 91.644744873046875
+  age[ind_f] <- 3.765012950751728*age_1[ind_f] - 0.0056043343436614941*age_2[ind_f]
+  
+  # BMI #
+  bmi_1[ind_f] <- dbmi[ind_f]
+  bmi_1[ind_f] <- bmi_1[ind_f] - 2.571253299713135
+  bmi_2[ind_f] <- bmi_2[ind_f] - 16.999439239501953
+  bmi[ind_f] <- 2.4410935031672469*bmi_1[ind_f] - 0.042152633479909642*bmi_2[ind_f]
+  
+  # Townsend #
+  townsend[ind_f] <- townsend[ind_f] - 0.391116052865982
+  townsend[ind_f] <- 0.03580462976631265*townsend[ind_f]
+  
+  # FPG #
+  fpg_1[ind_f] <- fpg[ind_f]^-1
+  fpg_2[ind_f] <- log(fpg[ind_f])*fpg[ind_f]^-1
+  fpg_1[ind_f] <- fpg_1[ind_f] - 0.208309367299080
+  fpg_2[ind_f] <- fpg_2[ind_f] - 0.326781362295151
+  fpg[ind_f] <- -2.1887891946337308*fpg_1[ind_f] - 69.960841982866029*fpg_2[ind_f]
+  
+  # Binary Variables #
+  antipsy[ind_f] <- 0.47483785502538534*antipsy[ind_f]
+  steroids[ind_f] <- 0.37679334437547285*steroids[ind_f]
+  cvd[ind_f] <- 0.19672615680665251*cvd[ind_f]
+  gestdiab[ind_f] <- 1.0689325033692647*gestdiab[ind_f]
+  learndiff[ind_f] <- 0.45422934089510347*learndiff[ind_f]
+  schizobipo[ind_f] <- 0.16161718890842605*schizobipo[ind_f]
+  pcos[ind_f] <- 0.35653657895767171*pcos[ind_f]
+  statins[ind_f] <- 0.58092873827186675*statins[ind_f]
+  hypertension[ind_f] <- 0.28366320201229073*hypertension[ind_f]
+  fh_diab[ind_f] <- 0.45221497662061116*fh_diab[ind_f]
+  
+  # Interaction Terms #
+  int[ind_f] <- Reduce("+", list(-0.76835916427865225*age_1[ind_f]*antipsy[ind_f],
+                                 0.00051944556244134762*age_2[ind_f]*antipsy[ind_f],
+                                 -0.79831281242975882*age_1[ind_f]*learndiff[ind_f],
+                                 0.00030283275671618906*age_2[ind_f]*learndiff[ind_f],
+                                 -1.9033508839833257*age_1[ind_f]*statins[ind_f],
+                                 0.0024397111406018711*age_2[ind_f]*statins[ind_f],
+                                 0.48447476024049152*age_1[ind_f]*bmi_1[ind_f],
+                                 -0.0041572976682154057*age_2[ind_f]*bmi_1[ind_f],
+                                 -0.031939988307181345*age_1[ind_f]*bmi_2[ind_f],
+                                 0.00011268821942042522*age_2[ind_f]*bmi_2[ind_f],
+                                 2.244290304740435*age_1[ind_f]*fpg_1[ind_f],
+                                 0.019934530853431255*age_2[ind_f]*fpg_1[ind_f],
+                                 13.006838869978303*age_1[ind_f]*fpg_2[ind_f],
+                                 -0.071667718752930668*age_2[ind_f]*fpg_2[ind_f],
+                                 -0.30406273740345013*age_1[ind_f]*fh_diab[ind_f],
+                                 0.00045236396712023254*age_2[ind_f]*fh_diab[ind_f]))
+  
   ## Male ##
-  if(gender == "Male"){
-    if(any(pcos, gestdiab)) stop("'pcos' and 'gestdiab' must be set to FALSE for male 'gender'")
-    # Ethnicity #
-    list_eth <- list(
-      WhiteNA = 0,
-      Indian = 1.0081475800686235000000000,
-      Pakistani = 1.3359138425778705000000000,
-      Bangladeshi = 1.4815419524892652000000000,
-      OtherAsian = 1.0384996851820663000000000,
-      BlackCaribbean = 0.5202348070887524700000000,
-      BlackAfrican = 0.8579673418258558800000000,
-      Chinese = 0.6413108960765615500000000,
-      Other = 0.4838340220821504800000000
-    )
-    ethnicity <- list_eth[[ethnicity]]
-
-    # Smoking #
-    list_smok <- list(
-      Non = 0,
-      Ex = 0.1119475792364162500000000,
-      Light = 0.3110132095412204700000000,
-      Moderate = 0.3328898469326042100000000,
-      Heavy = 0.4257069026941993100000000
-    )
-    smoking <- list_smok[[smoking]]
-
-    # Age #
-    dage <- age/10
-    age_1 <- log(dage)
-    age_2 <- dage^3
-    age_1 <- age_1 - 1.496392488479614
-    age_2 <- age_2 - 89.048171997070313
-    age <- 4.1149143302364717000000000*age_1 - 0.0047593576668505362000000*age_2
-
-    # BMI #
-    dbmi <- bmi/10
-    bmi_1 <- dbmi^2
-    bmi_2 <- dbmi^3
-    bmi_1 <- bmi_1 - 6.817805767059326
-    bmi_2 <- bmi_2 - 17.801923751831055
-    bmi <- 0.8169361587644297100000000*bmi_1 - 0.1250237740343336200000000*bmi_2
-
-    # Townsend #
-    townsend <- townsend - 0.515986680984497
-    townsend <- 0.0253741755198943560000000*townsend
-
-    # FPG #
-    fpg_1 <- fpg^-0.5
-    fpg_2 <- log(fpg)*fpg^-0.5
-    fpg_1 <- fpg_1 - 0.448028832674026
-    fpg_2 <- fpg_2 - 0.719442605972290
-    fpg <- -54.8417881280971070000000000*fpg_1 - 53.1120784984813600000000000*fpg_2
-
-    # Binary Variables #
-    antipsy <- 0.4417934088889577400000000*antipsy
-    steroids <- 0.3413547348339454100000000*steroids
-    cvd <- 0.2158977454372756600000000*cvd
-    learndiff <- 0.4012885027585300100000000*learndiff
-    schizobipo <- 0.2181769391399779300000000*schizobipo
-    statins <- 0.5147657600111734700000000*statins
-    hypertension <- 0.2467209287407037300000000*hypertension
-    fh_diab <- 0.5749437333987512700000000*fh_diab
-
-    # Interaction Terms #
-    int <- sum(-0.9502224313823126600000000*age_1*antipsy,
-               -0.8358370163090045300000000*age_1*learndiff,
-               -1.8141786919269460000000000*age_1*statins,
-               0.3748482092078384600000000*age_1*bmi_1,
-               -0.0909836579562487420000000*age_1*bmi_2,
-               21.0117301217643340000000000*age_1*fpg_1,
-               23.8244600447469740000000000*age_1*fpg_2,
-               -0.6780647705291665800000000*age_1*fh_diab,
-               0.0001472972077162874300000*age_2*antipsy,
-               0.0006012919264966409100000*age_2*learndiff,
-               0.0016393484911405418000000*age_2*statins,
-               -0.0010774782221531713000000*age_2*bmi_1,
-               0.0001911048730458310100000*age_2*bmi_2,
-               -0.0390046079223835270000000*age_2*fpg_1,
-               -0.0411277198058959470000000*age_2*fpg_2,
-               0.0006257588248859499300000*age_2*fh_diab)
-
-    # Risk Score #
-    score <- sum(ethnicity, smoking, age, bmi, townsend, antipsy, steroids, cvd, learndiff, schizobipo, statins, hypertension, fh_diab, fpg, int)
-    risk <- 100*(1 - 0.985019445419312^exp(score))
-  }
-
+  # Ethnicity #
+  vec_eth[gender == "Male" & ethnicity == "Indian"] <- 1.0081475800686235
+  vec_eth[gender == "Male" & ethnicity == "Pakistani"] <- 1.3359138425778705
+  vec_eth[gender == "Male" & ethnicity == "Bangladeshi"] <- 1.4815419524892652
+  vec_eth[gender == "Male" & ethnicity == "OtherAsian"] <- 1.0384996851820663
+  vec_eth[gender == "Male" & ethnicity == "BlackCaribbean"] <- 0.52023480708875247
+  vec_eth[gender == "Male" & ethnicity == "BlackAfrican"] <- 0.85796734182585588
+  vec_eth[gender == "Male" & ethnicity == "Chinese"] <- 0.64131089607656155
+  vec_eth[gender == "Male" & ethnicity == "Other"] <- 0.48383402208215048
+  
+  # Smoking #
+  vec_smok[gender == "Male" & smoking == "Ex"] <- 0.11194757923641625
+  vec_smok[gender == "Male" & smoking == "Light"] <- 0.31101320954122047
+  vec_smok[gender == "Male" & smoking == "Moderate"] <- 0.33288984693260421
+  vec_smok[gender == "Male" & smoking == "Heavy"] <- 0.42570690269419931
+  
+  # Age #
+  age_1[ind_m] <- log(dage[ind_m])
+  age_1[ind_m] <- age_1[ind_m] - 1.496392488479614
+  age_2[ind_m] <- age_2[ind_m] - 89.048171997070313
+  age[ind_m] <- 4.1149143302364717*age_1[ind_m] - 0.0047593576668505362*age_2[ind_m]
+  
+  # BMI #
+  bmi_1[ind_m] <- dbmi[ind_m]^2
+  bmi_1[ind_m] <- bmi_1[ind_m] - 6.817805767059326
+  bmi_2[ind_m] <- bmi_2[ind_m] - 17.801923751831055
+  bmi[ind_m] <- 0.81693615876442971*bmi_1[ind_m] - 0.12502377403433362*bmi_2[ind_m]
+  
+  # Townsend #
+  townsend[ind_m] <- townsend[ind_m] - 0.515986680984497
+  townsend[ind_m] <- 0.025374175519894356*townsend[ind_m]
+  
+  # FPG #
+  fpg_1[ind_m] <- fpg[ind_m]^-0.5
+  fpg_2[ind_m] <- log(fpg[ind_m])*fpg[ind_m]^-0.5
+  fpg_1[ind_m] <- fpg_1[ind_m] - 0.448028832674026
+  fpg_2[ind_m] <- fpg_2[ind_m] - 0.719442605972290
+  fpg[ind_m] <- -54.8417881280971070000000000*fpg_1[ind_m] - 53.1120784984813600000000000*fpg_2[ind_m]
+  
+  # Binary Variables #
+  antipsy[ind_m] <- 0.44179340888895774*antipsy[ind_m]
+  steroids[ind_m] <- 0.34135473483394541*steroids[ind_m]
+  cvd[ind_m] <- 0.21589774543727566*cvd[ind_m]
+  learndiff[ind_m] <- 0.40128850275853001*learndiff[ind_m]
+  schizobipo[ind_m] <- 0.21817693913997793*schizobipo[ind_m]
+  statins[ind_m] <- 0.51476576001117347*statins[ind_m]
+  hypertension[ind_m] <- 0.24672092874070373*hypertension[ind_m]
+  fh_diab[ind_m] <- 0.57494373339875127*fh_diab[ind_m]
+  
+  # Interaction Terms #
+  int[ind_m] <- Reduce("+", list(-0.95022243138231266*age_1[ind_m]*antipsy[ind_m],
+                                 0.00014729720771628743*age_2[ind_m]*antipsy[ind_m],
+                                 -0.83583701630900453*age_1[ind_m]*learndiff[ind_m],
+                                 0.00060129192649664091*age_2[ind_m]*learndiff[ind_m],
+                                 -1.814178691926946*age_1[ind_m]*statins[ind_m],
+                                 0.0016393484911405418*age_2[ind_m]*statins[ind_m],
+                                 0.37484820920783846*age_1[ind_m]*bmi_1[ind_m],
+                                 -0.0010774782221531713*age_2[ind_m]*bmi_1[ind_m],
+                                 -0.090983657956248742*age_1[ind_m]*bmi_2[ind_m],
+                                 0.00019110487304583101*age_2[ind_m]*bmi_2[ind_m],
+                                 21.011730121764334*age_1[ind_m]*fpg_1[ind_m],
+                                 -0.039004607922383527*age_2[ind_m]*fpg_1[ind_m],
+                                 23.824460044746974*age_1[ind_m]*fpg_2[ind_m],
+                                 -0.041127719805895947*age_2[ind_m]*fpg_2[ind_m],
+                                 -0.67806477052916658*age_1[ind_m]*fh_diab[ind_m],
+                                 0.00062575882488594993*age_2[ind_m]*fh_diab[ind_m]))
+  
+  ## Risk Score ##
+  ethnicity <- vec_eth; rm(vec_eth)
+  smoking <- vec_smok; rm(vec_smok)
+  score <- ethnicity + smoking + bmi + age + townsend + antipsy + steroids + cvd + gestdiab + learndiff + schizobipo + pcos + statins + hypertension + fh_diab + fpg + int
+  risk[ind_f] <- 100*(1 - 0.990905702114105^exp(score[ind_f]))
+  risk[ind_m] <- 100*(1 - 0.985019445419312^exp(score[ind_m]))
+  
   ## Output ##
   return(risk)
 }

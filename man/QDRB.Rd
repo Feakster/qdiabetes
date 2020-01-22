@@ -2,7 +2,7 @@
 \alias{QDRB}
 \title{QDiabetes-2018 Risk Calculator (B-Variant)}
 \description{
-  Calculate the 10-year risk of an individual developing type 2 diabetes, using the B-variant of the QDiabetes-2018 algorithm.
+  Calculate the 10-year risk of developing type 2 diabetes, using the B-variant of the QDiabetes-2018 algorithm.
   This variant includes all risk predictors present in the A-variant, with the addition of fasting plasma glucose.
 }
 \usage{
@@ -14,7 +14,6 @@ QDRB(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
 }
 \arguments{
   \item{gender}{Gender. Must be \code{"Male"} or \code{"Female"}.}
-  \item{age}{Age, in years.}
   \item{age}{Age, in years. Must be \eqn{\ge}25 and <85.}
   \item{bmi}{Body-mass index, in kg/m^2. Must be \eqn{\ge}40/2.1^2 and \eqn{\le}180/1.4^2. Within this range, values >40 are set to 40, while values <20 are set to 20.}
   \item{height}{Height, in m. Must be \eqn{\ge}1.4 and \eqn{\le}2.1.}
@@ -63,7 +62,7 @@ QDRB(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
     \bold{359}, j5019
 }
 \author{Benjamin G Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
-\seealso{\code{\link{QDR}}, \code{\link{QDRA}}, \code{\link{QDRC}}}
+\seealso{\code{\link{QDRA}}, \code{\link{QDRC}}}
 \examples{
 QDRB(gender = "Female", age = 76, height = 1.65, weight = 70, fpg = 4)
 QDRB(gender = "Male", age = 55, bmi = 42, fpg = 6, ethnicity = "BlackCaribbean")

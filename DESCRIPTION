@@ -1,5 +1,5 @@
 Package: QDiabetes
-Version: 0.0.0.9000
+Version: 0.1.0
 Date: 2020-01-02
 Title: 10-Year Type 2 Diabetes Risk Calculator (QDiabetes 2018)
 Authors@R: c(
@@ -14,6 +14,7 @@ Authors@R: c(
   person("National Institute for Health Research School for Primary Care Research", role = "fnd"),
   person("University of Oxford", role = c("cph", "sht")))
 Description: This package aims to calculate the risk of developing type 2 diabetes in the next 10 years. It is based on published risk prediction algorithms <https://qdiabetes.org/src.php>.
+Depends: R (>= 2.10)
 Suggests: data.table, dplyr, lattice, testthat, utils
 License: AGPL-3
 Copyrights: University of Oxford

@@ -2,7 +2,7 @@
 \alias{QDRC}
 \title{QDiabetes-2018 Risk Calculator (C-Variant)}
 \description{
-  Calculate the 10-year risk of an individual developing type 2 diabetes, using the C-variant of the QDiabetes-2018 algorithm.
+  Calculate the 10-year risk of developing type 2 diabetes, using the C-variant of the QDiabetes-2018 algorithm.
   This variant includes all risk predictors present in the A-variant, with the addition of glycated haemoglobin A1c.
 }
 \usage{
@@ -62,7 +62,7 @@ QDRC(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
     \bold{359}, j5019
 }
 \author{Benjamin G Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
-\seealso{\code{\link{QDR}}, \code{\link{QDRA}}, \code{\link{QDRB}}}
+\seealso{\code{\link{QDRA}}, \code{\link{QDRB}}}
 \examples{
 QDRC(gender = "Female", age = 76, height = 1.65, weight = 70, hba1c = 25)
 QDRC(gender = "Male", age = 55, bmi = 42, hba1c = 45, ethnicity = "BlackCaribbean")

@@ -3,7 +3,7 @@
 \docType{data}
 \title{QDiabetes Sample Dataset}
 \description{
-  A simulated sample dataset for exploring the use of the \code{QDR}, \code{QDRA}, \code{QDRB} and \code{QDRC} type 2 diabetes risk prediction functions of this package.
+  A simulated sample dataset for exploring the use of the \code{QDRA}, \code{QDRB} and \code{QDRC} type 2 diabetes risk prediction functions of this package.
 }
 \usage{data("dat_qdr")}
 \format{
