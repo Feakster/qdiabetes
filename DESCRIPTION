@@ -16,8 +16,8 @@ Authors@R: c(
 Description: This package aims to calculate the risk of developing type 2 diabetes in the next 10 years. It is based on published risk prediction algorithms <https://qdiabetes.org/src.php>.
 Depends: R (>= 2.10)
 Suggests: data.table, dplyr, lattice, testthat, utils
-License: AGPL-3
-Copyrights: University of Oxford
+License: AGPL-3 + file LICENSE
+Copyrights: University of Oxford + file inst/COPYRIGHTS
 URL: https://github.com/Feakster/qdiabetes
 BugReports: https://github.com/Feakster/qdiabetes/issues
 LazyData: true
