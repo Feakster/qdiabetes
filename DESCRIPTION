@@ -1,5 +1,5 @@
 Package: QDiabetes
-Version: 0.1.0
+Version: 0.1.1
 Date: 2020-01-02
 Title: 10-Year Type 2 Diabetes Risk Calculator (QDiabetes 2018)
 Authors@R: c(
@@ -11,6 +11,7 @@ Authors@R: c(
   person("Evangelos", "Kontopantelis", role = "sad", email = "e.kontopantelis@manchester.ac.uk", comment = c(ORCID = "0000-0001-6450-5815")),
   person(c("Dianna", "M"), "Smith", role = "sad", email = "d.m.smith@soton.ac.uk", comment = c(ORCID = "0000-0002-0650-6606")),
   person("Bernard", "Gudgin", role = "csl"),
+  person(c("Benjamin", "J"), "Cairns", role = c("csl", "sad"), email = "ben.cairns@ndph.ox.ac.uk", comment = c(ORCID = "0000-0001-7994-8213")),
   person("National Institute for Health Research School for Primary Care Research", role = "fnd"),
   person("University of Oxford", role = c("cph", "sht")))
 Description: This package aims to calculate the risk of developing type 2 diabetes in the next 10 years. It is based on published risk prediction algorithms <https://qdiabetes.org/src.php>.

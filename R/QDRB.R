@@ -122,8 +122,9 @@ QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
   bmi_2 <- dbmi^3
   fpg_1 <- rep(NA_real_, n)
   fpg_2 <- rep(NA_real_, n)
-  risk <- rep(NA_real_, n)
+  bin <- rep(NA_real_, n)
   int <- rep(NA_real_, n)
+  risk <- rep(NA_real_, n)
   
   ## Gender Indices ##
   ind_f <- which(gender == "Female")
@@ -170,16 +171,16 @@ QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
   fpg[ind_f] <- -2.1887891946337308*fpg_1[ind_f] - 69.960841982866029*fpg_2[ind_f]
   
   # Binary Variables #
-  antipsy[ind_f] <- 0.47483785502538534*antipsy[ind_f]
-  steroids[ind_f] <- 0.37679334437547285*steroids[ind_f]
-  cvd[ind_f] <- 0.19672615680665251*cvd[ind_f]
-  gestdiab[ind_f] <- 1.0689325033692647*gestdiab[ind_f]
-  learndiff[ind_f] <- 0.45422934089510347*learndiff[ind_f]
-  schizobipo[ind_f] <- 0.16161718890842605*schizobipo[ind_f]
-  pcos[ind_f] <- 0.35653657895767171*pcos[ind_f]
-  statins[ind_f] <- 0.58092873827186675*statins[ind_f]
-  hypertension[ind_f] <- 0.28366320201229073*hypertension[ind_f]
-  fh_diab[ind_f] <- 0.45221497662061116*fh_diab[ind_f]
+  bin[ind_f] <- Reduce("+", list(0.47483785502538534*antipsy[ind_f],
+                                 0.37679334437547285*steroids[ind_f],
+                                 0.19672615680665251*cvd[ind_f],
+                                 1.0689325033692647*gestdiab[ind_f],
+                                 0.45422934089510347*learndiff[ind_f],
+                                 0.16161718890842605*schizobipo[ind_f],
+                                 0.35653657895767171*pcos[ind_f],
+                                 0.58092873827186675*statins[ind_f],
+                                 0.28366320201229073*hypertension[ind_f],
+                                 0.45221497662061116*fh_diab[ind_f]))
   
   # Interaction Terms #
   int[ind_f] <- Reduce("+", list(-0.76835916427865225*age_1[ind_f]*antipsy[ind_f],
@@ -237,17 +238,17 @@ QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
   fpg_2[ind_m] <- log(fpg[ind_m])*fpg[ind_m]^-0.5
   fpg_1[ind_m] <- fpg_1[ind_m] - 0.448028832674026
   fpg_2[ind_m] <- fpg_2[ind_m] - 0.719442605972290
-  fpg[ind_m] <- -54.8417881280971070000000000*fpg_1[ind_m] - 53.1120784984813600000000000*fpg_2[ind_m]
+  fpg[ind_m] <- -54.841788128097107*fpg_1[ind_m] - 53.11207849848136*fpg_2[ind_m]
   
   # Binary Variables #
-  antipsy[ind_m] <- 0.44179340888895774*antipsy[ind_m]
-  steroids[ind_m] <- 0.34135473483394541*steroids[ind_m]
-  cvd[ind_m] <- 0.21589774543727566*cvd[ind_m]
-  learndiff[ind_m] <- 0.40128850275853001*learndiff[ind_m]
-  schizobipo[ind_m] <- 0.21817693913997793*schizobipo[ind_m]
-  statins[ind_m] <- 0.51476576001117347*statins[ind_m]
-  hypertension[ind_m] <- 0.24672092874070373*hypertension[ind_m]
-  fh_diab[ind_m] <- 0.57494373339875127*fh_diab[ind_m]
+  bin[ind_m] <- Reduce("+", list(0.44179340888895774*antipsy[ind_m],
+                                 0.34135473483394541*steroids[ind_m],
+                                 0.21589774543727566*cvd[ind_m],
+                                 0.40128850275853001*learndiff[ind_m],
+                                 0.21817693913997793*schizobipo[ind_m],
+                                 0.51476576001117347*statins[ind_m],
+                                 0.24672092874070373*hypertension[ind_m],
+                                 0.57494373339875127*fh_diab[ind_m]))
   
   # Interaction Terms #
   int[ind_m] <- Reduce("+", list(-0.95022243138231266*age_1[ind_m]*antipsy[ind_m],
@@ -270,7 +271,7 @@ QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
   ## Risk Score ##
   ethnicity <- vec_eth; rm(vec_eth)
   smoking <- vec_smok; rm(vec_smok)
-  score <- ethnicity + smoking + bmi + age + townsend + antipsy + steroids + cvd + gestdiab + learndiff + schizobipo + pcos + statins + hypertension + fh_diab + fpg + int
+  score <- ethnicity + smoking + bmi + age + townsend + fpg + bin + int
   risk[ind_f] <- 100*(1 - 0.990905702114105^exp(score[ind_f]))
   risk[ind_m] <- 100*(1 - 0.985019445419312^exp(score[ind_m]))
   

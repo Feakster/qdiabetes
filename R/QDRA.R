@@ -117,8 +117,9 @@ QDRA <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
   bmi_1 <- rep(NA_real_, n)
   bmi_2 <- rep(NA_real_, n)
   bmi_2 <- dbmi^3
-  risk <- rep(NA_real_, n)
+  bin <- rep(NA_real_, n)
   int <- rep(NA_real_, n)
+  risk <- rep(NA_real_, n)
   
   ## Gender Indices ##
   ind_f <- which(gender == "Female")
@@ -158,16 +159,16 @@ QDRA <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
   townsend[ind_f] <- 0.037340569618049151*townsend[ind_f]
   
   # Binary Variables #
-  antipsy[ind_f] <- 0.55267646110984381*antipsy[ind_f]
-  steroids[ind_f] <- 0.26792233680674599*steroids[ind_f]
-  cvd[ind_f] <- 0.17797229054586691*cvd[ind_f]
-  gestdiab[ind_f] <- 1.5248871531467574*gestdiab[ind_f]
-  learndiff[ind_f] <- 0.27835143587172717*learndiff[ind_f]
-  schizobipo[ind_f] <- 0.26180852109179059*schizobipo[ind_f]
-  pcos[ind_f] <- 0.34061739882066661*pcos[ind_f]
-  statins[ind_f] <- 0.65907287732808217*statins[ind_f]
-  hypertension[ind_f] <- 0.43947582858137119*hypertension[ind_f]
-  fh_diab[ind_f] <- 0.53133594565587339*fh_diab[ind_f]
+  bin[ind_f] <- Reduce("+", list(0.55267646110984381*antipsy[ind_f],
+                                 0.26792233680674599*steroids[ind_f],
+                                 0.17797229054586691*cvd[ind_f],
+                                 1.5248871531467574*gestdiab[ind_f],
+                                 0.27835143587172717*learndiff[ind_f],
+                                 0.26180852109179059*schizobipo[ind_f],
+                                 0.34061739882066661*pcos[ind_f],
+                                 0.65907287732808217*statins[ind_f],
+                                 0.43947582858137119*hypertension[ind_f],
+                                 0.53133594565587339*fh_diab[ind_f]))
   
   # Interaction Terms #
   int[ind_f] <- Reduce("+", list(-0.80315183983163951*age_1[ind_f]*antipsy[ind_f],
@@ -217,14 +218,14 @@ QDRA <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
   townsend[ind_m] <- 0.025918182067678725*townsend[ind_m]
   
   # Binary Variables #
-  antipsy[ind_m] <- 0.42101092346005436*antipsy[ind_m]
-  steroids[ind_m] <- 0.22183580932925384*steroids[ind_m]
-  cvd[ind_m] <- 0.20269605756290021*cvd[ind_m]
-  learndiff[ind_m] <- 0.23315321407986961*learndiff[ind_m]
-  schizobipo[ind_m] <- 0.22770449520517727*schizobipo[ind_m]
-  statins[ind_m] <- 0.58490075431141342*statins[ind_m]
-  hypertension[ind_m] <- 0.33379392183501078*hypertension[ind_m]
-  fh_diab[ind_m] <- 0.64799284899369536*fh_diab[ind_m]
+  bin[ind_m] <- Reduce("+", list(0.42101092346005436*antipsy[ind_m],
+                                 0.22183580932925384*steroids[ind_m],
+                                 0.20269605756290021*cvd[ind_m],
+                                 0.23315321407986961*learndiff[ind_m],
+                                 0.22770449520517727*schizobipo[ind_m],
+                                 0.58490075431141342*statins[ind_m],
+                                 0.33379392183501078*hypertension[ind_m],
+                                 0.64799284899369536*fh_diab[ind_m]))
   
   # Interaction Terms #
   int[ind_m] <- Reduce("+", list(-0.94637722268534152*age_1[ind_m]*antipsy[ind_m],
@@ -243,7 +244,7 @@ QDRA <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
   ## Risk Score ##
   ethnicity <- vec_eth; rm(vec_eth)
   smoking <- vec_smok; rm(vec_smok)
-  score <- ethnicity + smoking + bmi + age + townsend + antipsy + steroids + cvd + gestdiab + learndiff + schizobipo + pcos + statins + hypertension + fh_diab + int
+  score <- ethnicity + smoking + bmi + age + townsend + bin + int
   risk[ind_f] <- 100*(1 - 0.986227273941040^exp(score[ind_f]))
   risk[ind_m] <- 100*(1 - 0.978732228279114^exp(score[ind_m]))
   
