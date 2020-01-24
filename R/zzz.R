@@ -4,6 +4,10 @@
 #                                 #
 #=================================#
 
+.onLoad <- function(libname, pkgname){
+  invisible(.dat_oa)
+}
+
 .onAttach <- function(libname, pkgname){
   setHook(packageEvent("QDiabetes", "attach"), function(...){
     packageStartupMessage(

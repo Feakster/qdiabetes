@@ -15,7 +15,6 @@ dat_qdr <- data.frame(
   weight = sample(seq(40, 80, 0.5), n, replace = T),
   ethnicity = sample(gl(9, 1, 9, c("WhiteNA", "Indian", "Pakistani", "Bangladeshi", "OtherAsian", "BlackCaribbean", "BlackAfrican", "Chinese", "Other")), n, replace = T),
   smoking = sample(gl(3, 1, 3, c("Non", "Ex", "Light", "Moderate", "Heavy")), n, replace = T),
-  townsend = round(runif(n, -7.028634577, 13.3114711), 2),
   fpg = round(runif(n, 2, 6.99), 2),
   hba1c = round(runif(n, 15, 47.99), 2),
   antipsy = sample(c(F, T), n, replace = T),
@@ -28,7 +27,14 @@ dat_qdr <- data.frame(
   pcos = sample(c(F, T), n, replace = T),
   hypertension = sample(c(F, T), n, replace = T),
   fh_diab = sample(c(F, T), n, replace = T)
-); rm(n)
+)
+
+load("R/sysdata.rda")
+ind <- sample(1:nrow(.dat_oa), n); rm(n)
+dat_tmp <- .dat_oa[ind, ]; rm(ind)
+names(dat_tmp) <- gsub("^tds$", "townsend", names(dat_tmp))
+
+dat_qdr <- cbind(dat_qdr, dat_tmp); rm(dat_tmp)
 
 dat_qdr[["bmi"]] <- with(dat_qdr, round(weight/height^2, 2))
 dat_qdr <- dat_qdr[dat_qdr$bmi >= 20 & dat_qdr$bmi <= 40, ]
@@ -37,7 +43,7 @@ dat_qdr[dat_qdr$gender == "Male", c("gestdiab", "pcos")] <- FALSE
 
 rownames(dat_qdr) <- 1:nrow(dat_qdr)
 
-dat_qdr <- dat_qdr[, c("gender", "age", "height", "weight", "bmi", "ethnicity", "smoking", "townsend",
+dat_qdr <- dat_qdr[, c("gender", "age", "height", "weight", "bmi", "ethnicity", "smoking", "postcode", "townsend",
                        "fpg", "hba1c",
                        "antipsy", "statins", "steroids",
                        "cvd", "gestdiab", "learndiff", "schizobipo", "pcos", "hypertension", "fh_diab")]

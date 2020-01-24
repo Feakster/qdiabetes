@@ -67,9 +67,37 @@ QDRB(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
 \author{Benjamin G Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
 \seealso{\code{\link{QDRA}}, \code{\link{QDRC}}}
 \examples{
+## Simple usage
 QDRB(gender = "Female", age = 76, height = 1.65, weight = 70, fpg = 4)
-QDRB(gender = "Male", age = 55, bmi = 42, fpg = 6, ethnicity = "BlackCaribbean")
-QDRB(gender = "Female", age = 65, bmi = 35, fpg = 5, smoking = "Ex", cvd = TRUE)
+QDRB(gender = "Male", age = 55, bmi = 40, fpg = 2:6, ethnicity = "BlackCaribbean")
+QDRB(gender = "Female", age = 65, bmi = 35, fpg = 5, smoking = "Ex", cvd = c(FALSE, TRUE))
+
+## Using postcodes to estimate Townsend deprivation scores
+QDRB(gender = "Male", age = 65, bmi = 40, fpg = 6, townsend = getTDS("OX3 7LF"))
+QDRB(gender = "Female", age = 60, bmi = 35, fpg = 6, townsend = getTDS(c("OX2 6NW", "OX2 6GG")))
+
+## Data frame usage
+data(dat_qdr)
+with(dat_qdr, QDRB(gender = gender, age = age, bmi = bmi, fpg = fpg))
+
+## Plotting outputs
+fpg <- seq(2, 6.5, length.out = 10)
+risk_m <- QDRB(gender = "Male", age = 65, bmi = 40, fpg = fpg)
+risk_f <- QDRB(gender = "Female", age = 65, bmi = 40, fpg = fpg)
+
+par(cex = 0.8)
+plot.new()
+plot.window(xlim = range(fpg), ylim = range(pretty(c(risk_m, risk_f))))
+axis(1, at = fpg)
+axis(2, at = pretty(c(risk_m, risk_f)))
+title(xlab = "Fasting Plasma Glucose (mmol/L)", ylab = "Risk (\%)")
+lines(fpg, risk_m, type = "b", col = "navy", lwd = 1.5)
+lines(fpg, risk_f, type = "b", col = "red3", lwd = 1.5)
+legend("bottomright",
+       legend = c("Male", "Female"),
+       col = c("navy", "red3"),
+       lty = 1,
+       bty = "n")
 }
 \keyword{risk}
 \keyword{diabetes}

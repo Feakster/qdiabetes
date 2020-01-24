@@ -7,9 +7,9 @@
 }
 \usage{data("dat_qdr")}
 \format{
-  A data frame with 45 observations on the following 20 variables:
+  A data frame with 45 observations on the following 21 variables:
   \describe{
-    \item{\code{gender} A factor vector of genders. Possible values: \code{"Female"} or \code{"Male"}.}
+    \item{\code{gender}}{A factor vector of genders. Possible values: \code{"Female"} or \code{"Male"}.}
     \item{\code{age}}{An integer vector of ages (years).}
     \item{\code{height}}{A double vector of heights (m).}
     \item{\code{weight}}{A double vector of weights (kg).}
@@ -36,6 +36,7 @@
         \item \code{"Heavy"} (Heavy smoker - 20 or more cigarettes per day).
       }
     }
+    \item{\code{postcode}}{A character vector of UK postcodes.}
     \item{\code{townsend}}{A double vector of Townsend deprivation scores.}
     \item{\code{fpg}}{A double vector of fasting plasma glucose test results (mmol/L).}
     \item{\code{hba1c}}{A double vector of glycated haemoglobin test results (mmol/mol).}
@@ -57,7 +58,7 @@
   The dataset contains no values or combinations of values that would result in warnings or errors from any of the risk prediction functions in this package.
   It exists purely to allow for testing and exploration of these functions.
 }
-\source{Simulated dataset.}
+\source{The dataset is simulated, except for the \code{postcode} and \code{townsend} variables, which are key-value pairs randomly drawn from an Office for National Statistics dataset. For more information on this dataset, see the documentation for the \code{\link{getTDS}} function.}
 \author{Benjamin G Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
 \examples{
 data(dat_qdr)

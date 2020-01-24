@@ -32,7 +32,7 @@ getTDS(postcode = NULL)
 }
 \author{Benjamin G Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
 \examples{
-## General use
+## Simple usage
 getTDS(postcode = "OX2 6GG")
 getTDS(postcode = c("OX2 6NW", "OX3 7LF"))
 

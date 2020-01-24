@@ -1,5 +1,5 @@
 Package: QDiabetes
-Version: 0.1.1
+Version: 0.1.2
 Date: 2020-01-02
 Title: 10-Year Type 2 Diabetes Risk Calculator (QDiabetes 2018)
 Authors@R: c(
@@ -16,7 +16,7 @@ Authors@R: c(
   person("University of Oxford", role = c("cph", "sht")))
 Description: This package aims to calculate the risk of developing type 2 diabetes in the next 10 years. It is based on published risk prediction algorithms <https://qdiabetes.org/src.php>.
 Depends: R (>= 2.10)
-Suggests: data.table, dplyr, lattice, testthat, utils
+Suggests: data.table, dplyr, graphics, lattice, testthat, utils
 License: AGPL-3 + file LICENSE
 Copyrights: University of Oxford + file inst/COPYRIGHTS
 URL: https://github.com/Feakster/qdiabetes

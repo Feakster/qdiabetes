@@ -67,9 +67,37 @@ QDRC(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
 \author{Benjamin G Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
 \seealso{\code{\link{QDRA}}, \code{\link{QDRB}}}
 \examples{
+## Simple usage
 QDRC(gender = "Female", age = 76, height = 1.65, weight = 70, hba1c = 25)
-QDRC(gender = "Male", age = 55, bmi = 42, hba1c = 45, ethnicity = "BlackCaribbean")
-QDRC(gender = "Female", age = 65, bmi = 35, hba1c = 30, smoking = "Ex", cvd = TRUE)
+QDRC(gender = "Male", age = 55, bmi = 40, hba1c = seq(15, 40, 5), ethnicity = "Chinese")
+QDRC(gender = "Female", age = 65, bmi = 35, hba1c = 30, smoking = "Ex", fh_diab = c(FALSE, TRUE))
+
+## Using postcodes to estimate Townsend deprivation scores
+QDRC(gender = "Male", age = 65, bmi = 40, hba1c = 42, townsend = getTDS("OX3 7LF"))
+QDRC(gender = "Female", age = 60, bmi = 35, hba1c = 42, townsend = getTDS(c("OX2 6NW", "OX2 6GG")))
+
+## Data frame usage
+data(dat_qdr)
+with(dat_qdr, QDRC(gender = gender, age = age, bmi = bmi, hba1c = hba1c))
+
+## Plotting outputs
+hba1c <- seq(15, 42, length.out = 10)
+risk_m <- QDRC(gender = "Male", age = 65, bmi = 40, hba1c = hba1c)
+risk_f <- QDRC(gender = "Female", age = 65, bmi = 40, hba1c = hba1c)
+
+par(cex = 0.8)
+plot.new()
+plot.window(xlim = range(hba1c), ylim = range(pretty(c(risk_m, risk_f))))
+axis(1, at = hba1c)
+axis(2, at = pretty(c(risk_m, risk_f)))
+title(xlab = expression("Haemoglobin A"["1c"]~"(mmol/mol)"), ylab = "Risk (\%)")
+lines(hba1c, risk_m, type = "b", col = "navy", lwd = 1.5)
+lines(hba1c, risk_f, type = "b", col = "red3", lwd = 1.5)
+legend("bottomright",
+       legend = c("Male", "Female"),
+       col = c("navy", "red3"),
+       lty = 1,
+       bty = "n")
 }
 \keyword{risk}
 \keyword{diabetes}
