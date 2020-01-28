@@ -51,7 +51,7 @@ QDRB(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
   \item{pcos}{History of polycystic ovary syndrome.}
   \item{statins}{History of use of statins.}
   \item{hypertension}{History of hypertension.}
-  \item{fh_diab}{Family history of diabetes.}
+  \item{fh_diab}{Family history of diabetes in 1st degree relative.}
 }
 \value{Risk (\%) of type 2 diabetes.}
 \source{\url{https://qdiabetes.org/2018/src.php}}

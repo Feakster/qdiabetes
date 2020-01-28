@@ -1,11 +1,11 @@
-# History files
+# R history files
 .Rhistory
 .Rapp.history
 
-# Session Data files
+# R session Data files
 .RData
 
-# User-specific files
+# R user-specific files
 .Ruserdata
 
 # Example code in package build process
@@ -21,10 +21,12 @@
 .Rproj.user/
 *.Rproj
 
-# Vignettes
+# R Vignettes
 vignettes/*.aux
 vignettes/*.log
 vignettes/*.pdf
 vignettes/*.synctex.gz
 vignettes/*.tex
 
+# Markdown Files
+*.html

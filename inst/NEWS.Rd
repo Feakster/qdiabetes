@@ -12,3 +12,8 @@
     \item Added postcode data to the \code{\link{dat_qdr}} sample dataset to allow for exploration of the \code{\link{getTDS}} function.
   }
 }
+\section{Changes in version 0.1.3}{
+  \itemize{
+    \item Minor under-the-hood optimisations.
+  }
+}

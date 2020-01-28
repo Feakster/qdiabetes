@@ -1,5 +1,5 @@
 Package: QDiabetes
-Version: 0.1.2
+Version: 0.1.3
 Date: 2020-01-02
 Title: 10-Year Type 2 Diabetes Risk Calculator (QDiabetes 2018)
 Authors@R: c(

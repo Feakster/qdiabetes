@@ -10,3 +10,5 @@
 - Alter the assessment of the binary variables to use values likely to produce larger risk estimates, e.g. age = 65, bmi = 40, fpg = 6.9, hba1c = 47.9. This should make any discrepancies larger.
 - Add unit tests that use with(), dplyr and data.table to make sure the package works as intended in data frames. A weird error was being thrown before because of how gender/pcos/gestdiab were being checked. Need more thoroughness here.
 - Make a vignette that uses postcode data to produce a map of deprivation in inner London.
+- Where only one of the input vectors is of a length > 1, return a named vector instead, using the values of the input vector as names.
+- Add an overall package help file that can be found by executing help(QDiabetes).

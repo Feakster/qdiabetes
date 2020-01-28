@@ -76,7 +76,7 @@ QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
   stopifnot(all(fh_diab %in% c(FALSE, TRUE)))
   
   ## BMI Pre-Procession ##
-  if(!is.null(bmi) & !is.null(height) & !is.null(weight)){
+  if(all(!is.null(bmi), !is.null(height), !is.null(weight))){
     warning("bmi, height & weight all specified, height & weight ignored", call. = FALSE)
     bmi[is.na(bmi)] <- weight/height^2
   } else if(is.null(bmi)) bmi <- weight/height^2
@@ -114,11 +114,9 @@ QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
   vec_smok <- rep(0, n)
   dage <- age/10
   age_1 <- rep(NA_real_, n)
-  age_2 <- rep(NA_real_, n)
   age_2 <- dage^3
   dbmi <- bmi/10
   bmi_1 <- rep(NA_real_, n)
-  bmi_2 <- rep(NA_real_, n)
   bmi_2 <- dbmi^3
   fpg_1 <- rep(NA_real_, n)
   fpg_2 <- rep(NA_real_, n)
