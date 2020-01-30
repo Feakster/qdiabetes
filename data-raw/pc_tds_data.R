@@ -21,7 +21,9 @@ dir_tmp <- tempdir()
 ### Notes ###
 ## Postcode-to-Region Data ##
 # - http://geoportal1-ons.opendata.arcgis.com/datasets/postcode-to-output-area-to-lower-layer-super-output-area-to-middle-layer-super-output-area-to-local-authority-district-february-2019-lookup-in-the-uk
-# - https://www.statistics.digitalresources.jisc.ac.uk/dataset/2011-uk-townsend-deprivation-scores
+## Region-to-Townsend Data ##
+# - (2011) https://www.statistics.digitalresources.jisc.ac.uk/dataset/2011-uk-townsend-deprivation-scores
+# - (2001) https://census.ukdataservice.ac.uk/get-data/related/deprivation
 
 ### Postcode Data ###
 url_pc <- "https://www.arcgis.com/sharing/rest/content/items/c479d770cba14845a0e43db4e3eb5afa/data"

@@ -47,11 +47,12 @@
 # - townsend >= -7 & townsend <= 11
 # - surv >= 1 & surv <= 10
 
-QDR2013 <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL, ethnicity = "WhiteNA", smoking = "Non", townsend = 0, steroids = FALSE, cvd = FALSE, gestdiab = FALSE, pcos = FALSE, hypertension = FALSE, fh_diab = FALSE, surv = 10L){
+### Function ###
+QDR2013 <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL, ethnicity = "WhiteNA", smoking = "Non", townsend = 0, steroids = FALSE, cvd = FALSE, hypertension = FALSE, fh_diab = FALSE, surv = 10L){
   ## Stop Conditions ##
   if(any(is.null(gender), is.null(age))) stop("gender & age must be specified")
   if(is.null(bmi) & any(is.null(height), is.null(weight))) stop("either bmi or height & weight must be specified")
-  inputs <- list(gender, age, bmi, height, weight, ethnicity, smoking, townsend, steroids, cvd, gestdiab, pcos, hypertension, fh_diab, surv)
+  inputs <- list(gender, age, bmi, height, weight, ethnicity, smoking, townsend, steroids, cvd, hypertension, fh_diab, surv)
   inputs_length <- sapply(inputs, length)
   n <- max(inputs_length)
   stopifnot(all(inputs_length %in% c(0:1, n)))
@@ -62,14 +63,12 @@ QDR2013 <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight
   stopifnot(all(height >= 1.4 & height <= 2.1))
   stopifnot(all(weight >= 40 & weight <= 180))
   stopifnot(all(townsend >= -7 & townsend <= 11))
-  stopifnot(all(surv >= 1 & surv <= 10))
-  if(any(gender == "Male" & (pcos | gestdiab))) stop("'pcos' and 'gestdiab' must be set to FALSE for male 'gender'")
   stopifnot(all(steroids %in% c(FALSE, TRUE)))
   stopifnot(all(cvd %in% c(FALSE, TRUE)))
-  stopifnot(all(gestdiab %in% c(FALSE, TRUE)))
-  stopifnot(all(pcos %in% c(FALSE, TRUE)))
   stopifnot(all(hypertension %in% c(FALSE, TRUE)))
   stopifnot(all(fh_diab %in% c(FALSE, TRUE)))
+  stopifnot(all(!is.logical(surv)))
+  stopifnot(all(surv %in% 1:10))
   
   ## BMI Pre-Procession ##
   if(all(!is.null(bmi), !is.null(height), !is.null(weight))){
@@ -95,8 +94,6 @@ QDR2013 <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight
   if(length(townsend) == 1) townsend <- rep(townsend, n)
   if(length(steroids) == 1) steroids <- rep(steroids, n)
   if(length(cvd) == 1) cvd <- rep(cvd, n)
-  if(length(gestdiab) == 1) gestdiab <- rep(gestdiab, n)
-  if(length(pcos) == 1) pcos <- rep(pcos, n)
   if(length(hypertension) == 1) hypertension <- rep(hypertension, n)
   if(length(fh_diab) == 1) fh_diab <- rep(fh_diab, n)
   if(length(surv) == 1) surv <- rep(surv, n)
@@ -107,10 +104,10 @@ QDR2013 <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight
   vec_smok <- rep(0, n)
   dage <- age/10
   age_1 <- rep(NA_real_, n)
-  age_2 <- rep(NA_real_, n)
+  age_2 <- dage^3
   dbmi <- bmi/10
   bmi_1 <- rep(NA_real_, n)
-  bmi_2 <- rep(NA_real_, n)
+  bmi_2 <- dbmi^3
   bin <- rep(NA_real_, n)
   int <- rep(NA_real_, n)
   risk <- rep(NA_real_, n)
@@ -138,25 +135,50 @@ QDR2013 <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight
   # vec_surv[gender == "Female" & surv == 15] <- 0.97035014629364
   
   # Ethnicity # - Check coeffs in paper
-  # Blah!
+  vec_eth[gender == "Female" & ethnicity == "Indian"] <- 1.2672136244963337
+  vec_eth[gender == "Female" & ethnicity == "Pakistani"] <- 1.4277605208830098
+  vec_eth[gender == "Female" & ethnicity == "Bangladeshi"] <- 1.8624060798103199
+  vec_eth[gender == "Female" & ethnicity == "OtherAsian"] <- 1.2379988338989651
+  vec_eth[gender == "Female" & ethnicity == "BlackCaribbean"] <- 0.47090341729076779
+  vec_eth[gender == "Female" & ethnicity == "BlackAfrican"] <- 0.34764009017031605
+  vec_eth[gender == "Female" & ethnicity == "Chinese"] <- 1.1587283467731935
+  vec_eth[gender == "Female" & ethnicity == "Other"] <- 0.73354993250103151
   
   # Smoking #
-  # Blah!
+  vec_smok[gender == "Female" & smoking == "Ex"] <- 0.10125370249475051
+  vec_smok[gender == "Female" & smoking == "Light"] <- 0.19155205643806134
+  vec_smok[gender == "Female" & smoking == "Moderate"] <- 0.30918941361433339
+  vec_smok[gender == "Female" & smoking == "Heavy"] <- 0.46467303926938208
   
   # Age #
-  # Blah!
+  age_1[ind_f] <- sqrt(dage[ind_f])
+  age_1[ind_f] <- age_1[ind_f] - 2.135220289230347
+  age_2[ind_f] <- age_2[ind_f] - 94.766799926757813
+  age[ind_f] <- 4.3848331212989669*age_1[ind_f] - 0.0049763964406541149*age_2[ind_f]
   
   # BMI #
-  # Blah!
+  bmi_1[ind_f] <- dbmi[ind_f]
+  bmi_1[ind_f] <- bmi_1[ind_f] - 2.549620866775513
+  bmi_2[ind_f] <- bmi_2[ind_f] - 16.573980331420898
+  bmi[ind_f] <- 3.3753336326064329*bmi_1[ind_f] - 0.063162848866731833*bmi_2[ind_f]
   
   # Townsend #
-  # Blah!
+  townsend[ind_m] <- townsend[ind_m] + 0.224075347185135
+  townsend[ind_m] <- 0.043272699299863597*townsend[ind_m]
   
   # Binary Variables #
-  # Blah!
+  bin[ind_f] <- Reduce("+", list(0.2681990966241487*steroids[ind_f],
+                                 0.35961768309842529*cvd[ind_f],
+                                 0.53145984369747257*hypertension[ind_f],
+                                 0.73153588458376406*fh_diab[ind_f]))
   
   # Interaction Terms #
-  # Blah!
+  int[ind_f] <- Reduce("+", list(1.303783287399799*age_1[ind_f]*bmi_1[ind_f],
+                                 -0.070829371776904612*age_1[ind_f]*bmi_2[ind_f],
+                                 -0.79682668158342518*age_1[ind_f]*fh_diab[ind_f],
+                                 -0.0067725323761278549*age_2[ind_f]*bmi_1[ind_f],
+                                 0.00023749807286661167*age_2[ind_f]*bmi_2[ind_f],
+                                 0.0017048228889394394*age_2[ind_f]*fh_diab[ind_f]))
   
   ## Male ##
   # Survivor Function #
@@ -194,14 +216,12 @@ QDR2013 <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight
   
   # Age #
   age_1[ind_m] <- log(dage[ind_m])
-  age_2[ind_m] <- dage[ind_m]^3
   age_1[ind_m] <- age_1[ind_m] - 1.496771812438965
   age_2[ind_m] <- age_2[ind_m] - 89.149559020996094
   age[ind_m] <- 4.420559832337168*age_1[ind_m] - 0.0041132238299394193*age_2[ind_m]
   
   # BMI #
   bmi_1[ind_m] <- dbmi[ind_m]^2
-  bmi_2[ind_m] <- dbmi[ind_m]^3
   bmi_1[ind_m] <- bmi_1[ind_m] - 6.832604885101318
   bmi_2[ind_m] <- bmi_2[ind_m] - 17.859918594360352
   bmi[ind_m] <- 1.1169895991721528*bmi_1[ind_m] - 0.17935295302512691*bmi_2[ind_m]
@@ -231,6 +251,12 @@ QDR2013 <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight
   score <- ethnicity + smoking + bmi + age + townsend + bin + int
   risk[ind_f] <- 100*(1 - surv[ind_f]^exp(score[ind_f]))
   risk[ind_m] <- 100*(1 - surv[ind_m]^exp(score[ind_m]))
+  
+  ## Named Output ##
+  if(length(inputs_length[inputs_length == n]) == 1){
+    names_out <- inputs[inputs_length == n][[1]]
+    names(risk) <- names_out
+  }
   
   ## Output ##
   return(risk)

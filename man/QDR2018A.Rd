@@ -1,16 +1,16 @@
-\name{QDRC}
-\alias{QDRC}
-\title{QDiabetes-2018 Risk Calculator (C-Variant)}
+\name{QDR2018A}
+\alias{QDR2018A}
+\title{QDiabetes-2018 Risk Calculator (A-Variant)}
 \description{
-  Calculate the 10-year risk of developing type 2 diabetes, using the C-variant of the QDiabetes-2018 algorithm.
-  This variant includes all risk predictors present in the A-variant, with the addition of glycated haemoglobin A1c.
+  Calculate the 10-year risk of developing type 2 diabetes, using the A-variant of the QDiabetes-2018 algorithm.
+  This variant does not use fasting plasma glucose or glycated haemoglobin A1c.
 }
 \usage{
-QDRC(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
-     hba1c = NULL, ethnicity = "WhiteNA", smoking = "Non",
-     townsend = 0, antipsy = FALSE, steroids = FALSE, cvd = FALSE,
-     gestdiab = FALSE, learndiff = FALSE, schizobipo = FALSE,
-     pcos = FALSE, statins = FALSE, hypertension = FALSE, fh_diab = FALSE)
+QDR2018A(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
+         ethnicity = "WhiteNA", smoking = "Non",
+         townsend = 0, antipsy = FALSE, steroids = FALSE, cvd = FALSE,
+         gestdiab = FALSE, learndiff = FALSE, schizobipo = FALSE,
+         pcos = FALSE, statins = FALSE, hypertension = FALSE, fh_diab = FALSE)
 }
 \arguments{
   \item{gender}{Gender. Must be \code{"Male"} or \code{"Female"}.}
@@ -18,7 +18,6 @@ QDRC(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
   \item{bmi}{Body-mass index, in kg/m^2. Must be \eqn{\ge}40/2.1^2 and \eqn{\le}180/1.4^2. Within this range, values >40 are set to 40, while values <20 are set to 20.}
   \item{height}{Height, in m. Must be \eqn{\ge}1.4 and \eqn{\le}2.1.}
   \item{weight}{Weight, in kg. Must be \eqn{\ge}40 and \eqn{\le}180.}
-  \item{hba1c}{Glycated haemoglobin A1c level, in mmol/mol. Must be \eqn{\ge}15 and <48.}
   \item{ethnicity}{Ethnicity. Must be one of:
   \itemize{
     \item \code{"WhiteNA"} (White or not stated)
@@ -65,34 +64,34 @@ QDRC(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
   The limits set for Townsend deprivation scores reflect the minimum and maximum values found among \href{https://www.statistics.digitalresources.jisc.ac.uk/dataset/2011-uk-townsend-deprivation-scores/resource/938a1b3b-7d73-42fc-b19e-6c61bb5d2b73}{output areas} and \href{https://www.statistics.digitalresources.jisc.ac.uk/dataset/2011-uk-townsend-deprivation-scores/resource/0083b0bf-9241-4d73-bfdb-da33de2bd5cc}{lower layer super output areas} collated from the 2011 UK census.
 }
 \author{Benjamin G Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
-\seealso{\code{\link{QDRA}}, \code{\link{QDRB}}}
+\seealso{\code{\link{QDR2013}}, \code{\link{QDR2018B}}, \code{\link{QDR2018C}}}
 \examples{
 ## Simple usage
-QDRC(gender = "Female", age = 76, height = 1.65, weight = 70, hba1c = 25)
-QDRC(gender = "Male", age = 55, bmi = 40, hba1c = seq(15, 40, 5), ethnicity = "Chinese")
-QDRC(gender = "Female", age = 65, bmi = 35, hba1c = 30, smoking = "Ex", fh_diab = c(FALSE, TRUE))
+QDR2018A(gender = "Female", age = 76, height = 1.65, weight = 70)
+QDR2018A(gender = "Male", age = seq(25, 80, 5), bmi = 40, ethnicity = "Other", townsend = 5)
+QDR2018A(gender = "Female", age = 65, bmi = 35, smoking = c("Non", "Ex", "Light"), fh_diab = TRUE)
 
 ## Using postcodes to estimate Townsend deprivation scores
-QDRC(gender = "Male", age = 65, bmi = 40, hba1c = 42, townsend = getTDS("OX3 7LF"))
-QDRC(gender = "Female", age = 60, bmi = 35, hba1c = 42, townsend = getTDS(c("OX2 6NW", "OX2 6GG")))
+QDR2018A(gender = "Male", age = 65, bmi = 40, townsend = getTDS("OX3 7LF"))
+QDR2018A(gender = "Female", age = 60, bmi = 35, townsend = getTDS(c("OX2 6NW", "OX2 6GG")))
 
 ## Data frame usage
 data(dat_qdr)
-with(dat_qdr, QDRC(gender = gender, age = age, bmi = bmi, hba1c = hba1c))
+with(dat_qdr, QDR2018A(gender = gender, age = age, bmi = bmi))
 
 ## Plotting outputs
-hba1c <- seq(15, 42, length.out = 10)
-risk_m <- QDRC(gender = "Male", age = 65, bmi = 40, hba1c = hba1c)
-risk_f <- QDRC(gender = "Female", age = 65, bmi = 40, hba1c = hba1c)
+age <- seq(25, 80, 5)
+risk_m <- QDR2018A(gender = "Male", age = age, bmi = 40)
+risk_f <- QDR2018A(gender = "Female", age = age, bmi = 40)
 
 par(cex = 0.8)
 plot.new()
-plot.window(xlim = range(hba1c), ylim = range(pretty(c(risk_m, risk_f))))
-axis(1, at = hba1c)
+plot.window(xlim = range(age), ylim = range(pretty(c(risk_m, risk_f))))
+axis(1, at = age)
 axis(2, at = pretty(c(risk_m, risk_f)))
-title(xlab = expression("Haemoglobin A"["1c"]~"(mmol/mol)"), ylab = "Risk (\%)")
-lines(hba1c, risk_m, type = "b", col = "navy", lwd = 1.5)
-lines(hba1c, risk_f, type = "b", col = "red3", lwd = 1.5)
+title(xlab = "Age (years)", ylab = "Risk (\%)")
+lines(age, risk_m, type = "b", col = "navy", lwd = 1.5)
+lines(age, risk_f, type = "b", col = "red3", lwd = 1.5)
 legend("bottomright",
        legend = c("Male", "Female"),
        col = c("navy", "red3"),

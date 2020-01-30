@@ -17,3 +17,10 @@
     \item Minor under-the-hood optimisations.
   }
 }
+\section{Changes in version 0.1.4}{
+  \itemize{
+    \item Added the QDiabetes-2013 algorithm.
+    \item Altered all functions names to allow for easier inclusion of past and future updates to QDiabetes.
+    \item Set all risk prediction functions to return a named vector when only one of inputs is of length > 1.
+  }
+}

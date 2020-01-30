@@ -5,7 +5,7 @@
 #================================#
 
 ### License Information ###
-# The vQDRC function is part of the QDiabetes package, and is for
+# The QDR2018C function is part of the QDiabetes package, and is for
 # calculating the 10-year risk of developing type-2 diabetes.
 # Copyright (C) 2020  University of Oxford
 
@@ -47,7 +47,8 @@
 # - hba1c >= 15 & hba1c < 48
 # - townsend >= -7.028634577 & townsend <= 13.3114711
 
-QDRC <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL, hba1c = NULL, ethnicity = "WhiteNA", smoking = "Non", townsend = 0, antipsy = FALSE, steroids = FALSE, cvd = FALSE, gestdiab = FALSE, learndiff = FALSE, schizobipo = FALSE, pcos = FALSE, statins = FALSE, hypertension = FALSE, fh_diab = FALSE){
+### Function ###
+QDR2018C <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL, hba1c = NULL, ethnicity = "WhiteNA", smoking = "Non", townsend = 0, antipsy = FALSE, steroids = FALSE, cvd = FALSE, gestdiab = FALSE, learndiff = FALSE, schizobipo = FALSE, pcos = FALSE, statins = FALSE, hypertension = FALSE, fh_diab = FALSE){
   ## Stop Conditions ##
   if(any(is.null(gender), is.null(age), is.null(hba1c))) stop("gender, age & hba1c must be specified")
   if(is.null(bmi) & any(is.null(height), is.null(weight))) stop("either bmi or height & weight must be specified")
@@ -269,6 +270,12 @@ QDRC <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
   score <- ethnicity + smoking + bmi + age + townsend + hba1c + bin + int
   risk[ind_f] <- 100*(1 - 0.988788545131683^exp(score[ind_f]))
   risk[ind_m] <- 100*(1 - 0.981181740760803^exp(score[ind_m]))
+  
+  ## Named Output ##
+  if(length(inputs_length[inputs_length == n]) == 1){
+    names_out <- inputs[inputs_length == n][[1]]
+    names(risk) <- names_out
+  }
   
   ## Output ##
   return(risk)

@@ -5,7 +5,7 @@
 #================================#
 
 ### License Information ###
-# The vQDRA function is part of the QDiabetes package, and is for
+# The QDR2018A function is part of the QDiabetes package, and is for
 # calculating the 10-year risk of developing type-2 diabetes.
 # Copyright (C) 2020  University of Oxford
 
@@ -46,7 +46,8 @@
 # - bmi == 40 if bmi > 40
 # - townsend >= -7.028634577 & townsend <= 13.3114711
 
-QDRA <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL, ethnicity = "WhiteNA", smoking = "Non", townsend = 0, antipsy = FALSE, steroids = FALSE, cvd = FALSE, gestdiab = FALSE, learndiff = FALSE, schizobipo = FALSE, pcos = FALSE, statins = FALSE, hypertension = FALSE, fh_diab = FALSE){
+### Function ###
+QDR2018A <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL, ethnicity = "WhiteNA", smoking = "Non", townsend = 0, antipsy = FALSE, steroids = FALSE, cvd = FALSE, gestdiab = FALSE, learndiff = FALSE, schizobipo = FALSE, pcos = FALSE, statins = FALSE, hypertension = FALSE, fh_diab = FALSE){
   ## Stop Conditions ##
   if(any(is.null(gender), is.null(age))) stop("gender & age must be specified")
   if(is.null(bmi) & any(is.null(height), is.null(weight))) stop("either bmi or height & weight must be specified")
@@ -245,6 +246,12 @@ QDRA <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = 
   score <- ethnicity + smoking + bmi + age + townsend + bin + int
   risk[ind_f] <- 100*(1 - 0.986227273941040^exp(score[ind_f]))
   risk[ind_m] <- 100*(1 - 0.978732228279114^exp(score[ind_m]))
+  
+  ## Named Output ##
+  if(length(inputs_length[inputs_length == n]) == 1){
+    names_out <- inputs[inputs_length == n][[1]]
+    names(risk) <- names_out
+  }
   
   ## Output ##
   return(risk)

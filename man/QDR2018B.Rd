@@ -1,16 +1,16 @@
-\name{QDRA}
-\alias{QDRA}
-\title{QDiabetes-2018 Risk Calculator (A-Variant)}
+\name{QDR2018B}
+\alias{QDR2018B}
+\title{QDiabetes-2018 Risk Calculator (B-Variant)}
 \description{
-  Calculate the 10-year risk of developing type 2 diabetes, using the A-variant of the QDiabetes-2018 algorithm.
-  This variant does not use fasting plasma glucose or glycated haemoglobin A1c.
+  Calculate the 10-year risk of developing type 2 diabetes, using the B-variant of the QDiabetes-2018 algorithm.
+  This variant includes all risk predictors present in the A-variant, with the addition of fasting plasma glucose.
 }
 \usage{
-QDRA(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
-     ethnicity = "WhiteNA", smoking = "Non",
-     townsend = 0, antipsy = FALSE, steroids = FALSE, cvd = FALSE,
-     gestdiab = FALSE, learndiff = FALSE, schizobipo = FALSE,
-     pcos = FALSE, statins = FALSE, hypertension = FALSE, fh_diab = FALSE)
+QDR2018B(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
+         fpg = NULL, ethnicity = "WhiteNA", smoking = "Non",
+         townsend = 0, antipsy = FALSE, steroids = FALSE, cvd = FALSE,
+         gestdiab = FALSE, learndiff = FALSE, schizobipo = FALSE,
+         pcos = FALSE, statins = FALSE, hypertension = FALSE, fh_diab = FALSE)
 }
 \arguments{
   \item{gender}{Gender. Must be \code{"Male"} or \code{"Female"}.}
@@ -18,6 +18,7 @@ QDRA(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
   \item{bmi}{Body-mass index, in kg/m^2. Must be \eqn{\ge}40/2.1^2 and \eqn{\le}180/1.4^2. Within this range, values >40 are set to 40, while values <20 are set to 20.}
   \item{height}{Height, in m. Must be \eqn{\ge}1.4 and \eqn{\le}2.1.}
   \item{weight}{Weight, in kg. Must be \eqn{\ge}40 and \eqn{\le}180.}
+  \item{fpg}{Fasting plasma glucose level, in mmol/L. Must be \eqn{\ge}2 and <7.}
   \item{ethnicity}{Ethnicity. Must be one of:
   \itemize{
     \item \code{"WhiteNA"} (White or not stated)
@@ -64,34 +65,61 @@ QDRA(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL,
   The limits set for Townsend deprivation scores reflect the minimum and maximum values found among \href{https://www.statistics.digitalresources.jisc.ac.uk/dataset/2011-uk-townsend-deprivation-scores/resource/938a1b3b-7d73-42fc-b19e-6c61bb5d2b73}{output areas} and \href{https://www.statistics.digitalresources.jisc.ac.uk/dataset/2011-uk-townsend-deprivation-scores/resource/0083b0bf-9241-4d73-bfdb-da33de2bd5cc}{lower layer super output areas} collated from the 2011 UK census.
 }
 \author{Benjamin G Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
-\seealso{\code{\link{QDRB}}, \code{\link{QDRC}}}
+\seealso{\code{\link{QDR2013}}, \code{\link{QDR2018A}}, \code{\link{QDR2018C}}}
 \examples{
 ## Simple usage
-QDRA(gender = "Female", age = 76, height = 1.65, weight = 70)
-QDRA(gender = "Male", age = seq(25, 80, 5), bmi = 40, ethnicity = "Other", townsend = 5)
-QDRA(gender = "Female", age = 65, bmi = 35, smoking = c("Non", "Ex", "Light"), fh_diab = TRUE)
+QDR2018B(gender = "Female",
+         age = 76,
+         height = 1.65,
+         weight = 70,
+         fpg = 4)
+QDR2018B(gender = "Male",
+         age = 55,
+         bmi = 40,
+         fpg = 2:6,
+         ethnicity = "BlackCaribbean")
+QDR2018B(gender = "Female",
+         age = 65,
+         bmi = 35,
+         fpg = 5,
+         smoking = "Ex",
+         cvd = c(FALSE, TRUE))
 
 ## Using postcodes to estimate Townsend deprivation scores
-QDRA(gender = "Male", age = 65, bmi = 40, townsend = getTDS("OX3 7LF"))
-QDRA(gender = "Female", age = 60, bmi = 35, townsend = getTDS(c("OX2 6NW", "OX2 6GG")))
+QDR2018B(gender = "Male",
+         age = 65,
+         bmi = 40,
+         fpg = 6,
+         townsend = getTDS("OX3 7LF"))
+QDR2018B(gender = "Female",
+         age = 60,
+         bmi = 35,
+         fpg = 6,
+         townsend = getTDS(c("OX2 6NW", "OX2 6GG")))
 
 ## Data frame usage
 data(dat_qdr)
-with(dat_qdr, QDRA(gender = gender, age = age, bmi = bmi))
+with(dat_qdr, QDR2018B(gender = gender, age = age, bmi = bmi, fpg = fpg))
 
 ## Plotting outputs
-age <- seq(25, 80, 5)
-risk_m <- QDRA(gender = "Male", age = age, bmi = 40)
-risk_f <- QDRA(gender = "Female", age = age, bmi = 40)
+fpg <- seq(2, 6.5, length.out = 10)
+risk_m <- QDR2018B(gender = "Male",
+                   age = 65,
+                   bmi = 40,
+                   fpg = fpg)
+risk_f <- QDR2018B(gender = "Female",
+                   age = 65,
+                   bmi = 40,
+                   fpg = fpg)
 
 par(cex = 0.8)
 plot.new()
-plot.window(xlim = range(age), ylim = range(pretty(c(risk_m, risk_f))))
-axis(1, at = age)
+plot.window(xlim = range(fpg), ylim = range(pretty(c(risk_m, risk_f))))
+axis(1, at = fpg)
 axis(2, at = pretty(c(risk_m, risk_f)))
-title(xlab = "Age (years)", ylab = "Risk (\%)")
-lines(age, risk_m, type = "b", col = "navy", lwd = 1.5)
-lines(age, risk_f, type = "b", col = "red3", lwd = 1.5)
+title(xlab = "Fasting Plasma Glucose (mmol/L)", ylab = "Risk (\%)")
+lines(fpg, risk_m, type = "b", col = "navy", lwd = 1.5)
+lines(fpg, risk_f, type = "b", col = "red3", lwd = 1.5)
 legend("bottomright",
        legend = c("Male", "Female"),
        col = c("navy", "red3"),
