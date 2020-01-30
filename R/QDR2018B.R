@@ -5,7 +5,7 @@
 #================================#
 
 ### License Information ###
-# The vQDRB function is part of the QDiabetes package, and is for
+# The QDR2018B function is part of the QDiabetes package, and is for
 # calculating the 10-year risk of developing type-2 diabetes.
 # Copyright (C) 2020  University of Oxford
 
@@ -47,7 +47,7 @@
 # - fpg >= 2 & fpg < 7
 # - townsend >= -7.028634577 & townsend <= 13.3114711
 
-QDRB <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL, fpg = NULL, ethnicity = "WhiteNA", smoking = "Non", townsend = 0, antipsy = FALSE, steroids = FALSE, cvd = FALSE, gestdiab = FALSE, learndiff = FALSE, schizobipo = FALSE, pcos = FALSE, statins = FALSE, hypertension = FALSE, fh_diab = FALSE){
+QDR2018B <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight = NULL, fpg = NULL, ethnicity = "WhiteNA", smoking = "Non", townsend = 0, antipsy = FALSE, steroids = FALSE, cvd = FALSE, gestdiab = FALSE, learndiff = FALSE, schizobipo = FALSE, pcos = FALSE, statins = FALSE, hypertension = FALSE, fh_diab = FALSE){
   ## Stop Conditions ##
   if(any(is.null(gender), is.null(age), is.null(fpg))) stop("gender, age & fpg must be specified")
   if(is.null(bmi) & any(is.null(height), is.null(weight))) stop("either bmi or height & weight must be specified")
