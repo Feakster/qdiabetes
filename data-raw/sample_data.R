@@ -33,6 +33,7 @@ load("R/sysdata.rda")
 ind <- sample(1:nrow(.dat_oa), n); rm(n)
 dat_tmp <- .dat_oa[ind, ]; rm(ind)
 names(dat_tmp) <- gsub("^tds$", "townsend", names(dat_tmp))
+dat_tmp[["postcode"]] <- with(dat_tmp, gsub("(\\w{3}$)", " \\1", postcode))
 
 dat_qdr <- cbind(dat_qdr, dat_tmp); rm(dat_tmp)
 

@@ -134,7 +134,7 @@ QDR2013 <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight
   # vec_surv[gender == "Female" & surv == 14] <- 0.972945988178253
   # vec_surv[gender == "Female" & surv == 15] <- 0.97035014629364
   
-  # Ethnicity # - Check coeffs in paper
+  # Ethnicity #
   vec_eth[gender == "Female" & ethnicity == "Indian"] <- 1.2672136244963337
   vec_eth[gender == "Female" & ethnicity == "Pakistani"] <- 1.4277605208830098
   vec_eth[gender == "Female" & ethnicity == "Bangladeshi"] <- 1.8624060798103199
@@ -198,7 +198,7 @@ QDR2013 <- function(gender = NULL, age = NULL, bmi = NULL, height = NULL, weight
   # vec_surv[gender == "Male" & surv == 14] <- 0.959633111953735
   # vec_surv[gender == "Male" & surv == 15] <- 0.955690681934357
   
-  # Ethnicity # - Check coeffs in paper
+  # Ethnicity #
   vec_eth[gender == "Male" & ethnicity == "Indian"] <- 1.2366090720913343
   vec_eth[gender == "Male" & ethnicity == "Pakistani"] <- 1.4716746107789032
   vec_eth[gender == "Male" & ethnicity == "Bangladeshi"] <- 1.8073235649498174

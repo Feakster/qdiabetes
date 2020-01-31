@@ -4,11 +4,34 @@
 #            #
 #============#
 
-- Complete the vignette.
-- Use aggregated GP data in the vignette to simulate a UK population & produce a risk map that could be added to the vignette.
-- Add tests to check that the input and output vector lengths match for the QDR*() functions.
-- Alter the assessment of the binary variables to use values likely to produce larger risk estimates, e.g. age = 65, bmi = 40, fpg = 6.9, hba1c = 47.9. This should make any discrepancies larger.
-- Add unit tests that use with(), dplyr and data.table to make sure the package works as intended in data frames. A weird error was being thrown before because of how gender/pcos/gestdiab were being checked. Need more thoroughness here.
-- Make a vignette that uses postcode data to produce a map of deprivation in inner London.
-- Where only one of the input vectors is of a length > 1, return a named vector instead, using the values of the input vector as names.
-- Add an overall package help file that can be found by executing help(QDiabetes).
+### Features ###
+- Add partial postcode matching to getTDS().
+- Incorporate 2001 UK census data into the .dat_oa data frame, and add a "year"
+  parameter to getTDS() to all the specification of the Townsend data year.
+
+### Documentation ###
+- Add an overall package help file that can be found by executing
+  help(QDiabetes).
+
+### Vignettes ###
+- Complete the main package vignette.
+- Use aggregated GP data in the vignette to simulate a UK population and produce
+  a risk map that could be added to the vignette.
+- Make a vignette that uses postcode data to produce a map of deprivation in
+  inner London.
+
+### Unit Tests ###
+- Add tests to check that the input and output vector lengths match for the
+  QDR*() functions.
+- Alter the assessment of the binary variables to use values likely to produce
+  larger risk estimates, e.g. age = 65, bmi = 40, fpg = 6.9, hba1c = 47.9. This
+  should make any discrepancies larger.
+- Add unit tests that use with(), dplyr and data.table to make sure the package
+  works as intended in data frames. A weird error was being thrown before
+  because of how gender/pcos/gestdiab were being checked. Need more thoroughness
+  here.
+
+### Misc ###
+- Edit the README.md file to mention the "surv" parameter of QDiabetes-2013. The
+  code allows this to specify modifiable risk periods from 1--15 years. However
+  it ceases to be configurable in QDiabetes-2018.
