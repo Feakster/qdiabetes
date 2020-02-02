@@ -6,6 +6,7 @@
 
 ### Features ###
 - Add partial postcode matching to getTDS().
+- Add the ability to search by output area to getTDS().
 - Incorporate 2001 UK census data into the .dat_oa data frame, and add a "year"
   parameter to getTDS() to all the specification of the Townsend data year.
 
