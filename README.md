@@ -1,5 +1,11 @@
 # QDiabetes
 
+<!-- Badges -->
+[![license](https://img.shields.io/badge/license-AGPL--3-blue)](https://choosealicense.com/licenses/agpl-3.0/)
+[![platform-support](https://img.shields.io/badge/R-%3E%3D2.10-blue)](https://www.r-project.org/)
+<!--[![CRANstatus](https://www.r-pkg.org/badges/version/qdiabetes)](https://cran.r-project.org/package=qdiabetes)-->
+<!--[![CRANdownloads](https://cranlogs.r-pkg.org/badges/grand-total/qdiabetes)](https://cran.r-project.org/package=qdiabetes)-->
+
 ## General info
 
 This project is an R package for calculating the 10-year risk of type 2 diabetes using the QDiabetes algorithms. Initially, these will be QDiabetes-2013 and [QDiabetes-2018](https://qdiabetes.org/).
@@ -97,16 +103,16 @@ QDR2018C(gender = "Male", age = 25, bmi = 40, hba1c = 42)
 
 ### Making Use of Vectorisation ###
 QDR2013(gender = "Female", age = 35, bmi = seq(20, 40, 5))
-#        20        25        30        35        40 
+#        20        25        30        35        40
 # 0.1783861 0.6263671 1.7714187 3.8614378 6.2376483
 QDR2018A(gender = "Female", age = seq(25, 75, 10), bmi = 35)
-#        25        35        45        55        65        75 
+#        25        35        45        55        65        75
 #  1.085179  2.921454  5.893499  9.082108 10.713717  9.567516
 QDR2018B(gender = "Male", age = 65, bmi = 35, fpg = 2:6)
-#          2          3          4          5          6 
+#          2          3          4          5          6
 #  0.9123063  0.5911511  1.8416081  7.8554831 30.8096968
 QDR2018C(gender = "Female", age = 80, bmi = 28, hba1c = seq(15, 45, 5))
-#           15           20           25           30           35           40           45 
+#           15           20           25           30           35           40           45
 #  0.008084487  0.033019655  0.121238952  0.412396004  1.320727239  4.005759509 11.409509026
 
 ### Data Frame Usage ###

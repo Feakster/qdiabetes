@@ -11,8 +11,8 @@
 .onAttach <- function(libname, pkgname){
   packageStartupMessage(
     paste(
-      "Contains OS data Crown copyright and database right 2019",
-      "Contains Royal Mail data Royal Mail copyright and database right 2019",
+      "Contains OS data \U00A9 Crown copyright and database right 2019",
+      "Contains Royal Mail data \U00A9 Royal Mail copyright and database right 2019",
       "Source: Office for National Statistics licensed under the Open Government Licence v.3.0",
       sep = "\n"
     )

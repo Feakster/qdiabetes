@@ -24,3 +24,8 @@
     \item Set all risk prediction functions to return a named vector when only one of inputs is of length > 1.
   }
 }
+\section{Changes in version 0.1.5}{
+  \itemize{
+    \item Expanded the abilities of the \code{\link{getTDS}} function to allow searching by postcode prefix, postcode suffix, and regular expressions. A \code{squash} parameter has also been added to \code{\link{getTDS}} to allow the user to specify whether an overall median should be produced for all Townsend deprivation scores matched.
+  }
+}

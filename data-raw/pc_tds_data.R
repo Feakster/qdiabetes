@@ -5,8 +5,8 @@
 #=================================#
 
 ### License Information ###
-# - Contains OS data © Crown copyright and database right 2019
-# - Contains Royal Mail data © Royal Mail copyright and database right 2019
+# - Contains OS data \U00A9 Crown copyright and database right 2019
+# - Contains Royal Mail data \U00A9 Royal Mail copyright and database right 2019
 # - Source: Office for National Statistics licensed under the Open Government Licence v.3.0
 
 ### Libraries ###
@@ -76,11 +76,23 @@ rm(dat_pc)
 dat_oa <- dat_oa[, postcode := gsub("\\s+", "", postcode)]
 # dat_lsoa <- dat_lsoa[, postcode := gsub("\\s+", "", postcode)]
 
+### Add Prefix & Suffix Columns ###
+dat_oa[, post_pre := gsub("\\w{3}$", "", postcode)]
+# dat_lsoa[, post_pre := gsub("\\w{3}$", "", postcode)]
+dat_oa[, post_suff := regmatches(postcode, regexpr("\\w{3}$", postcode))]
+# dat_lsoa[, post_suff := regmatches(postcode, regexpr("\\w{3}$", postcode))]
+
+### Convert Prefix and Suffix Columns to Factor ###
+dat_oa[, post_pre := factor(post_pre)]
+# dat_lsoa[, post_pre := factor(post_pre)]
+dat_oa[, post_suff := factor(post_suff)]
+# dat_lsoa[, post_suff := factor(post_suff)]
+
 ### Sort ###
-dat_oa <- dat_oa[, .(postcode, tds)]
-# dat_lsoa <- dat_lsoa[, .(postcode, tds)]
-setkey(dat_oa, postcode)
-# setkey(dat_lsoa, postcode)
+dat_oa <- dat_oa[, .(postcode, post_pre, post_suff, tds)]
+# dat_lsoa <- dat_lsoa[, .(postcode, post_pre, post_suff, tds)]
+setkey(dat_oa, post_pre, post_suff)
+# setkey(dat_lsoa, post_pre, post_suff)
 
 ### Export ###
 .dat_oa <- as.data.frame(dat_oa); rm(dat_oa)

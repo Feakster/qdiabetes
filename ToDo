@@ -13,6 +13,8 @@
 ### Documentation ###
 - Add an overall package help file that can be found by executing
   help(QDiabetes).
+- Find out how to replace copyright symbols with unicode (\U00A9) in the
+  getTDS() documentation.
 
 ### Vignettes ###
 - Complete the main package vignette.
