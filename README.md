@@ -5,6 +5,7 @@
 [![platform-support](https://img.shields.io/badge/R-%3E%3D2.10-blue)](https://www.r-project.org/)
 <!--[![CRANstatus](https://www.r-pkg.org/badges/version/qdiabetes)](https://cran.r-project.org/package=qdiabetes)-->
 <!--[![CRANdownloads](https://cranlogs.r-pkg.org/badges/grand-total/qdiabetes)](https://cran.r-project.org/package=qdiabetes)-->
+![travisCI](https://img.shields.io/travis/com/Feakster/qdiabetes)
 
 ## General info
 

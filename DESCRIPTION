@@ -16,6 +16,7 @@ Authors@R: c(
   person("University of Oxford", role = c("cph", "sht")))
 Description: This package aims to calculate the risk of developing type 2 diabetes in the next 10 years. It is based on published risk prediction algorithms <https://qdiabetes.org/src.php>.
 Depends: R (>= 2.10)
+Imports: stats
 Suggests: data.table, dplyr, graphics, lattice, testthat, utils
 License: AGPL-3 + file LICENSE
 Copyrights: University of Oxford + file inst/COPYRIGHTS

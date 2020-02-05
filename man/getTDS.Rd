@@ -2,7 +2,7 @@
 \alias{getTDS}
 \title{Lookup Townsend Deprivation Score from UK postcode}
 \description{
-  Convenient function to look up Townsend deprivation scores using UK postcodes.
+  Convenient function to look up Townsend deprivation scores using UK postcodes, postcode prefixes, postcode suffixes or a regular expression.
 }
 \usage{
 getTDS(postcode = NULL, type = "full", squash = if(type != "regex") FALSE else TRUE)
@@ -20,15 +20,20 @@ getTDS(postcode = NULL, type = "full", squash = if(type != "regex") FALSE else T
 }
 \details{
   \code{getTDS} is a lookup function that queries a dataset of postcodes and Townsend deprivation scores.
-  This dataset was created by joining a dataset of postcodes to a dataset of Townsend deprivation scores, using output area codes.
+  This dataset was created by joining a dataset of postcodes to a dataset of Townsend deprivation scores, via output area codes.
   Both data sets are made available by the Office for National Statistics under the \href{https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/}{Open Government License}.
   The postcode dataset was last updated in February 2019, while the dataset of Townsend deprivation scores uses values obtained from the 2011 UK census (matching the Townsend deprivation score dates used by ClinRisk in the derivation of the QDiabetes-2018 algorithms).
 }
-\value{Townsend Deprivation Score. Where \code{type} is not set to \code{"regex"}, the nature of the value returned is governed by the \code{type} and \code{squash} parameters:
-\itemize{
-  \item When \code{type} is set to \code{"full"}, setting \code{squash} to \code{FALSE} (the default value) will result in an output vector or equal length to the input vector. As each postcode is only associated with a single output area, no further aggregation is required in the associated Townsend deprivation scores. Setting \code{squash} to \code{FALSE} will produce an numeric output of length one, comprising the median Townsend deprivation score from all matched postcodes.
+\value{
+  Townsend Deprivation Score.
+  
+  Where \code{type} is not set to \code{"regex"}, the length and nature of the value returned are governed by the \code{type} and \code{squash} parameters:
+  \itemize{
+    \item When \code{squash} is set to \code{FALSE} (the default value) an output vector will be returned that is of equal length to the input vector. When \code{squash} is set to \code{TRUE} a numeric output of length one will be returned, comprising the median Townsend deprivation score from all matched postcodes.
+    \item As each postcode is only associated with a single output area, when \code{type} is set to \code{"full"} and \code{squash} is set to \code{FALSE} the Townsend deprivation scores returned will be the exact values associated with each linked output area.
+    \item As each postcode prefix or suffix may be associated with multiple output areas, when \code{squash} is set to \code{FALSE} and \code{type} is set to \code{"prefix"} or \code{"suffix"} the median Townsend deprivation score per prefix/suffix will be returned.
+  }
 }
-\code{FALSE}, the default setting for \code{squash}, will result in an output vector of length equal to the input vector, containing median-stratified vales. Setting \code{squash} to \code{FALSE} will result in an output of length equal to one, comprising an overall aggregate median value.}
 \source{
   UK Postcode-to-output-area data were obtained \href{http://geoportal1-ons.opendata.arcgis.com/datasets/postcode-to-output-area-to-lower-layer-super-output-area-to-middle-layer-super-output-area-to-local-authority-district-february-2019-lookup-in-the-uk}{here} from the Office for National Statistics.
   
@@ -51,6 +56,21 @@ getTDS(postcode = c("OX2 6NW", "OX3 7LF"))
 
 ## Case & white space insensitive
 getTDS(postcode = c("OX37LF", "OX3 7LF", "ox37lf", "ox3 7lf"))
+
+## Median Townsend Deprivaton Score per Postcode Prefix ##
+getTDS(postcode = paste0("OX", 1:9), type = "prefix")
+
+## Median Overall Townsend Deprivation Score for a Set of Prefixes ##
+getTDS(postcode = paste0("OX", 1:9), type = "prefix", squash = TRUE)
+
+## Median Townsend Deprivaton Score per Postcode Suffix ##
+getTDS(postcode = paste0(1:9, "AA"), type = "suffix")
+
+## Median Overall Townsend Deprivation Score for a Set of Prefixes ##
+getTDS(postcode = paste0(1:9, "AA"), type = "suffix", squash = TRUE)
+
+## Median Overall Townsend Deprivation Score for Postcodes Matching a Regular Expression ##
+getTDS(postcode = "^OX37[A-Z]{2}$", type = "regex")
 }
 \keyword{postcode}
 \keyword{townsend}

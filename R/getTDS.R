@@ -52,7 +52,7 @@ getTDS <- function(postcode = NULL, type = "full", squash = if(type != "regex") 
     if(any(!grepl("^(([A-Z]{1,2}\\d[A-Z]|[A-Z]{1,2}\\d{1,2}|NPT)\\d[A-Z]{2})$", postcode))) stop("One or more postcodes are not in a recognisable format.")
     dat_tmp <- .dat_oa[match(postcode, .dat_oa$postcode), ]
     if(squash == TRUE){
-      tds <- median(dat_tmp[, "tds"])
+      tds <- stats::median(dat_tmp[, "tds"])
     } else {
       tds <- dat_tmp[, "tds"]
     }
@@ -61,9 +61,9 @@ getTDS <- function(postcode = NULL, type = "full", squash = if(type != "regex") 
     if(any(!grepl("^([A-Z]{1,2}\\d[A-Z]|[A-Z]{1,2}\\d{1,2}|NPT)$", postcode))) stop("One or more postcode prefixes are not in a recognisable format.")
     dat_tmp <- .dat_oa[.dat_oa$post_pre %in% postcode, ]
     if(squash == TRUE){
-      tds <- median(dat_tmp[, "tds"])
+      tds <- stats::median(dat_tmp[, "tds"])
     } else {
-      tds <- with(dat_tmp, tapply(tds, post_pre, median))
+      tds <- with(dat_tmp, tapply(tds, post_pre, stats::median))
       tds <- tds[match(postcode, names(tds))]
       tds <- as.vector(tds)
     }
@@ -72,16 +72,16 @@ getTDS <- function(postcode = NULL, type = "full", squash = if(type != "regex") 
     if(any(!grepl("^\\d[A-Z]{2}$", postcode))) stop("One or more postcode suffixes are not in a recognisable format.")
     dat_tmp <- .dat_oa[.dat_oa$post_suff %in% postcode, ]
     if(squash == TRUE){
-      tds <- median(dat_tmp[, "tds"])
+      tds <- stats::median(dat_tmp[, "tds"])
     } else {
-      tds <- with(dat_tmp, tapply(tds, post_suff, median))
+      tds <- with(dat_tmp, tapply(tds, post_suff, stats::median))
       tds <- tds[match(postcode, names(tds))]
       tds <- as.vector(tds)
     }
   } else {
     # Regex Matching #
     dat_tmp <- .dat_oa[grepl(postcode, .dat_oa$postcode), ]
-    tds <- median(dat_tmp[, "tds"])
+    tds <- stats::median(dat_tmp[, "tds"])
   }
   
   ## Output Checks ##

@@ -5,8 +5,9 @@
 #============#
 
 ### Features ###
-- Add partial postcode matching to getTDS().
 - Add the ability to search by output area to getTDS().
+- Add the ability to specify partial prefixes and suffixes, and to be able to
+  specify both at once in getTDS().
 - Incorporate 2001 UK census data into the .dat_oa data frame, and add a "year"
   parameter to getTDS() to all the specification of the Townsend data year.
 
@@ -24,6 +25,8 @@
   inner London.
 
 ### Unit Tests ###
+- Find out why QDRB() tests related to fpg keep finding a discrepancy at the
+  very bottom of the scale.
 - Add tests to check that the input and output vector lengths match for the
   QDR*() functions.
 - Alter the assessment of the binary variables to use values likely to produce
