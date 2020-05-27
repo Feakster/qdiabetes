@@ -1,0 +1,26 @@
+#============#
+#            #
+#### ToDo ####
+#            #
+#============#
+
+### Features ###
+- Fully vectorise getTDS(). It currently only vectorises over postcodes when
+  type is set to "full".
+- Add the ability to search by output area to getTDS().
+- Add the ability to specify partial prefixes and suffixes, and to be able to
+  specify both at once in getTDS().
+- Incorporate 2001 UK census data into the .dat_oa data frame, and add a "year"
+  parameter to getTDS() to allow the specification of the Townsend data year.
+- Make the error messages and warnings friendlier.
+
+### Vignettes ###
+- Complete the main package vignette.
+- Use aggregated GP data in the vignette to simulate a UK population and produce
+  a risk map that could be added to the vignette.
+- Make a vignette that uses postcode data to produce a map of deprivation in
+  inner London.
+
+### Unit Tests ###
+- Add tests to check that the input and output vector lengths match for the
+  QDR*() functions.

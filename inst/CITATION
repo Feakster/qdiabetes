@@ -1,0 +1,26 @@
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
+url <- meta$URL
+
+bibentry(bibtype = "Manual",
+         title = "{QDiabetes}: A package to calculate risk of type 2 diabetes",
+         author = c(person(c("Benjamin", "G."), "Feakins"),
+                    person(c("Sarah", "L."), "Lay-Flurrie"),
+                    person(c("Richard", "J."), "Stevens"),
+                    person("Trish", "Greenhalgh"),
+                    person(c("Tim", "A."), "Holt"),
+                    person("Evangelos", "Kontopantelis"),
+                    person(c("Dianna", "M."), "Smith"),
+                    person(c("Bernard", "C."), "Gudgin")),
+         year = year,
+         note = note,
+         url = url,
+         header = "To cite QDiabetes in publications use:",
+         key = "QDiabetes-package",
+
+         textVersion = paste("Benjamin G. Feakins, Sarah L. Lay-Flurrie, Richard J. Stevens, Trish Greenhalgh, Tim A. Holt, Evangelos Kontopantelis, Dianna M. Smith and Bernard C. Gudgin",
+                             paste0("(", year, ")."),
+                             "QDiabetes: A package to calculate risk of type 2 diabetes.",
+                             paste0(note, ", "),
+                             paste("URL", url))
+)

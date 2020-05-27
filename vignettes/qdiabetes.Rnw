@@ -1,0 +1,328 @@
+% !Rnw weave = Sweave
+
+%==================================%
+%                                  %
+%%%% QDIABETES PACKAGE VIGNETTE %%%%
+%                                  %
+%==================================%
+
+%%% Notes %%%
+% - 3D plot of the boundary space of height (x) & weight (y), and their effect on risk surface (z).
+
+%%% Meta-Data %%%
+%\VignetteIndexEntry{QDiabetes-package}
+%\VignetteKeyword{QDiabetes}
+%\SweaveUTF8
+
+%%% Document Class %%%
+\documentclass[9pt,a4paper]{article}
+
+%%% Load Packages %%%
+\usepackage{Sweave} % Weave R code into LaTeX.
+\usepackage[margin=2.5cm]{geometry} % 2.5cm margins all around.
+\usepackage[utf8]{inputenc} % Input encoding.
+\usepackage[T1]{fontenc} % Allows more complex characters.
+\usepackage{microtype} % Better use of white space.
+\usepackage[british]{babel} % Better hyphenation.
+%\usepackage{parskip} % Removes indenting at the beginning of paragraphs.
+\usepackage[dvipsnames]{xcolor} % More colours.
+\usepackage[colorlinks=true,allcolors=MidnightBlue]{hyperref} % Coloured hyperlinks.
+\usepackage[numbers,square,comma]{natbib} % Better citations.
+\usepackage{doi} % Hyperlink DOIs.
+\usepackage{textcomp} % "Registered" symbol.
+
+%%% Customisations %%%
+%% Font Family Settings %%
+\renewcommand\familydefault{\sfdefault} % Alter default font family to sans serif.
+%% Set URL Style %%
+\urlstyle{same} % Non-monospace font.
+%% Citation Style %%
+\bibliographystyle{unsrtnat} % Unsorted: bibliography follows order of text citations.
+
+%%% Set Up Title Page %%%
+\title{QDiabetes Package Vignette}
+\author{Benjamin G Feakins}
+\date{}
+
+%%% Begin Document %%%
+\begin{document}
+\SweaveOpts{concordance = T, keep.source = T} % RStudio thing.
+
+\maketitle
+
+<<setup, echo = F>>=
+library(QDiabetes)
+@
+
+\section*{Introduction}
+
+The QDiabetes package is an R implementation of the QDiabetes risk prediction algorithms of ClinRisk. Initially, this comprises QDiabetes-2013 and QDiabetes-2018.
+
+\subsection*{QDiabetes-2013}
+
+The QDiabetes-2013 algorithm consists of two separate risk prediction models (one per gender), in which the following 11 variables are used to calculate risk:
+
+\begin{itemize}
+    \item \textbf{Gender} [\texttt{sex}]
+    \item \textbf{Age} [\texttt{age}], in years
+    \item \textbf{Body mass index} [\texttt{bmi}], in kg/m\textsuperscript{2}
+    \item \textbf{Ethnicity} [\texttt{ethn}], nine categories:
+        \begin{itemize}
+            \item White or not stated
+            \item Indian
+            \item Pakistani
+            \item Bangladeshi
+            \item Black Caribbean
+            \item Black African
+            \item Chinese
+            \item Other Asian
+            \item Other ethnic group
+        \end{itemize}
+    \item \textbf{Smoking status} [\texttt{smoke}], five levels:
+        \begin{itemize}
+            \item Non-smoker
+            \item Ex-smoker
+            \item Light smoker (1--9/day)
+            \item Moderate smoker (10--19/day)
+            \item Heavy smoker ($\ge$20/day)
+        \end{itemize}
+    \item \textbf{Deprivation} [\texttt{tds}], as measured by Townsend scores, where higher values indicate higher levels of deprivation
+    \item \textbf{Family history of diabetes in first degree relative} [\texttt{fhdm}]
+    \item \textbf{History of treated hypertension} [\texttt{htn}], being diagnosis of hypertension and treatment with at least one hypertensive drug
+    \item \textbf{History of cardiovascular disease} [\texttt{cvd}], defined as: ischaemic heart disease, stroke, or transient ischaemic attack
+    \item \textbf{History of use of corticosteroids} [\texttt{ster}] listed in British National Formulary chapter 6.3.2, including oral or injections of systemic: prednisolone, betamethasone, cortisone, depo-medrone, dexamethasone, deflazacort, efcortesol, hydrocortisone, methylprednisolone, or triamcinolone
+    \item \textbf{Survival time} [\texttt{surv}], being the time period over which risk of developing type-2 diabetes is to be calculated.
+\end{itemize}
+
+The QDiabetes-2013 algorithm is implemented within the \texttt{QDR2013()} function of the QDiabetes package.
+
+\subsection*{QDiabetes-2018}
+
+The QDiabetes-2018 algorithm consists of six separate risk prediction models; three variants (A, B and C) per gender (male and female).
+
+\subsubsection*{Model A}
+
+The basic (core) model, `model A', uses the same risk predictors as QDiabetes-2013, with the omission of the \textbf{Survival time} variable (in favour of a fixed 10-year survival window), and the addition of the following 6 variables:
+
+\begin{itemize}
+    \item \textit{\textbf{History of gestational diabetes}} [\texttt{gdm}] (women only)
+    \item \textit{\textbf{History of polycystic ovary syndrome}} [\texttt{pcos}] (women only)
+    \item \textbf{History of learning disabilities} [\texttt{learn}]
+    \item \textbf{History of schizophrenia or bipolar affective disorder} [\texttt{psy}]
+    \item \textbf{History of use of statins} [\texttt{stat}]
+    \item \textbf{History of use of second generation} ``atypical'' antipsychotics [\texttt{apsy}], including: amisulpride, aripiprazole, clozapine, lurasidone, olanzapine, paliperidone, quetiapine, risperidone, sertindole, and zotepine
+\end{itemize}
+
+Model A of the QDiabetes-2018 algorithm is implemented within the \texttt{QDR2018A()} function of the QDiabetes package.
+
+\subsubsection*{Model B}
+
+% Blah!
+
+\subsubsection*{Model C}
+
+% Blah!
+
+% Each of these variants may be invoked directly via the \texttt{QDR2018A()}, \texttt{QDR2018B()} and \texttt{QDR2018C()} functions. For convenience, I have added the ability to specify body mass index or height and weight. Note, many of the default values of these algorithms assume the absence of comorbidities and concomittant pharmacotherapies. Hence, although you will be able to get an output from the \texttt{QDR2018A()} function with the specification of only \texttt{sex}, \texttt{age} and \texttt{bmi}, this will likely underestimate the risk unless you accurately specify the other parameters of the function.
+
+\section*{Ad hoc usage}
+
+<<>>=
+QDR2018A(sex = "Female", age = 65, ht = 1.65, wt = 70)
+QDR2018A(sex = "Male", age = 54, bmi = 35)
+@
+
+\section*{Data frame usage}
+
+Load the sample data:
+
+<<>>=
+data(dat_qdr)
+@
+
+For R's standard \textit{data.frame}:
+
+<<>>=
+dat_qdr[["risk"]] <- with(dat_qdr, QDR2018A(sex = sex, age = age, bmi = bmi))
+@
+
+Or with \textit{data.table}:
+
+<<echo = T, eval = F>>=
+library(data.table)
+dt_qdr <- as.data.table(dat_qdr)
+dt_qdr[, risk := QDR2018A(sex = sex, age = age, bmi = bmi)]
+head(dt_qdr[, .(sex, age, bmi, risk)])
+@
+<<echo = F, eval = F>>=
+library(data.table)
+dt_qdr <- invisible(as.data.table(dat_qdr))
+dt_qdr[, risk := QDR2018A(sex = sex, age = age, bmi = bmi)]
+head(dt_qdr[, .(sex, age, bmi, risk)])
+@
+
+Or with \textit{dplyr}:
+
+<<message = F>>=
+library(dplyr)
+df_qdr <- as_tibble(dat_qdr)
+df_qdr <- df_qdr %>%
+  mutate(risk = QDR2018A(sex = sex, age = age, bmi = bmi))
+df_qdr %>%
+  select(sex, age, bmi, risk) %>%
+  head()
+@
+
+\section*{Using specific variants of the algorithm}
+
+<<>>=
+# QDiabetes-2013
+dat_qdr[["qdr2013"]] <- with(dat_qdr, QDR2013(sex = sex,
+                                              age = age,
+                                              bmi = bmi))
+
+# QDiabetes-2018 "A" Variant
+dat_qdr[["qdr2018a"]] <- with(dat_qdr, QDR2018A(sex = sex,
+                                                age = age,
+                                                bmi = bmi))
+# QDiabetes-2018 "B" Variant
+dat_qdr[["qdr2018b"]] <- with(dat_qdr, QDR2018B(sex = sex,
+                                                age = age,
+                                                bmi = bmi,
+                                                fpg = fpg))
+# QDiabetes-2018 "C" Variant
+dat_qdr[["qdr2018c"]] <- with(dat_qdr, QDR2018C(sex = sex,
+                                                age = age,
+                                                bmi = bmi,
+                                                hba1c = hba1c))
+
+# Output
+head(dat_qdr[, c("sex", "age", "bmi", "fpg", "hba1c",
+                 grep("^qdr", names(dat_qdr), value = T))])
+@
+
+\section*{Visualising risk in QDiabetes}
+
+\subsection*{Visualising the impact of height and weight}
+
+Change in risk associated with changes in height and weight.
+
+<<fig = T>>=
+## Libraries
+library(lattice)
+
+## Simulate Data Ranges
+df <- expand.grid(ht = seq(1.4, 2.1, length.out = 15),
+                  wt = seq(40, 180, length.out = 15),
+                  KEEP.OUT.ATTRS = F)
+
+## Estimate Risk
+suppressWarnings({
+  df[["risk"]] <- with(df,  QDR2018A(sex = "Male",
+                                     age = 65,
+                                     ht = ht,
+                                     wt = wt))
+})
+
+## Colour Palette
+pal <- hsv(0.6, seq(0, 1, length.out = 1e3), 1)
+
+## 3D Wireframe Surface Plot
+wireframe(risk ~ ht*wt, data = df,
+          drape = T, colorkey = T, col.regions = pal,
+          xlab = list(label = "Height\n(m)", cex = 0.8),
+          ylab = list(label = "Weight\n(kg)", cex = 0.8),
+          zlab = list(label = "Risk\n(%)", cex = 0.8),
+          scales = list(arrows = F, cex = 0.8))
+
+@
+
+\subsection*{Visualising age interactions}
+
+Change in risk associated with changes in age and BMI.
+
+<<fig = T>>=
+## Libraries
+library(lattice)
+
+## Simulate Data Ranges
+df <- expand.grid(age = seq(25, 84.99, length.out = 15),
+                  bmi = seq(20, 40, length.out = 15),
+                  KEEP.OUT.ATTRS = F)
+
+## Estimate Risk
+df[["risk"]] <- with(df,  QDR2018A(sex = "Male",
+                                   age = age,
+                                   bmi = bmi))
+
+## Colour Palette
+pal <- hsv(0.6, seq(0, 1, length.out = 1e3), 1)
+
+## 3D Wireframe Plot
+wireframe(risk ~ age*bmi, data = df,
+          drape = T, colorkey = T, col.regions = pal,
+          xlab = list(label = "Age\n(years)", cex = 0.8),
+          ylab = list(label = paste0("BMI\n(kg/m", "\u00B2", ")"), cex = 0.8),
+          zlab = list(label = "Risk\n(%)", cex = 0.8),
+          scales = list(arrows = F, cex = 0.8))
+@
+
+Change in risk associated with changes in age and FPG.
+
+<<fig = T>>=
+## Libraries
+library(lattice)
+
+## Simulate Data Ranges
+df <- expand.grid(age = seq(25, 84.99, length.out = 15),
+                  fpg = seq(2, 6.99, length.out = 15),
+                  KEEP.OUT.ATTRS = F)
+
+## Estimate Risk
+df[["risk"]] <- with(df,  QDR2018B(sex = "Male",
+                                   age = age,
+                                   bmi = 30,
+                                   fpg = fpg))
+
+## Colour Palette
+pal <- hsv(0.6, seq(0, 1, length.out = 1e3), 1)
+
+## 3D Wireframe Plot
+wireframe(risk ~ age*fpg, data = df,
+          drape = T, colorkey = T, col.regions = pal,
+          xlab = list(label = "Age\n(years)", cex = 0.8),
+          ylab = list(label = "FPG\n(mmol/L)", cex = 0.8),
+          zlab = list(label = "Risk\n(%)", cex = 0.8),
+          scales = list(arrows = F, cex = 0.8))
+@
+
+Change in risk associated with changes in age and HbA\textsubscript{1c}.
+
+<<fig = T>>=
+## Libraries
+library(lattice)
+
+## Simulate Data Ranges
+df <- expand.grid(age = seq(25, 84.99, length.out = 15),
+                  hba1c = seq(15, 47.99, length.out = 15),
+                  KEEP.OUT.ATTRS = F)
+
+## Estimate Risk
+df[["risk"]] <- with(df,  QDR2018C(sex = "Male",
+                                   age = age,
+                                   bmi = 30,
+                                   hba1c = hba1c))
+
+## Colour Palette
+pal <- hsv(0.6, seq(0, 1, length.out = 1e3), 1)
+
+## 3D Wireframe Plot
+wireframe(risk ~ age*hba1c, data = df,
+          drape = T, colorkey = T, col.regions = pal,
+          xlab = list(label = "Age\n(years)", cex = 0.8),
+          ylab = list(label = "HbA1c\n(mmol/mol)", cex = 0.8),
+          zlab = list(label = "Risk\n(%)", cex = 0.8),
+          scales = list(arrows = F, cex = 0.8))
+@
+
+\end{document}

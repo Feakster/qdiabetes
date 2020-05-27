@@ -1,0 +1,16 @@
+^\.git/
+^\.gitignore$
+^\.travis\.yml$
+^.*\.Rproj$
+^\.Rproj\.user$
+^data-raw/
+^LICENSE\.md$
+^man/figures/
+^README\.html$
+^README\.md$
+^ToDo$
+^vignettes/
+^vignettes/.*\.aux$
+^vignettes/.*\.log$
+^vignettes/.*\.tex$
+^vignettes/.*\.pdf$

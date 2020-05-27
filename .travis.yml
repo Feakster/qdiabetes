@@ -1,0 +1,16 @@
+os: linux
+dist: bionic
+language: r
+cache: packages
+
+branches:
+  only:
+    - "master"
+
+r:
+  - oldrel
+  - release
+  - devel
+
+repos:
+  CRAN: https://cloud.r-project.org
