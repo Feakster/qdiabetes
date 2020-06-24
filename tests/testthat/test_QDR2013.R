@@ -60,24 +60,24 @@ dat_test[, c("risk_min", "risk_max")] <- NULL
 ## Gender ##
 expect_error(rQDR2013(age = 60),
              regexp = "sex & age must be specified",
-             label = "QDR2013-Female [is.null(sex)]")
+             label = "QDR2013-Female [missing(sex)]")
 
 ## Age ##
 expect_error(gQDR2013(),
              regexp = "sex & age must be specified",
-             label = "QDR2013-Female [is.null(age)]")
+             label = "QDR2013-Female [missing(age)]")
 
 ## BMI, Height & Weight ##
 tQDR2013 <- function(...){gQDR2013(age = 60, ...)}
 expect_error(tQDR2013(ht = 1.83),
-             regexp = "either bmi or ht & wt must be specified",
-             label = "QDR2013-Female [is.null(bmi) & is.null(wt)]")
+             regexp = "Either bmi or ht & wt must be specified",
+             label = "QDR2013-Female [missing(bmi) & missing(wt)]")
 expect_error(tQDR2013(wt = 90),
-             regexp = "either bmi or ht & wt must be specified",
-             label = "QDR2013-Female [is.null(bmi) & is.null(ht)]")
-expect_warning(tQDR2013(bmi = 30, ht = 1.83, wt = 90),
-               regexp = "bmi, ht & wt all specified, ht & wt ignored",
-               label = "QDR2013-Female [!is.null(bmi) & !is.null(ht) & !is.null(wt)]")
+             regexp = "Either bmi or ht & wt must be specified",
+             label = "QDR2013-Female [missing(bmi) & missing(ht)]")
+expect_error(tQDR2013(bmi = 30, ht = 1.83, wt = 90),
+             regexp = "Either bmi or ht & wt must be specified",
+             label = "QDR2013-Female [!missing(bmi) & !missing(ht) & !missing(wt)]")
 rm(tQDR2013)
 
 ### Boundaries ###
@@ -137,6 +137,9 @@ expect_error(tQDR2013(tds = 11 + tiny),
              label = "QDR2013-Female [tds > 11]")
 rm(tQDR2013)
 
+### Tidy Up ###
+rm(gQDR2013)
+
 ############
 ### Male ###
 ############
@@ -175,24 +178,24 @@ dat_test[, c("risk_min", "risk_max")] <- NULL
 ## Gender ##
 expect_error(rQDR2013(age = 60),
              regexp = "sex & age must be specified",
-             label = "QDR2013-Male [is.null(sex)]")
+             label = "QDR2013-Male [missing(sex)]")
 
 ## Age ##
 expect_error(gQDR2013(),
              regexp = "sex & age must be specified",
-             label = "QDR2013-Male [is.null(age)]")
+             label = "QDR2013-Male [missing(age)]")
 
 ## BMI, Height & Weight ##
 tQDR2013 <- function(...){gQDR2013(age = 60, ...)}
 expect_error(tQDR2013(ht = 1.83),
-             regexp = "either bmi or ht & wt must be specified",
-             label = "QDR2013-Male [is.null(bmi) & is.null(wt)]")
+             regexp = "Either bmi or ht & wt must be specified",
+             label = "QDR2013-Male [missing(bmi) & missing(wt)]")
 expect_error(tQDR2013(wt = 90),
-             regexp = "either bmi or ht & wt must be specified",
-             label = "QDR2013-Male [is.null(bmi) & is.null(ht)]")
-expect_warning(tQDR2013(bmi = 30, ht = 1.83, wt = 90),
-               regexp = "bmi, ht & wt all specified, ht & wt ignored",
-               label = "QDR2013-Male [!is.null(bmi) & !is.null(ht) & !is.null(wt)]")
+             regexp = "Either bmi or ht & wt must be specified",
+             label = "QDR2013-Male [missing(bmi) & missing(ht)]")
+expect_error(tQDR2013(bmi = 30, ht = 1.83, wt = 90),
+             regexp = "Either bmi or ht & wt must be specified",
+             label = "QDR2013-Male [!missing(bmi) & !missing(ht) & !missing(wt)]")
 rm(tQDR2013)
 
 ### Boundaries ###
@@ -251,3 +254,12 @@ expect_error(tQDR2013(tds = 11 + tiny),
              regexp = "all\\(tds >= -7 & tds <= 11) is not TRUE",
              label = "QDR2013-Male [tds > 11]")
 rm(tQDR2013)
+
+### Tidy Up ###
+rm(gQDR2013)
+
+###############
+### Tidy Up ###
+###############
+
+rm(tol, tiny, dat_test, rQDR2013)

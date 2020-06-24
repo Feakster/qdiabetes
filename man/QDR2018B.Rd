@@ -7,10 +7,9 @@
   This variant includes all risk predictors present in the A-variant, with the addition of fasting plasma glucose.
 }
 \usage{
-QDR2018B(sex = NULL, age = NULL, bmi = NULL, ht = NULL, wt = NULL, fpg = NULL,
-         ethn = "WhiteNA", smoke = "Non", tds = 0, fhdm = FALSE, htn = FALSE,
-         cvd = FALSE, gdm = FALSE, pcos = FALSE, learn = FALSE, psy = FALSE,
-         ster = FALSE, stat = FALSE, apsy = FALSE)
+QDR2018B(sex, age, bmi, ht, wt, fpg, ethn = "WhiteNA", smoke = "Non", tds = 0,
+         fhdm = FALSE, htn = FALSE, cvd = FALSE, gdm = FALSE, pcos = FALSE,
+         learn = FALSE, psy = FALSE, ster = FALSE, stat = FALSE, apsy = FALSE)
 }
 \arguments{
   \item{sex}{Gender. Must be \code{"Male"} or \code{"Female"}.}

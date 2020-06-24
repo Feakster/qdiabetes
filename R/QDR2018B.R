@@ -48,29 +48,28 @@
 # - tds >= -8 & tds <= 14
 
 ### Function ###
-QDR2018B <- function(sex = NULL, age = NULL,
-                     bmi = NULL, ht = NULL, wt = NULL, fpg = NULL,
+QDR2018B <- function(sex, age,
+                     bmi, ht, wt, fpg,
                      ethn = "WhiteNA", smoke = "Non", tds = 0,
                      fhdm = FALSE,
                      htn = FALSE, cvd = FALSE, gdm = FALSE, pcos = FALSE,
                      learn = FALSE, psy = FALSE,
                      ster = FALSE, stat = FALSE, apsy = FALSE){
   ## Stop Conditions ##
-  if(any(is.null(sex), is.null(age), is.null(fpg))) stop("sex, age & fpg must be specified")
-  if(is.null(bmi) & any(is.null(ht), is.null(wt))) stop("either bmi or ht & wt must be specified")
   inputs <- as.list(sys.frame(sys.nframe()))
   inputs_length <- lengths(inputs)
   n <- max(inputs_length)
-  stopifnot(all(inputs_length %in% c(0:1, n)))
+  stopifnot(all(inputs_length %in% c(1, n)))
+  if(any(missing(sex), missing(age), missing(fpg))) stop("sex, age & fpg must be specified")
+  if(missing(bmi) & any(missing(ht), missing(wt))) stop("Either bmi or ht & wt must be specified")
+  if(!missing(bmi) & any(!missing(ht), !missing(wt))) stop("Either bmi or ht & wt must be specified")
   stopifnot(all(sex %in% c("Female", "Male")))
   stopifnot(all(ethn %in% c("WhiteNA", "Indian", "Pakistani", "Bangladeshi", "OtherAsian", "BlackCaribbean", "BlackAfrican", "Chinese", "Other")))
   stopifnot(all(smoke %in% c("Non", "Ex", "Light", "Moderate", "Heavy")))
   stopifnot(all(age >= 25 & age < 85))
-  stopifnot(all(ht >= 1.4 & ht <= 2.1))
-  stopifnot(all(wt >= 40 & wt <= 180))
   stopifnot(all(fpg >= 2 & fpg < 7))
   stopifnot(all(tds >= -8 & tds <= 14))
-  if(any(sex == "Male" & (pcos | gdm))) stop("'pcos' and 'gdm' must be set to FALSE for male 'sex'")
+  if(any(sex == "Male" & (pcos | gdm))) stop("pcos and gdm must be set to FALSE for male sex")
   stopifnot(all(fhdm %in% c(FALSE, TRUE)))
   stopifnot(all(htn %in% c(FALSE, TRUE)))
   stopifnot(all(cvd %in% c(FALSE, TRUE)))
@@ -83,10 +82,11 @@ QDR2018B <- function(sex = NULL, age = NULL,
   stopifnot(all(apsy %in% c(FALSE, TRUE)))
   
   ## BMI Pre-Processing ##
-  if(all(!is.null(bmi), !is.null(ht), !is.null(wt))){
-    warning("bmi, ht & wt all specified, ht & wt ignored", call. = FALSE)
-    bmi[is.na(bmi)] <- wt/ht^2
-  } else if(is.null(bmi)) bmi <- wt/ht^2
+  if(!missing(ht) & !missing(wt)){
+    stopifnot(all(ht >= 1.4 & ht <= 2.1))
+    stopifnot(all(wt >= 40 & wt <= 180))
+    bmi <- wt/ht^2
+  }
   stopifnot(all(bmi >= 40/2.1^2 & bmi <= 180/1.4^2))
   if(any(bmi < 20)){
     warning("bmi < 20. Setting bmi == 20", call. = FALSE)

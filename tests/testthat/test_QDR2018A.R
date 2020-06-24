@@ -66,34 +66,34 @@ dat_test[, c("risk_min", "risk_max")] <- NULL
 ## Gender ##
 expect_error(rQDR2018A(age = 60),
              regexp = "sex & age must be specified",
-             label = "QDR2018A-Female [is.null(sex)]")
+             label = "QDR2018A-Female [missing(sex)]")
 
 ## Age ##
 expect_error(gQDR2018A(),
              regexp = "sex & age must be specified",
-             label = "QDR2018A-Female [is.null(age)]")
+             label = "QDR2018A-Female [missing(age)]")
 
 ## BMI, Height & Weight ##
 tQDR2018A <- function(...){gQDR2018A(age = 60, ...)}
 expect_error(tQDR2018A(ht = 1.83),
-             regexp = "either bmi or ht & wt must be specified",
-             label = "QDR2018A-Female [is.null(bmi) & is.null(wt)]")
+             regexp = "Either bmi or ht & wt must be specified",
+             label = "QDR2018A-Female [missing(bmi) & missing(wt)]")
 expect_error(tQDR2018A(wt = 90),
-             regexp = "either bmi or ht & wt must be specified",
-             label = "QDR2018A-Female [is.null(bmi) & is.null(ht)]")
-expect_warning(tQDR2018A(bmi = 30, ht = 1.83, wt = 90),
-               regexp = "bmi, ht & wt all specified, ht & wt ignored",
-               label = "QDR2018A-Female [!is.null(bmi) & !is.null(ht) & !is.null(wt)]")
+             regexp = "Either bmi or ht & wt must be specified",
+             label = "QDR2018A-Female [missing(bmi) & missing(ht)]")
+expect_error(tQDR2018A(bmi = 30, ht = 1.83, wt = 90),
+             regexp = "Either bmi or ht & wt must be specified",
+             label = "QDR2018A-Female [!missing(bmi) & !missing(ht) & !missing(wt)]")
 rm(tQDR2018A)
 
 ## FPG & HbA1c ##
 tQDR2018A <- function(...){gQDR2018A(age = 60, ht = 1.83, wt = 90, ...)}
 expect_error(tQDR2018A(fpg = 4.5),
              regexp = "unused argument",
-             label = "QDR2018A-Female [!is.null(fpg)]")
+             label = "QDR2018A-Female [!missing(fpg)]")
 expect_error(tQDR2018A(hba1c = 31.5),
              regexp = "unused argument",
-             label = "QDR2018A-Female [!is.nulll(hba1c)]")
+             label = "QDR2018A-Female [!missingl(hba1c)]")
 rm(tQDR2018A)
 
 ### Boundaries ###
@@ -233,43 +233,43 @@ dat_test[, c("risk_min", "risk_max")] <- NULL
 ## Gender ##
 expect_error(rQDR2018A(age = 60),
              regexp = "sex & age must be specified",
-             label = "QDR2018A-Male [is.null(sex)]")
+             label = "QDR2018A-Male [missing(sex)]")
 
 ## Age ##
 expect_error(gQDR2018A(),
              regexp = "sex & age must be specified",
-             label = "QDR2018A-Male [is.null(age)]")
+             label = "QDR2018A-Male [missing(age)]")
 
 ## BMI, Height & Weight ##
 tQDR2018A <- function(...){gQDR2018A(age = 60, ...)}
 expect_error(tQDR2018A(ht = 1.83),
-             regexp = "either bmi or ht & wt must be specified",
-             label = "QDR2018A-Male [is.null(bmi) & is.null(wt)]")
+             regexp = "Either bmi or ht & wt must be specified",
+             label = "QDR2018A-Male [missing(bmi) & missing(wt)]")
 expect_error(tQDR2018A(wt = 90),
-             regexp = "either bmi or ht & wt must be specified",
-             label = "QDR2018A-Male [is.null(bmi) & is.null(ht)]")
-expect_warning(tQDR2018A(bmi = 30, ht = 1.83, wt = 90),
-               regexp = "bmi, ht & wt all specified, ht & wt ignored",
-               label = "QDR2018A-Male [!is.null(bmi) & !is.null(ht) & !is.null(wt)]")
+             regexp = "Either bmi or ht & wt must be specified",
+             label = "QDR2018A-Male [missing(bmi) & missing(ht)]")
+expect_error(tQDR2018A(bmi = 30, ht = 1.83, wt = 90),
+             regexp = "Either bmi or ht & wt must be specified",
+             label = "QDR2018A-Male [!missing(bmi) & !missing(ht) & !missing(wt)]")
 rm(tQDR2018A)
 
 ## FPG & HbA1c ##
 tQDR2018A <- function(...){gQDR2018A(age = 60, ht = 1.83, wt = 90, ...)}
 expect_error(tQDR2018A(fpg = 4.5),
              regexp = "unused argument",
-             label = "QDR2018A-Male [!is.null(fpg)]")
+             label = "QDR2018A-Male [!missing(fpg)]")
 expect_error(tQDR2018A(hba1c = 31.5),
              regexp = "unused argument",
-             label = "QDR2018A-Male [!is.null(hba1c)]")
+             label = "QDR2018A-Male [!missing(hba1c)]")
 rm(tQDR2018A)
 
 ## Gestational Diabetes & PCOS ##
 tQDR2018A <- function(...){gQDR2018A(age = 60, ht = 1.83, wt = 90, ...)}
 expect_error(tQDR2018A(gdm = T),
-             regexp = "'pcos' and 'gdm' must be set to FALSE for male 'sex'",
+             regexp = "pcos and gdm must be set to FALSE for male sex",
              label = "QDR2018A-Male [gdm = T]")
 expect_error(tQDR2018A(pcos = T),
-             regexp = "'pcos' and 'gdm' must be set to FALSE for male 'sex'",
+             regexp = "pcos and gdm must be set to FALSE for male sex",
              label = "QDR2018A-Male [pcos = T]")
 rm(tQDR2018A)
 

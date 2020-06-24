@@ -6,9 +6,8 @@
   Calculate the risk of developing type 2 diabetes, using the QDiabetes-2013 algorithm.
 }
 \usage{
-QDR2013(sex = NULL, age = NULL, bmi = NULL, ht = NULL, wt = NULL,
-        ethn = "WhiteNA", smoke = "Non", tds = 0, fhdm = FALSE, htn = FALSE,
-        cvd = FALSE, ster = FALSE, surv = 10L)
+QDR2013(sex, age, bmi, ht, wt, ethn = "WhiteNA", smoke = "Non", tds = 0,
+        fhdm = FALSE, htn = FALSE, cvd = FALSE, ster = FALSE, surv = 10L)
 }
 \arguments{
   \item{sex}{Gender. Must be \code{"Male"} or \code{"Female"}.}

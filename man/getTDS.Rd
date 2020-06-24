@@ -5,7 +5,7 @@
   Convenient function to look up Townsend deprivation scores using UK postcodes, postcode prefixes, postcode suffixes or a regular expression.
 }
 \usage{
-getTDS(postcode = NULL, type = "full", squash = ifelse(type != "regex", FALSE, TRUE))
+getTDS(postcode, type = "full", squash = ifelse(type != "regex", FALSE, TRUE))
 }
 \arguments{
   \item{postcode}{A vector of UK postcodes, postcode prefixes, postcode suffixes, or a regular expression.}

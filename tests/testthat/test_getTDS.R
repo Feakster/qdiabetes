@@ -7,15 +7,6 @@
 # ### Comparator Data ###
 dat_oa <- QDiabetes:::.dat_oa
 
-# pc_known <- c("OX26GG", "OX26NW", "OX37LF", "OX26PN", "OX14AR")
-# tds <- dat_oa[match(pc_known, dat_oa$postcode), "tds"]
-# names(tds) <- dat_oa[match(pc_known, dat_oa$postcode), "postcode"]
-# 
-# pc_full <- gsub("(\\w{3})$", " \\1", pc_known)
-# pc_pre <- gsub("\\w{3}$", "", pc_known)
-# m <- regexpr("\\w{3}$", pc_known)
-# pc_suff <- regmatches(pc_known, m); rm(m)
-
 ### Input Classes ###
 expect_error(getTDS(),
              regexp = "One or more values must be specified",

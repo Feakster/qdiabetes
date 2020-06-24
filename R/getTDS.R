@@ -24,9 +24,9 @@
 # pc_regex <- paste0("^(", "(", lon_pre, "|", gen_pre, "|", npt_pre, ")", gen_suff, ")$")
 
 ### Function ###
-getTDS <- function(postcode = NULL, type = "full", squash = ifelse(type != "regex", FALSE, TRUE)){
+getTDS <- function(postcode, type = "full", squash = ifelse(type != "regex", FALSE, TRUE)){
   ## Stop Conditions & Warnings ##
-  if(is.null(postcode)) stop("One or more values must be specified.")
+  if(missing(postcode)) stop("One or more values must be specified.")
   stopifnot(type %in% c("full", "prefix", "suffix", "regex"))
   stopifnot(is.logical(squash))
   stopifnot(is.character(postcode))

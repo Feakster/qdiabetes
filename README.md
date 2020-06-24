@@ -204,7 +204,7 @@ dt_qdr[, risk := QDR2013(sex = sex,
 
 See [Issues](https://github.com/Feakster/qdiabetes/issues) on the QDiabetes GitHub repository.
 
-## Similar Packages
+## Similar packages
 
 * [QRISK3](https://github.com/YanLiUK/QRISK3): An R implementation of ClinRisk&rsquo;s [QRISK3](https://www.qrisk.org/three/) risk prediction algorithms.
 

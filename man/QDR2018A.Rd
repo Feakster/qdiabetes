@@ -7,10 +7,9 @@
   This variant does not use fasting plasma glucose or glycated haemoglobin A1c.
 }
 \usage{
-QDR2018A(sex = NULL, age = NULL, bmi = NULL, ht = NULL, wt = NULL,
-         ethn = "WhiteNA", smoke = "Non", tds = 0, fhdm = FALSE, htn = FALSE,
-         cvd = FALSE, gdm = FALSE, pcos = FALSE, learn = FALSE, psy = FALSE,
-         ster = FALSE, stat = FALSE, apsy = FALSE)
+QDR2018A(sex, age, bmi, ht, wt, ethn = "WhiteNA", smoke = "Non", tds = 0,
+         fhdm = FALSE, htn = FALSE, cvd = FALSE, gdm = FALSE, pcos = FALSE,
+         learn = FALSE, psy = FALSE, ster = FALSE, stat = FALSE, apsy = FALSE)
 }
 \arguments{
   \item{sex}{Gender. Must be \code{"Male"} or \code{"Female"}.}
