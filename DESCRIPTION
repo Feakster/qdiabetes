@@ -1,6 +1,6 @@
 Package: QDiabetes
 Version: 1.0.0
-Date: 2020-06-24
+Date: 2020-08-04
 Title: Type 2 Diabetes Risk Calculator
 Authors@R: c(
   person(c("Benjamin", "G."), "Feakins", role = c("aut", "cre"), email = "benjamin.feakins@ndph.ox.ac.uk", comment = c(ORCID = "0000-0002-3928-6750")),
@@ -17,7 +17,7 @@ Authors@R: c(
 Description: This package calculates the risk of developing type 2 diabetes. It is based on the QDiabetes-2013 <https://svn.clinrisk.co.uk/opensource/qdiabetes/standard/> and QDiabetes-2018 <https://qdiabetes.org/src.php> risk prediction algorithms derived by ClinRisk.
 Depends: R (>= 2.10)
 Imports: stats
-Suggests: data.table, graphics, testthat, utils
+Suggests: data.table, graphics, tinytest, utils
 License: AGPL-3 + file LICENSE
 Copyrights: University of Oxford + file inst/COPYRIGHTS
 URL: https://github.com/Feakster/qdiabetes

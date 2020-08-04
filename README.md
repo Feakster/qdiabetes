@@ -4,7 +4,7 @@
 [![license](https://img.shields.io/badge/license-AGPL--3-blue)](https://choosealicense.com/licenses/agpl-3.0/)
 [![platform-support](https://img.shields.io/badge/R-%3E%3D2.10-blue)](https://www.r-project.org/)
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
-[![build-status](https://travis-ci.com/Feakster/qdiabetes.svg?token=7gffbys6D7wFuF15Hyqi&branch=master)](https://travis-ci.com/Feakster/qdiabetes)
+[![github-workflow](https://github.com/Feakster/qdiabetes/workflows/R-CMD-check/badge.svg)](https://github.com/Feakster/qdiabetes/actions)
 <!--[![CRANstatus](https://www.r-pkg.org/badges/version/qdiabetes)](https://cran.r-project.org/package=qdiabetes)-->
 <!--[![CRANdownloads](https://cranlogs.r-pkg.org/badges/grand-total/qdiabetes)](https://cran.r-project.org/package=qdiabetes)-->
 

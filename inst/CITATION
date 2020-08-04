@@ -22,5 +22,5 @@ bibentry(bibtype = "Manual",
                              paste0("(", year, ")."),
                              "QDiabetes: A package to calculate risk of type 2 diabetes.",
                              paste0(note, ", "),
-                             paste("URL", url))
+                             url)
 )
