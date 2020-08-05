@@ -98,8 +98,8 @@ install.packages("QDiabetes")
 Alternatively, the development version may be installed from [GitHub](https://github.com/Feakster/qdiabetes) with:
 
 ```r
-if (!{"devtools" %in% installed.packages()}) install.packages("devtools")
-devtools::install_github("Feakster/qdiabetes")
+if (!{"remotes" %in% installed.packages()}) install.packages("remotes")
+remotes::install_github("Feakster/qdiabetes")
 ```
 
 ## Package ethos
