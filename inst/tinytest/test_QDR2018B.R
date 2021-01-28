@@ -5,11 +5,9 @@
 #========================#
 
 ### Notes ###
-# - 0.1 tolerance allowed in risk outputs to account for different rounding standards.
 # - Townsend score currently not easily testable.
 
 ### Parameters ###
-tol <- 0.1 # Tolerance
 tiny <- 1e-8 # Small number
 
 ### Test Data ###
@@ -532,4 +530,4 @@ rm(gQDR2018B)
 ### Tidy Up ###
 ###############
 
-rm(tol, tiny, dat_test, rQDR2018B)
+rm(tiny, dat_test, rQDR2018B)

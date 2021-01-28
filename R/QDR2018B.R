@@ -60,16 +60,16 @@ QDR2018B <- function(sex, age,
   inputs_length <- lengths(inputs)
   n <- max(inputs_length)
   stopifnot(all(inputs_length %in% c(1, n)))
-  if(any(missing(sex), missing(age), missing(fpg))) stop("sex, age & fpg must be specified")
-  if(missing(bmi) & any(missing(ht), missing(wt))) stop("Either bmi or ht & wt must be specified")
-  if(!missing(bmi) & any(!missing(ht), !missing(wt))) stop("Either bmi or ht & wt must be specified")
+  if (any(missing(sex), missing(age), missing(fpg))) stop("sex, age & fpg must be specified")
+  if (missing(bmi) & any(missing(ht), missing(wt))) stop("Either bmi or ht & wt must be specified")
+  if (!missing(bmi) & any(!missing(ht), !missing(wt))) stop("Either bmi or ht & wt must be specified")
   stopifnot(all(sex %in% c("Female", "Male")))
   stopifnot(all(ethn %in% c("WhiteNA", "Indian", "Pakistani", "Bangladeshi", "OtherAsian", "BlackCaribbean", "BlackAfrican", "Chinese", "Other")))
   stopifnot(all(smoke %in% c("Non", "Ex", "Light", "Moderate", "Heavy")))
   stopifnot(all(age >= 25 & age < 85))
   stopifnot(all(fpg >= 2 & fpg < 7))
   stopifnot(all(tds >= -8 & tds <= 14))
-  if(any(sex == "Male" & (pcos | gdm))) stop("pcos and gdm must be set to FALSE for male sex")
+  if (any(sex == "Male" & (pcos | gdm))) stop("pcos and gdm must be set to FALSE for male sex")
   stopifnot(all(fhdm %in% c(FALSE, TRUE)))
   stopifnot(all(htn %in% c(FALSE, TRUE)))
   stopifnot(all(cvd %in% c(FALSE, TRUE)))
@@ -82,39 +82,41 @@ QDR2018B <- function(sex, age,
   stopifnot(all(apsy %in% c(FALSE, TRUE)))
   
   ## BMI Pre-Processing ##
-  if(!missing(ht) & !missing(wt)){
+  if (!missing(ht) & !missing(wt)) {
     stopifnot(all(ht >= 1.4 & ht <= 2.1))
     stopifnot(all(wt >= 40 & wt <= 180))
     bmi <- wt/ht^2
   }
   stopifnot(all(bmi >= 40/2.1^2 & bmi <= 180/1.4^2))
-  if(any(bmi < 20)){
+  if (any(bmi < 20)) {
     warning("bmi < 20. Setting bmi == 20", call. = FALSE)
     bmi[bmi < 20] <- 20
   }
-  if(any(bmi > 40)){
+  if (any(bmi > 40)) {
     warning("bmi > 40. Setting bmi == 40", call. = FALSE)
     bmi[bmi > 40] <- 40
   }
   
   ## Harmonize Input Lengths ##
-  if(length(sex) == 1) sex <- rep(sex, n)
-  if(length(age) == 1) age <- rep(age, n)
-  if(length(bmi) == 1) bmi <- rep(bmi, n)
-  if(length(fpg) == 1) fpg <- rep(fpg, n)
-  if(length(ethn) == 1) ethn <- rep(ethn, n)
-  if(length(smoke) == 1) smoke <- rep(smoke, n)
-  if(length(tds) == 1) tds <- rep(tds, n)
-  if(length(fhdm) == 1) fhdm <- rep(fhdm, n)
-  if(length(htn) == 1) htn <- rep(htn, n)
-  if(length(cvd) == 1) cvd <- rep(cvd, n)
-  if(length(gdm) == 1) gdm <- rep(gdm, n)
-  if(length(pcos) == 1) pcos <- rep(pcos, n)
-  if(length(learn) == 1) learn <- rep(learn, n)
-  if(length(psy) == 1) psy <- rep(psy, n)
-  if(length(ster) == 1) ster <- rep(ster, n)
-  if(length(stat) == 1) stat <- rep(stat, n)
-  if(length(apsy) == 1) apsy <- rep(apsy, n)
+  if (n != 1L) {
+    sex <- rep_len(sex, n)
+    age <- rep_len(age, n)
+    bmi <- rep_len(bmi, n)
+    fpg <- rep_len(fpg, n)
+    ethn <- rep_len(ethn, n)
+    smoke <- rep_len(smoke, n)
+    tds <- rep_len(tds, n)
+    fhdm <- rep_len(fhdm, n)
+    htn <- rep_len(htn, n)
+    cvd <- rep_len(cvd, n)
+    gdm <- rep_len(gdm, n)
+    pcos <- rep_len(pcos, n)
+    learn <- rep_len(learn, n)
+    psy <- rep_len(psy, n)
+    ster <- rep_len(ster, n)
+    stat <- rep_len(stat, n)
+    apsy <- rep_len(apsy, n)
+  }
   
   ## Intermediate Vectors ##
   vec_eth <- rep(0, n)
@@ -281,9 +283,9 @@ QDR2018B <- function(sex, age,
   risk[ind_m] <- 100*(1 - 0.985019445419312^exp(score[ind_m]))
   
   ## Named Output ##
-  if(length(inputs_length[inputs_length == n]) == 1){
+  if (length(inputs_length[inputs_length == n]) == 1) {
     names_out <- inputs[inputs_length == n][[1]]
-    if(is.null(names(names_out))){
+    if (is.null(names(names_out))) {
       names(risk) <- names_out
     } else {
       names(risk) <- names(names_out)

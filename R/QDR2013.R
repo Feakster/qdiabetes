@@ -60,9 +60,9 @@ QDR2013 <- function(sex, age,
   inputs_length <- lengths(inputs)
   n <- max(inputs_length)
   stopifnot(all(inputs_length %in% c(1, n)))
-  if(any(missing(sex), missing(age))) stop("sex & age must be specified")
-  if(missing(bmi) & any(missing(ht), missing(wt))) stop("Either bmi or ht & wt must be specified")
-  if(!missing(bmi) & any(!missing(ht), !missing(wt))) stop("Either bmi or ht & wt must be specified")
+  if (any(missing(sex), missing(age))) stop("sex & age must be specified")
+  if (missing(bmi) & any(missing(ht), missing(wt))) stop("Either bmi or ht & wt must be specified")
+  if (!missing(bmi) & any(!missing(ht), !missing(wt))) stop("Either bmi or ht & wt must be specified")
   stopifnot(all(sex %in% c("Female", "Male")))
   stopifnot(all(ethn %in% c("WhiteNA", "Indian", "Pakistani", "Bangladeshi", "OtherAsian", "BlackCaribbean", "BlackAfrican", "Chinese", "Other")))
   stopifnot(all(smoke %in% c("Non", "Ex", "Light", "Moderate", "Heavy")))
@@ -76,33 +76,35 @@ QDR2013 <- function(sex, age,
   stopifnot(all(surv %in% 1:10))
   
   ## BMI Pre-Processing ##
-  if(!missing(ht) & !missing(wt)){
+  if (!missing(ht) & !missing(wt)) {
     stopifnot(all(ht >= 1.4 & ht <= 2.1))
     stopifnot(all(wt >= 40 & wt <= 180))
     bmi <- wt/ht^2
   }
   stopifnot(all(bmi >= 40/2.1^2 & bmi <= 180/1.4^2))
-  if(any(bmi < 20)){
+  if (any(bmi < 20)) {
     warning("bmi < 20. Setting bmi == 20", call. = FALSE)
     bmi[bmi < 20] <- 20
   }
-  if(any(bmi > 40)){
+  if (any(bmi > 40)) {
     warning("bmi > 40. Setting bmi == 40", call. = FALSE)
     bmi[bmi > 40] <- 40
   }
   
   ## Harmonize Input Lengths ##
-  if(length(sex) == 1) sex <- rep(sex, n)
-  if(length(age) == 1) age <- rep(age, n)
-  if(length(bmi) == 1) bmi <- rep(bmi, n)
-  if(length(ethn) == 1) ethn <- rep(ethn, n)
-  if(length(smoke) == 1) smoke <- rep(smoke, n)
-  if(length(tds) == 1) tds <- rep(tds, n)
-  if(length(fhdm) == 1) fhdm <- rep(fhdm, n)
-  if(length(htn) == 1) htn <- rep(htn, n)
-  if(length(cvd) == 1) cvd <- rep(cvd, n)
-  if(length(ster) == 1) ster <- rep(ster, n)
-  if(length(surv) == 1) surv <- rep(surv, n)
+  if (n != 1L) {
+    sex <- rep_len(sex, n)
+    age <- rep_len(age, n)
+    bmi <- rep_len(bmi, n)
+    ethn <- rep_len(ethn, n)
+    smoke <- rep_len(smoke, n)
+    tds <- rep_len(tds, n)
+    fhdm <- rep_len(fhdm, n)
+    htn <- rep_len(htn, n)
+    cvd <- rep_len(cvd, n)
+    ster <- rep_len(ster, n)
+    surv <- rep_len(surv, n)
+  }
   
   ## Intermediate Vectors ##
   vec_surv <- rep(NA_real_, n)
@@ -259,9 +261,9 @@ QDR2013 <- function(sex, age,
   risk[ind_m] <- 100*(1 - surv[ind_m]^exp(score[ind_m]))
   
   ## Named Output ##
-  if(length(inputs_length[inputs_length == n]) == 1){
+  if (length(inputs_length[inputs_length == n]) == 1) {
     names_out <- inputs[inputs_length == n][[1]]
-    if(is.null(names(names_out))){
+    if (is.null(names(names_out))) {
       names(risk) <- names_out
     } else {
       names(risk) <- names(names_out)
