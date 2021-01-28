@@ -66,7 +66,7 @@ QDR2018A(sex, age, bmi, ht, wt, ethn = "WhiteNA", smoke = "Non", tds = 0,
 }
 \author{Benjamin G. Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
 \seealso{
-\code{\link{QDR2013}} - For estimating the 1–10-year risk using QDiabetes-2013.
+\code{\link{QDR2013}} - For estimating the 1--10-year risk using QDiabetes-2013.
 
 \code{\link{QDR2018B}} - For estimating the 10-year risk using QDiabetes-2018 (Model B).
 

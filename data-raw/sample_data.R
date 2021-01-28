@@ -37,6 +37,7 @@ dat_qdr <- data.frame(
   apsy = sample(c(F, T), n, replace = T)
 )
 
+### Calculate BMI ###
 dat_qdr[["bmi"]] <- with(dat_qdr, wt/ht^2)
 
 ### Rejection Sampling ###
@@ -53,7 +54,7 @@ dat_qdr[["bmi"]] <- round(dat_qdr[["bmi"]], 2)
 ### Import and Sample Postcode + Deprivation Data ###
 load("R/sysdata.rda")
 .dat_oa <- .dat_oa[.dat_oa$tds >= -7 & .dat_oa$tds <= 11, ] # Restrict range for QDR2013()
-ind <- sample(1:nrow(.dat_oa), n); rm(n)
+ind <- sample(seq.int(nrow(.dat_oa)), n); rm(n)
 dat_tmp <- .dat_oa[ind, ]; rm(ind, .dat_oa)
 dat_tmp[["postcode"]] <- with(dat_tmp, gsub("(\\w{3}$)", " \\1", postcode))
 
@@ -62,7 +63,8 @@ dat_qdr <- cbind(dat_qdr, dat_tmp); rm(dat_tmp)
 ### Remove Biological Implausibilities ###
 dat_qdr[dat_qdr$sex == "Male", c("gdm", "pcos")] <- FALSE
 
-rownames(dat_qdr) <- 1:nrow(dat_qdr)
+### Reset Row Names ###
+rownames(dat_qdr) <- seq.int(nrow(dat_qdr))
 
 ### Reorder Variables ###
 dat_qdr <- dat_qdr[, c("sex", "age",

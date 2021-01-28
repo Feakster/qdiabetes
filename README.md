@@ -10,11 +10,11 @@
 
 ## General info
 
-This project is an R package for calculating the risk of developing type 2 diabetes. The package uses R implementations of the QDiabetes algorithms, which were initially derived by [ClinRisk](https://clinrisk.co.uk/ClinRisk/Welcome.html) using the C programming language. The QDiabetes package comprises QDiabetes-2013 and [QDiabetes-2018](https://qdiabetes.org/), although older (and eventually more recent) versions of QDiabetes may be included in future releases.
+This project is an R package for calculating the risk of developing type 2 diabetes. The package uses R implementations of the QDiabetes algorithms, which were initially derived by [ClinRisk](https://clinrisk.co.uk/ClinRisk/Welcome.html) using the C++ programming language. The QDiabetes package comprises QDiabetes-2013 and [QDiabetes-2018](https://qdiabetes.org/), although older (and eventually more recent) versions of QDiabetes may be included in future releases.
 
 ## Disclaimer
 
-ClinRisk do not support of endorse this code. End users should see the original C source as the &lsquo;gold standard&rsquo; open source implementation. Please note that the _QDiabetes_ R package has been created as a research tool for scientific purposes only. The _QDiabetes_ R package has not been granted Medicines and Healthcare products Regulatory Agency (MHRA) approval as a medical device, and hence, should not be used as part of any individualised risk assessment.
+ClinRisk do not support of endorse this code. End users should see the original C++ source as the &lsquo;gold standard&rsquo; open source implementation. Please note that the _QDiabetes_ R package has been created as a research tool for scientific purposes only. The _QDiabetes_ R package has not been granted Medicines and Healthcare products Regulatory Agency (MHRA) approval as a medical device, and hence, should not be used as part of any individualised risk assessment.
 
 ## History
 
@@ -104,7 +104,7 @@ remotes::install_github("Feakster/qdiabetes")
 
 ## Package ethos
 
-In building this package, we wanted to make something that was simple to write and easy to maintain ([KISS priciples](https://en.wikipedia.org/wiki/KISS_principle)), performant, but compatible with the latest and older versions of R. With this in mind, we have written this package to be as faithful to R&rsquo;s core language as possible, using minimal dependencies. Hence, you will not find any _Rcpp_ here. Instead, all functions have been written entirely in _base_ R; the only exception being the `getTDS()` function, which uses the `median()` function from the _stats_ package (although we may re-write this at some point). All other packages listed under "Suggests" in the DESCRITPION file only serve to illustrate the use of _QDiabetes_ in examples or vignettes, or in testing the package. The primary factor limiting the package&rsquo;s compatibility with older versions of R is the data storage method CRAN require us to use for the data frame backend of the `getTDS()` function. Owing to the memory footprint of this object (&asymp;200MB), we need to make use of xz compression to reduce the overall size of the package as much as possible. xz compression was fist implemented in [R version 2.10.0](https://cran-archive.r-project.org/bin/windows/base/old/2.10.0/NEWS.R-2.10.0).
+In building this package, we wanted to make something that was simple to write and easy to maintain ([KISS priciples](https://en.wikipedia.org/wiki/KISS_principle)), performant, but compatible with the latest and older versions of R. With this in mind, we have written this package to be as faithful to R&rsquo;s core language as possible, using minimal dependencies. Hence, you will not find any _Rcpp_ here. Instead, all functions have been written entirely in _base_ R; the only exception being the `getTDS()` function, which uses the `median()` function from the _stats_ package (although we may re-write this at some point). All other packages listed under "Suggests" in the DESCRITPION file only serve to illustrate the use of _QDiabetes_ in examples or vignettes, or in testing the package. The primary factor limiting the package&rsquo;s compatibility with older versions of R is the data storage method CRAN require us to use for the data frame backend of the `getTDS()` function. Owing to the memory footprint of this object (&asymp;200MB), we need to make use of XZ compression to reduce the overall size of the package as much as possible. XZ compression was first implemented in [R version 2.10](https://cran-archive.r-project.org/bin/windows/base/old/2.10.0/NEWS.R-2.10.0).
 
 ## Note
 
@@ -143,8 +143,8 @@ getTDS(c("OX3 7LF", "OX2 6NW", "OX2 6GG", "OX1 4AR"))
 #    OX37LF    OX26NW    OX26GG    OX14AR
 # -1.032394  1.640422  2.022583  2.309777
 QDR2013(sex = "Female", age = 35, bmi = seq(20, 40, 5))
-#        20        25        30        35        40 
-# 0.1801226 0.6324508 1.7885233 3.8983187 6.2964702 
+#        20        25        30        35        40
+# 0.1801226 0.6324508 1.7885233 3.8983187 6.2964702
 QDR2018A(sex = "Female", age = seq(25, 75, 10), bmi = 35)
 #       25        35        45        55        65        75
 # 1.085179  2.921454  5.893499  9.082108 10.713717  9.567516
