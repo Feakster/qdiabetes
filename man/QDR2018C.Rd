@@ -92,15 +92,21 @@ hba1c <- seq(15, 42, length.out = 10)
 risk_m <- QDR2018C(sex = "Male", age = 65, bmi = 40, hba1c = hba1c)
 risk_f <- QDR2018C(sex = "Female", age = 65, bmi = 40, hba1c = hba1c)
 
-par(cex = 0.8)
+\dontshow{oldpar <- par(no.readonly = TRUE)}
+par(cex = 0.8, cex.sub = 0.8)
 plot.new()
 plot.window(xlim = range(hba1c), ylim = range(pretty(c(risk_m, risk_f))))
 axis(1, at = hba1c)
 axis(2, at = pretty(c(risk_m, risk_f)))
-title(xlab = expression("Haemoglobin A"["1c"]~"(mmol/mol)"), ylab = "Risk (\%)")
+title(
+  main = "Diabetes 10-year risk with glycated haemoglobin level:\\nQDiabetes-2018 (C-Variant)",
+  sub = expression("Age set to 65 years, BMI set to"~40*kg/m^2*", other variables set to defaults"),
+  xlab = expression("Haemoglobin"~A[1*c]~"(mmol/mol)"), ylab = "Risk (\%)"
+)
 lines(hba1c, risk_m, type = "b", col = "navy", lwd = 1.5)
 lines(hba1c, risk_f, type = "b", col = "red3", lwd = 1.5)
 legend("bottomright", legend = c("Male", "Female"), col = c("navy", "red3"), lty = 1, bty = "n")
+\dontshow{par(oldpar)}
 }
 \concept{risk}
 \concept{diabetes}

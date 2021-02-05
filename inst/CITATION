@@ -1,6 +1,6 @@
 year <- sub("-.*", "", meta$Date)
 note <- sprintf("R package version %s", meta$Version)
-url <- meta$URL
+url <- "https://cran.r-project.org/package=QDiabetes"
 
 bibentry(bibtype = "Manual",
          title = "{QDiabetes}: A package to calculate risk of type 2 diabetes",

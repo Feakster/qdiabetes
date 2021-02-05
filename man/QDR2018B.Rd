@@ -92,15 +92,21 @@ fpg <- seq(2, 6.5, length.out = 10)
 risk_m <- QDR2018B(sex = "Male", age = 65, bmi = 40, fpg = fpg)
 risk_f <- QDR2018B(sex = "Female", age = 65, bmi = 40, fpg = fpg)
 
-par(cex = 0.8)
+\dontshow{oldpar <- par(no.readonly = TRUE)}
+par(cex = 0.8, cex.sub = 0.8)
 plot.new()
 plot.window(xlim = range(fpg), ylim = range(pretty(c(risk_m, risk_f))))
 axis(1, at = fpg)
 axis(2, at = pretty(c(risk_m, risk_f)))
-title(xlab = "Fasting Plasma Glucose (mmol/L)", ylab = "Risk (\%)")
+title(
+  main = "Diabetes 10-year risk with fasting plasma glucose level:\\nQDiabetes-2018 (B-Variant)",
+  sub = expression("Age set to 65 years, BMI set to"~40*kg/m^2*", other variables set to defaults"),
+  xlab = "Fasting Plasma Glucose (mmol/L)", ylab = "Risk (\%)"
+)
 lines(fpg, risk_m, type = "b", col = "navy", lwd = 1.5)
 lines(fpg, risk_f, type = "b", col = "red3", lwd = 1.5)
 legend("bottomright", legend = c("Male", "Female"), col = c("navy", "red3"), lty = 1, bty = "n")
+\dontshow{par(oldpar)}
 }
 \concept{risk}
 \concept{diabetes}
