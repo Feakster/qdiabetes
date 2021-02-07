@@ -46,13 +46,6 @@ QDR2013(sex, age, bmi, ht, wt, ethn = "WhiteNA", smoke = "Non", tds = 0,
 }
 \value{Risk (\%) of type 2 diabetes.}
 \source{\url{https://svn.clinrisk.co.uk/opensource/qdiabetes/standard/}}
-\references{
-  Hippisley-Cox, J., Coupland, C., Robson, J., Sheikh, A. and Brindle, P. (2009).
-  Predicting risk of type 2 diabetes in England and Wales: prospective derivation and validation of QDScore.
-  \emph{BMJ}
-  \bold{338}, b880.
-  \doi{10.1136/bmj.b880}
-}
 \note{
   The QDiabetes \R package has been created as a research tool for scientific purposes only.
   The QDiabetes \R package has not been granted Medicines and Healthcare products Regulatory Agency (MHRA) approval as a medical device, and hence, should not be used as part of any individualised risk assessment.
@@ -84,15 +77,21 @@ age <- seq(25, 80, 5)
 risk_m <- QDR2013(sex = "Male", age = age, bmi = 40)
 risk_f <- QDR2013(sex = "Female", age = age, bmi = 40)
 
-par(cex = 0.8)
+oldpar <- par(no.readonly = TRUE)
+par(cex = 0.8, cex.sub = 0.8)
 plot.new()
 plot.window(xlim = range(age), ylim = range(pretty(c(risk_m, risk_f))))
 axis(1, at = age)
 axis(2, at = pretty(c(risk_m, risk_f)))
-title(xlab = "Age (years)", ylab = "Risk (\%)")
+title(
+  main = "Diabetes 10-year risk with age:\\nQDiabetes-2013",
+  sub = expression("BMI set to"~40*kg/m^2*", other variables set to defaults"),
+  xlab = "Age (years)", ylab = "Risk (\%)"
+)
 lines(age, risk_m, type = "b", col = "navy", lwd = 1.5)
 lines(age, risk_f, type = "b", col = "red3", lwd = 1.5)
 legend("bottomright", legend = c("Male", "Female"), col = c("navy", "red3"), lty = 1, bty = "n")
+par(oldpar)
 }
 \concept{risk}
 \concept{diabetes}

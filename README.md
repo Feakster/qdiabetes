@@ -1,4 +1,4 @@
-# QDiabetes <img src="man/figures/logo.png" alt="QDiabetes hex logo" height="139px" align="right" />
+# QDiabetes <img src="man/figures/logo.png" height="139px" align="right" />
 
 <!-- Badges -->
 [![license](https://img.shields.io/badge/license-AGPL--3-blue)](https://choosealicense.com/licenses/agpl-3.0/)
@@ -104,11 +104,11 @@ remotes::install_github("Feakster/qdiabetes")
 
 ## Package ethos
 
-In building this package, we wanted to make something that was simple to write and easy to maintain ([KISS priciples](https://en.wikipedia.org/wiki/KISS_principle)), performant, but compatible with the latest and older versions of R. With this in mind, we have written this package to be as faithful to R&rsquo;s core language as possible, using minimal dependencies. Hence, you will not find any _Rcpp_ here. Instead, all functions have been written entirely in _base_ R; the only exception being the `getTDS()` function, which uses the `median()` function from the _stats_ package (although we may re-write this at some point). All other packages listed under "Suggests" in the DESCRITPION file only serve to illustrate the use of _QDiabetes_ in examples or vignettes, or in testing the package. The primary factor limiting the package&rsquo;s compatibility with older versions of R is the data storage method CRAN require us to use for the data frame backend of the `getTDS()` function. Owing to the memory footprint of this object (&asymp;200MB), we need to make use of XZ compression to reduce the overall size of the package as much as possible. XZ compression was first implemented in [R version 2.10](https://cran-archive.r-project.org/bin/windows/base/old/2.10.0/NEWS.R-2.10.0).
+In building this package, we wanted to make something that was simple to write and easy to maintain ([KISS principles](https://en.wikipedia.org/wiki/KISS_principle)), performant, but compatible with the latest and older versions of R. With this in mind, we have written this package to be as faithful to R&rsquo;s core language as possible, using minimal dependencies. Hence, you will not find any _Rcpp_ here. Instead, all functions have been written entirely in _base_ R; the only exception being the `getTDS()` function, which uses the `median()` function from the _stats_ package (although we may re-write this at some point). All other packages listed under &ldquo;Suggests&rdquo; in the DESCRIPTION file only serve to illustrate the use of _QDiabetes_ in examples or vignettes, or in testing the package. The primary factor limiting the package&rsquo;s compatibility with older versions of R is the data storage method CRAN require us to use for the data frame backend of the `getTDS()` function. Owing to the memory footprint of this object (&asymp;200MB), we need to make use of XZ compression to reduce the overall size of the package as much as possible. XZ compression was first implemented in [R version 2.10](https://cran-archive.r-project.org/bin/windows/base/old/2.10.0/NEWS.R-2.10.0).
 
 ## Note
 
-Many of the default values used in the risk prediction functions of this package were selected to be representative of a UK population. These values are only intended to minimise the amount of typing required when using the risk prediction functions in an exploratory manner. They are unlikely to be useful in a research setting, and you would need to know the exact values to assign to all function parameters in order to make an accurate risk prediction. Hence, while you can get risk preditions from the `QDR2013()` and `QDR2018A()` functions through the specification of only `sex`, `age`, and `bmi`, you would be assuming White or missing ethnicity, non-smoking status, a Townsend deprivation score of 0, and the complete absence of any relevant medical history/conditions and concommitant drug therapies. In the case of `QDR2013()`, you would also be assuming that a 10-year risk window is desired.
+Many of the default values used in the risk prediction functions of this package were selected to be representative of a UK population. These values are only intended to minimise the amount of typing required when using the risk prediction functions in an exploratory manner. They are unlikely to be useful in a research setting, and you would need to know the exact values to assign to all function parameters in order to make an accurate risk prediction. Hence, while you can get risk predictions from the `QDR2013()` and `QDR2018A()` functions through the specification of only `sex`, `age`, and `bmi`, you would be assuming White or missing ethnicity, non-smoking status, a Townsend deprivation score of 0, and the complete absence of any relevant medical history/conditions and concomitant drug therapies. In the case of `QDR2013()`, you would also be assuming that a 10-year risk window is desired.
 
 ## Examples
 
@@ -212,7 +212,7 @@ See [Issues](https://github.com/Feakster/qdiabetes/issues) on the QDiabetes GitH
 
 This project was funded by the National Institute for Health Research (NIHR) School for Primary Care Research (SPCR) [project number: [412](https://www.spcr.nihr.ac.uk/projects/412-quantifying-the-risk-of-type-2-diabetes-across-the-uk)]. The views expressed are those of the author(s) and not necessarily those of the NIHR or the Department of Health and Social Care.
 
-<img src="man/figures/nihr-logo.png" alt="Funded by the NIHR logo" height="40px" align="float:left" />
+<img src="man/figures/nihr-logo.png" height="40px" align="float:left" />
 
 ## References
 

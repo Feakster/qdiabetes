@@ -91,15 +91,21 @@ age <- seq(25, 80, 5)
 risk_m <- QDR2018A(sex = "Male", age = age, bmi = 40)
 risk_f <- QDR2018A(sex = "Female", age = age, bmi = 40)
 
-par(cex = 0.8)
+oldpar <- par(no.readonly = TRUE)
+par(cex = 0.8, cex.sub = 0.8)
 plot.new()
 plot.window(xlim = range(age), ylim = range(pretty(c(risk_m, risk_f))))
 axis(1, at = age)
 axis(2, at = pretty(c(risk_m, risk_f)))
-title(xlab = "Age (years)", ylab = "Risk (\%)")
+title(
+  main = "Diabetes 10-year risk with age:\\nQDiabetes-2018 (A-Variant)",
+  sub = expression("BMI set to"~40*kg/m^2*", other variables set to defaults"),
+  xlab = "Age (years)", ylab = "Risk (\%)"
+)
 lines(age, risk_m, type = "b", col = "navy", lwd = 1.5)
 lines(age, risk_f, type = "b", col = "red3", lwd = 1.5)
 legend("bottomright", legend = c("Male", "Female"), col = c("navy", "red3"), lty = 1, bty = "n")
+par(oldpar)
 }
 \concept{risk}
 \concept{diabetes}
