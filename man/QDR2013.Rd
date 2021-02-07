@@ -46,13 +46,6 @@ QDR2013(sex, age, bmi, ht, wt, ethn = "WhiteNA", smoke = "Non", tds = 0,
 }
 \value{Risk (\%) of type 2 diabetes.}
 \source{\url{https://svn.clinrisk.co.uk/opensource/qdiabetes/standard/}}
-\references{
-  Hippisley-Cox, J., Coupland, C., Robson, J., Sheikh, A. and Brindle, P. (2009).
-  Predicting risk of type 2 diabetes in England and Wales: prospective derivation and validation of QDScore.
-  \emph{BMJ}
-  \bold{338}, b880.
-  \doi{10.1136/bmj.b880}
-}
 \note{
   The QDiabetes \R package has been created as a research tool for scientific purposes only.
   The QDiabetes \R package has not been granted Medicines and Healthcare products Regulatory Agency (MHRA) approval as a medical device, and hence, should not be used as part of any individualised risk assessment.

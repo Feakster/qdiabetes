@@ -1,4 +1,4 @@
-# QDiabetes <img src="man/figures/logo.png" alt="QDiabetes hex logo" height="139px" align="right" />
+# QDiabetes <img src="man/figures/logo.png" height="139px" align="right" />
 
 <!-- Badges -->
 [![license](https://img.shields.io/badge/license-AGPL--3-blue)](https://choosealicense.com/licenses/agpl-3.0/)
@@ -212,7 +212,7 @@ See [Issues](https://github.com/Feakster/qdiabetes/issues) on the QDiabetes GitH
 
 This project was funded by the National Institute for Health Research (NIHR) School for Primary Care Research (SPCR) [project number: [412](https://www.spcr.nihr.ac.uk/projects/412-quantifying-the-risk-of-type-2-diabetes-across-the-uk)]. The views expressed are those of the author(s) and not necessarily those of the NIHR or the Department of Health and Social Care.
 
-<img src="man/figures/nihr-logo.png" alt="Funded by the NIHR logo" height="40px" align="float:left" />
+<img src="man/figures/nihr-logo.png" height="40px" align="float:left" />
 
 ## References
 
