@@ -92,7 +92,7 @@ fpg <- seq(2, 6.5, length.out = 10)
 risk_m <- QDR2018B(sex = "Male", age = 65, bmi = 40, fpg = fpg)
 risk_f <- QDR2018B(sex = "Female", age = 65, bmi = 40, fpg = fpg)
 
-\dontshow{oldpar <- par(no.readonly = TRUE)}
+oldpar <- par(no.readonly = TRUE)
 par(cex = 0.8, cex.sub = 0.8)
 plot.new()
 plot.window(xlim = range(fpg), ylim = range(pretty(c(risk_m, risk_f))))
@@ -106,7 +106,7 @@ title(
 lines(fpg, risk_m, type = "b", col = "navy", lwd = 1.5)
 lines(fpg, risk_f, type = "b", col = "red3", lwd = 1.5)
 legend("bottomright", legend = c("Male", "Female"), col = c("navy", "red3"), lty = 1, bty = "n")
-\dontshow{par(oldpar)}
+par(oldpar)
 }
 \concept{risk}
 \concept{diabetes}

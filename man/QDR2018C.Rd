@@ -92,7 +92,7 @@ hba1c <- seq(15, 42, length.out = 10)
 risk_m <- QDR2018C(sex = "Male", age = 65, bmi = 40, hba1c = hba1c)
 risk_f <- QDR2018C(sex = "Female", age = 65, bmi = 40, hba1c = hba1c)
 
-\dontshow{oldpar <- par(no.readonly = TRUE)}
+oldpar <- par(no.readonly = TRUE)
 par(cex = 0.8, cex.sub = 0.8)
 plot.new()
 plot.window(xlim = range(hba1c), ylim = range(pretty(c(risk_m, risk_f))))
@@ -106,7 +106,7 @@ title(
 lines(hba1c, risk_m, type = "b", col = "navy", lwd = 1.5)
 lines(hba1c, risk_f, type = "b", col = "red3", lwd = 1.5)
 legend("bottomright", legend = c("Male", "Female"), col = c("navy", "red3"), lty = 1, bty = "n")
-\dontshow{par(oldpar)}
+par(oldpar)
 }
 \concept{risk}
 \concept{diabetes}
