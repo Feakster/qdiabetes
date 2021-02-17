@@ -1,6 +1,6 @@
 Package: QDiabetes
-Version: 1.0-2
-Date: 2021-02-07
+Version: 1.0-3
+Date: 2021-02-17
 Title: Type 2 Diabetes Risk Calculator
 Authors@R: c(
   person(c("Benjamin", "G."), "Feakins", role = c("aut", "cre"), email = "benjamin.feakins@ndph.ox.ac.uk", comment = c(ORCID = "0000-0002-3928-6750")),
