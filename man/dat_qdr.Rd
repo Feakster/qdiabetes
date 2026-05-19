@@ -67,7 +67,7 @@
     \item Source: Office for National Statistics licensed under the Open Government Licence v.3.0
   }
 }
-\author{Benjamin G. Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
+\author{Benjamin G. Feakins \email{feakster@posteo.eu}}
 \examples{
 data(dat_qdr)
 str(dat_qdr)

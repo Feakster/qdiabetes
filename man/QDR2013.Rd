@@ -50,7 +50,7 @@ QDR2013(sex, age, bmi, ht, wt, ethn = "WhiteNA", smoke = "Non", tds = 0,
   The QDiabetes \R package has been created as a research tool for scientific purposes only.
   The QDiabetes \R package has not been granted Medicines and Healthcare products Regulatory Agency (MHRA) approval as a medical device, and hence, should not be used as part of any individualised risk assessment.
 }
-\author{Benjamin G. Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
+\author{Benjamin G. Feakins \email{feakster@posteo.eu}}
 \seealso{
 \code{\link{QDR2018A}} - For estimating the 10-year risk using QDiabetes-2018 (Model A).
 

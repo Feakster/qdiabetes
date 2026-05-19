@@ -48,7 +48,7 @@ getTDS(postcode, type = "full", squash = ifelse(type != "regex", FALSE, TRUE))
     \item Source: Office for National Statistics licensed under the Open Government Licence v.3.0
   }
 }
-\author{Benjamin G. Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
+\author{Benjamin G. Feakins \email{feakster@posteo.eu}}
 \examples{
 ## Simple usage
 getTDS(postcode = "OX2 6GG")

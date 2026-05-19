@@ -4,6 +4,7 @@
 \section{Changes in version 1.0-3}{
   \itemize{
     \item Updated the package citation to direct users towards any relevant derivation papers.
+    \item Updated details of the package maintainer.
   }
 }
 
