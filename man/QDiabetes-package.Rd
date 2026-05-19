@@ -44,7 +44,7 @@
   
   As per \R's general coding sytax, factor or character values may be passed to any risk prediction function parameter where a character value is expected, so long as the factor variable label matches one of the expected character strings. Similarly, \code{0} or \code{1} many be used in place of \code{FALSE} or \code{TRUE} for any function parameter where a logical value is expected.
 }
-\author{Benjamin G. Feakins \email{benjamin.feakins@ndph.ox.ac.uk}}
+\author{Benjamin G. Feakins \email{feakster@posteo.eu}}
 \references{
   Hippisley-Cox, J., Coupland, C., Robson, J., Sheikh, A. and Brindle, P. (2009).
   Predicting risk of type 2 diabetes in England and Wales: prospective derivation and validation of QDScore.

@@ -200,6 +200,16 @@ dt_qdr[, risk := QDR2013(sex = sex,
                          ster = ster)]
 ```
 
+## Citation
+
+Run the following code in R to obtain a reference to cite the _QDiabetes_ R package:
+
+```r
+citation("QDiabetes")
+```
+
+Please also cite any relevant derivation papers alongside this reference! You will find links to these in the documentation for the functions you have used.
+
 ## Known issues
 
 See [Issues](https://github.com/Feakster/qdiabetes/issues) on the QDiabetes GitHub repository.

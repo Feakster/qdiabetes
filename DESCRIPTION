@@ -1,9 +1,9 @@
 Package: QDiabetes
-Version: 1.0-2
-Date: 2021-02-07
+Version: 1.0-3
+Date: 2026-05-19
 Title: Type 2 Diabetes Risk Calculator
 Authors@R: c(
-  person(c("Benjamin", "G."), "Feakins", role = c("aut", "cre"), email = "benjamin.feakins@ndph.ox.ac.uk", comment = c(ORCID = "0000-0002-3928-6750")),
+  person(c("Benjamin", "G."), "Feakins", role = c("aut", "cre"), email = "feakster@posteo.eu", comment = c(ORCID = "0000-0002-3928-6750")),
   person(c("Sarah", "L."), "Lay-Flurrie", role = "ctb", email = "sarah.lay-flurrie@phc.ox.ac.uk", comment = c(ORCID = "0000-0003-1094-8455")),
   person(c("Richard", "J."), "Stevens", role = "ctb", email = "richard.stevens@phc.ox.ac.uk", comment = c(ORCID = "0000-0002-9258-4060")),
   person("Trish", "Greenhalgh", role = "ctb", email = "trish.greenhalgh@phc.ox.ac.uk", comment = c(ORCID = "0000-0003-2369-8088")),
@@ -13,7 +13,8 @@ Authors@R: c(
   person(c("Bernard", "C."), "Gudgin", role = "ctb"),
   person(c("Benjamin", "J."), "Cairns", role = c("csl", "sad"), email = "ben.cairns@ndph.ox.ac.uk", comment = c(ORCID = "0000-0001-7994-8213")),
   person("National Institute for Health Research School for Primary Care Research", role = "fnd"),
-  person("University of Oxford", role = c("cph", "sht")))
+  person("University of Oxford", role = c("cph", "sht"))
+  )
 Description: Calculate the risk of developing type 2 diabetes using risk prediction algorithms derived by 'ClinRisk'.
 Depends: R (>= 2.10)
 Imports: stats

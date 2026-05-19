@@ -16,6 +16,7 @@ bibentry(bibtype = "Manual",
          note = note,
          url = url,
          header = "To cite QDiabetes in publications use:",
+         footer = "Please also cite any relevant derivation papers.",
          key = "QDiabetes-package",
 
          textVersion = paste("Benjamin G. Feakins, Sarah L. Lay-Flurrie, Richard J. Stevens, Trish Greenhalgh, Tim A. Holt, Evangelos Kontopantelis, Dianna M. Smith and Bernard C. Gudgin",
